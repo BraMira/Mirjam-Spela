@@ -11,4 +11,4 @@ Religije po državah:
 
 https://en.wikipedia.org/wiki/Religions_by_country
 
-![My image](username.github.com/repository/img/ERdiagram.png)
+
