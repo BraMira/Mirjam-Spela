@@ -14,4 +14,9 @@
 
 * [Kontinenti](https://datahub.io/dataset/countries-continents/resource/aa08c34c-57e8-4e15-bd36-969bee26aba5)
 
+* [Države - area, population](http://www.infoplease.com/ipa/A0004379.html)
+
+* [Države - glavna mesta](http://www.go4quiz.com/1023/lworld-countries-and-their-capitals/)
+
+
 
