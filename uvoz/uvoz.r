@@ -1,3 +1,5 @@
+#Uvozimo napade
+
 # Uvozimo potrebne knjižnice
 library(rvest)
 #library(dplyr) #ta package ne deluje
