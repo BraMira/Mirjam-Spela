@@ -1,4 +1,4 @@
-# Uvozimo potrebne knji≈ænice
+# Uvozimo potrebne knji√Ö¬ænice
 library(rvest)
 #library(dplyr) 
 library(gsubfn)
@@ -13,11 +13,6 @@ stran2 <- html_session(link2) %>% read_html()
 #3.link religije ****
 link3 <- "https://en.wikipedia.org/wiki/Religions_by_country"
 stran3 <- html_session(link3) %>% read_html()
-
-
-#4.link drûave - glavna mesta
-link4 <- "http://www.go4quiz.com/1023/lworld-countries-and-their-capitals/"
-stran4 <- html_session(link4) %>% read_html()
 
 
 
@@ -57,7 +52,7 @@ religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") 
 #######################################################################################################
 #AREA in POPULATION
 source("Tabele - uvoz/xml.r", encoding="UTF-8")
-cat("Uvaûam podatke")
+cat("Uva≈æam podatke")
 area <- uvozi.area()
 
 #KONTINENTI
@@ -67,6 +62,6 @@ uvozi1 <- function() {
                   fileEncoding = "Windows-1250"))
 }
 
-cat("Uvaûam podatke ")
+cat("Uva≈æam podatke ")
 kontinenti <- uvozi1()
 
