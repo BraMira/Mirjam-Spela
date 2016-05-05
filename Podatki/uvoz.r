@@ -103,4 +103,4 @@ names(napadi1)[names(napadi1) %in% c("Type", "Injured1","Perpetrator","Part of")
 #napadi1$Dead %>% strapplyc("^([0-9]+)") %>% as.numeric()
 
 # Zapišemo v datoteko CSV
-write.csv(napadi, "napadi.csv")
+write.csv(napadi1, "napadi.csv")
