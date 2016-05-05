@@ -3,6 +3,7 @@ library(rvest)
 #library(dplyr) 
 library(gsubfn)
 
+##########################################################################################
 # LINKI
 #Prvi link - januar -junij **
 link <- "https://en.wikipedia.org/wiki/List_of_terrorist_incidents,_January%E2%80%93June_2015"
@@ -13,12 +14,6 @@ stran2 <- html_session(link2) %>% read_html()
 #3.link religije ****
 link3 <- "https://en.wikipedia.org/wiki/Religions_by_country"
 stran3 <- html_session(link3) %>% read_html()
-
-
-#4.link države - glavna mesta
-link4 <- "http://www.go4quiz.com/1023/lworld-countries-and-their-capitals/"
-stran4 <- html_session(link4) %>% read_html()
-
 
 
 ###########################################################################
@@ -49,24 +44,51 @@ november <- stran2 %>% html_nodes(xpath="//table[@class='wikitable sortable']") 
 december <- stran2 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
   .[[6]] %>% html_table()
 
+
+#########################################################################################
+
 #RELIGIJE
+
 religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[1]] %>% html_table()
+  .[[1]] %>% html_table()                                        #RELIGIJE
 
 
 #######################################################################################################
-#AREA in POPULATION
-source("Tabele - uvoz/xml.r", encoding="UTF-8")
-cat("Uvažam podatke")
-area <- uvozi.area()
 
 #KONTINENTI
 uvozi1 <- function() {
-  return(read.csv("Tabele - uvoz/Kontinenti.csv", sep = ";", as.is = TRUE,
-                  row.names = 1, na.strings=c("-", "z") ,
+  return(read.csv("Podatki/Kontinenti.csv", sep = ",", as.is = TRUE,
+                  na.strings=c("-", "z") ,
                   fileEncoding = "Windows-1250"))
 }
 
-cat("Uvažam podatke ")
 kontinenti <- uvozi1()
+celine<- kontinenti[,0:2] #celine - polepÅ¡ana tabela                #CELINE
+############################################################################################
+
+#GLAVNA MESTA
+
+library(rvest)
+library(dplyr)
+url.mesta <- "http://www.go4quiz.com/1023/lworld-countries-and-their-capitals/"
+stran <- html_session(url.mesta) %>% read_html()
+
+gl.mesta <- stran %>% html_nodes(xpath="//table") %>%
+  .[[1]] %>% html_table()                                          #GL.MESTA
+
+
+##########################################################################################
+
+#DRÅ½AVE - area, population 
+library(XML)
+ustvari_area<- function(){
+  naslov <- "http://www.infoplease.com/ipa/A0004379.html"
+  area <- readHTMLTable(naslov, which=2, skip.rows = 1, stringsAsFactors = FALSE)
+}
+area.pop <- ustvari_area()                                        #AREA.POP
+
+############################################################################################
+
+
+
 
