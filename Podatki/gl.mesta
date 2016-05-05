@@ -1,0 +1,10 @@
+#glavna mesta
+
+library(rvest)
+library(dplyr)
+url.mesta <- "http://www.go4quiz.com/1023/lworld-countries-and-their-capitals/"
+stran <- html_session(url.mesta) %>% read_html()
+
+tabela <- stran %>% html_nodes(xpath="//table") %>%
+  .[[1]] %>% html_table()
+

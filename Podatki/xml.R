@@ -7,24 +7,16 @@ stripByPath <- function(x, path) {
                     function(y) gsub("^\\s*(.*?)\\s*$", "\\1", xmlValue(y))))
 }
 
-#1. države - area, population
-uvozi.area <- function() {
-  url.area <- "http://www.infoplease.com/ipa/A0004379.html"
-  doc.area <- htmlTreeParse(url.area, useInternalNodes=TRUE)
-
-  tabele.area <- getNodeSet(doc.area, "//table")
-  
-  vrstice <- getNodeSet(tabele.area[[1]], "./tr")
-  
-  seznam <- lapply(vrstice[0:length(vrstice)], stripByPath, "./td")
-  
-  matrika <- matrix(unlist(seznam), nrow=length(seznam), byrow=TRUE)
-
-  r <- data.frame(apply(gsub(",", "", matrika[,0:1]), as.numeric), row.names=matrika[,1]) #NI OK TA KORAK
-  return(r)
+#1. države - area, population ****
+library(XML)
+ustvari_area<- function(){
+  naslov <- "http://www.infoplease.com/ipa/A0004379.html"
+  area <- readHTMLTable(naslov, which=2, skip.rows = 1, stringsAsFactors = FALSE)
 }
+area.pop <- ustvari_area() 
 
-#2. države - glavna mesta
+
+#2. države - glavna mesta (NE DELAAAA)
 uvozi.mesta <- function() {
   url.mesta <- "http://www.go4quiz.com/1023/lworld-countries-and-their-capitals/"
   doc.mesta <- htmlTreeParse(url.mesta, useInternalNodes=TRUE)
@@ -40,3 +32,10 @@ uvozi.mesta <- function() {
   r <- data.frame(apply(gsub(",", "", matrika[,0:1]), as.numeric), row.names=matrika[,1])
   return(r)
 }
+
+library(XML)
+ustvari_mesto<- function(){
+  naslov <- "http://www.go4quiz.com/1023/lworld-countries-and-their-capitals/"
+  mesto <- readHTMLTable(naslov, which=2, skip.rows = 1, stringsAsFactors = FALSE)
+}
+mesta<- ustvari_mesto() 
