@@ -11,9 +11,6 @@ stran <- html_session(link) %>% read_html()
 #Drugi link - julij - december**
 link2 <- "https://en.wikipedia.org/wiki/List_of_terrorist_incidents,_July%E2%80%93December_2015"
 stran2 <- html_session(link2) %>% read_html()
-#3.link religije ****
-link3 <- "https://en.wikipedia.org/wiki/Religions_by_country"
-stran3 <- html_session(link3) %>% read_html()
 
 
 ###########################################################################
@@ -48,6 +45,9 @@ december <- stran2 %>% html_nodes(xpath="//table[@class='wikitable sortable']") 
 #########################################################################################
 
 #RELIGIJE
+
+link3 <- "https://en.wikipedia.org/wiki/Religions_by_country"
+stran3 <- html_session(link3) %>% read_html()
 
 religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
   .[[1]] %>% html_table()                                        #RELIGIJE
