@@ -2,7 +2,7 @@
 
 # Uvozimo potrebne knjižnice
 library(rvest)
-library(plyr) #ta package ne deluje
+library(dplyr) 
 library(gsubfn)
 
 #Prvi link
@@ -54,6 +54,7 @@ december$month <- 12
 napadi <- do.call("rbind", list(januar,februar, marec,april,maj,junij,julij,avgust,september,oktober,november,december))
 napadi$Date1 <- `Encoding<-`(napadi$Date,"UTF-8")
 napadi$Injured1 <- `Encoding<-`(napadi$Injured,"UTF-8")
+napadi$Location1 <- `Encoding<-`(napadi$Location,"UTF-8")
 napadi$Dead[180]<-"8-10"
 napadi$Dead[77]<-"10-20(+7)"
 
@@ -87,20 +88,28 @@ napadi$dead_perpetrators <- napadi$Dead %>% strapplyc("\\(\\+([0-9]+)\\)") %>% a
 napadi$dead_perpetrators[is.na(napadi$dead_perpetrators)]<-0
 napadi$city <- 0
 napadi$country <-0
-for (i in 1:length(napadi$Location)){
-  napadi$city[i]<-strsplit(napadi$Location,",")[[i]][1];
-  napadi$country[i]<-strsplit(napadi$Location,",")[[i]][2];
+for (i in 1:length(napadi$Location1)){
+  napadi$city[i]<-strsplit(napadi$Location1,",")[[i]][1];
+  napadi$country[i]<-strsplit(napadi$Location1,",")[[i]][2];
   
 }
- 
+napadi$country[napadi$city=="East Jerusalem"]<- "Jerusalem" 
+napadi$country[192]<-"Nigeria"
+napadi$city[192]<-NA
+napadi$country[266]<-"Pakistan"
+napadi$city[266]<-"Quetta"
+napadi$city[267]<-"NA"
+napadi$country[267]<-"Bhutan"
+napadi$country[207]<-"France"
+napadi$city[207]<-"Oignies"
+napadi$city[369]<-"Abadam"
+napadi$country[369]<-"Nigeria"
 #spremenimo vrstni red
 napadi1 <- napadi[,c("start_date","end_date","month","Type","max_deaths","confirmed","Injured1","dead_perpetrators","country","city","Perpetrator","Part of")] 
 
-
 #spremenimo imena
-names(napadi1)[names(napadi1) %in% c("Type", "Injured1","Perpetrator","Part of")]<-c("type","injured","perpetrator","part_of") 
+names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city","Perpetrator","Part of")]<-c("type","injured","place","perpetrator","part_of") 
 
-#napadi1$Dead %>% strapplyc("^([0-9]+)") %>% as.numeric()
 
 # Zapišemo v datoteko CSV
 write.csv(napadi1, "Podatki/napadi.csv")
