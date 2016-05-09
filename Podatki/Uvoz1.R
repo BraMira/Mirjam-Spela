@@ -35,7 +35,9 @@ url.mesta <- "http://www.go4quiz.com/1023/lworld-countries-and-their-capitals/"
 stran <- html_session(url.mesta) %>% read_html()
 
 gl.mesta <- stran %>% html_nodes(xpath="//table") %>%
-  .[[1]] %>% html_table()                                          #GL.MESTA
+  .[[1]] %>% html_table()
+
+gl.mesta$"No." <- NULL              #GL.MESTA
 
 
 ##########################################################################################
@@ -49,7 +51,5 @@ ustvari_area<- function(){
 area.pop <- ustvari_area()                                        #AREA.POP
 
 ############################################################################################
-
-
 
 
