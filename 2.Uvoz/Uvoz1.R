@@ -14,12 +14,12 @@ religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") 
   .[[1]] %>% html_table()                                        #RELIGIJE
 
 # Zapišemo v datoteko CSV
-write.csv(religije, "Podatki/religije.csv")
+write.csv(religije, "3.Podatki/religije.csv")
 #######################################################################################################
 
 #KONTINENTI
 uvozi1 <- function() {
-  return(read.csv("Uvoz/Kontinenti.csv", sep = ",", as.is = TRUE,
+  return(read.csv("2.Uvoz/Kontinenti.csv", sep = ",", as.is = TRUE,
                   na.strings=c("-", "z") ,
                   fileEncoding = "Windows-1250"))
 }
@@ -28,7 +28,7 @@ kontinenti <- uvozi1()
 celine<- kontinenti[,0:2] #celine - polepšana tabela                #CELINE
 
 # Zapišemo v datoteko CSV
-write.csv(celine, "Podatki/celine.csv")
+write.csv(celine, "3.Podatki/celine.csv")
 ############################################################################################
 
 #GLAVNA MESTA
@@ -90,4 +90,4 @@ drzave$Capital[167]<- c("Lobamba")
 drzave$Capital[173]<- c("Dodoma")
 
 # Zapišemo v datoteko CSV
-write.csv(drzave, "Podatki/drzave.csv")
+write.csv(drzave, "3.Podatki/drzave.csv")

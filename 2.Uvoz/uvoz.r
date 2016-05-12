@@ -112,4 +112,4 @@ names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city","Perpetrator","Pa
 
 
 # Zapišemo v datoteko CSV
-write.csv(napadi1, "Podatki/napadi.csv")
+write.csv(napadi1, "3.Podatki/napadi.csv")
