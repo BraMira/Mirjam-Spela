@@ -11,7 +11,9 @@ link3 <- "https://en.wikipedia.org/wiki/Religions_by_country"
 stran3 <- html_session(link3) %>% read_html()
 
 religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[1]] %>% html_table()                                        #RELIGIJE
+  .[[1]] %>% html_table()           #RELIGIJE
+
+names(religije)[1]<- c("Country")
 
 # Zapišemo v datoteko CSV
 write.csv(religije, "3.Podatki/religije.csv")
@@ -91,3 +93,11 @@ drzave$Capital[173]<- c("Dodoma")
 
 # Zapišemo v datoteko CSV
 write.csv(drzave, "3.Podatki/drzave.csv")
+
+#UREDI ŠE Z CELINAMI
+anti_join(drzave, celine)
+anti_join(celine,drzave)
+
+#UREDI ŠE Z RELIGIJAMI (pri religijah vsem odstrani prvo črko!!!)
+anti_join(drzave, religije)
+anti_join(religije,drzave)
