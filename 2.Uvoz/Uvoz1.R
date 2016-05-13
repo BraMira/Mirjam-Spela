@@ -15,8 +15,10 @@ religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") 
 
 names(religije)[1]<- c("Country")
 
+
 religije<-religije[-c(22,33,40,60,64,71,81,88,97,108,121,130,140,155,161,169,181,191,203,229,239,256,263,278),]
 
+religije$Country1<- `Encoding<-`(religije$Country,"UTF-8")
 
 #######################################################################################################
 
