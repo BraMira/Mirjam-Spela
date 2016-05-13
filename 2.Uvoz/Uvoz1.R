@@ -15,8 +15,9 @@ religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") 
 
 names(religije)[1]<- c("Country")
 
-# Zapišemo v datoteko CSV
-write.csv(religije, "3.Podatki/religije.csv")
+religije<-religije[-c(22,33,40,60,64,71,81,88,97,108,121,130,140,155,161,169,181,191,203,229,239,256,263,278),]
+
+
 #######################################################################################################
 
 #KONTINENTI
@@ -29,8 +30,7 @@ uvozi1 <- function() {
 kontinenti <- uvozi1()
 celine<- kontinenti[,0:2] #celine - polepšana tabela                #CELINE
 
-# Zapišemo v datoteko CSV
-write.csv(celine, "3.Podatki/celine.csv")
+
 ############################################################################################
 
 #GLAVNA MESTA
@@ -44,6 +44,7 @@ gl.mesta <- stran %>% html_nodes(xpath="//table") %>%
   .[[1]] %>% html_table()
 
 gl.mesta$"No." <- NULL              #GL.MESTA
+
 names(gl.mesta)<- c("Country","Capital")
 
 ##########################################################################################
@@ -55,7 +56,7 @@ ustvari_area<- function(){
   area <- readHTMLTable(naslov, which=2, stringsAsFactors = FALSE)
 }
 area.pop <- ustvari_area()                                        #AREA.POP
-names(area.pop)<- c("Country", "Population","Area (in sq mi)")
+names(area.pop)<- c("Country", "Population","Area")
 
 ############################################################################################
 
@@ -94,10 +95,52 @@ drzave$Capital[173]<- c("Dodoma")
 # Zapišemo v datoteko CSV
 write.csv(drzave, "3.Podatki/drzave.csv")
 
+##############################################################################
+uvozi2 <- function() {
+  return(read.csv("3.Podatki/drzave.csv", sep = ",", as.is = TRUE,
+                  fileEncoding = "Windows-1250"))
+}
+
+drzave <- uvozi2()
+
 #UREDI ŠE Z CELINAMI
 anti_join(drzave, celine)
 anti_join(celine,drzave)
 
+drzave$Country[27]<-c("Burkina")
+drzave$Country[89]<-c("North Korea")
+drzave$Country[90]<-c("South Korea")
+drzave$Country[114]<-c("Micronesia")
+drzave$Country[121]<-c("Burma")
+drzave$Country[175]<-c("East Timor")
+drzave$Country[12]<-c("Bahamas")
+drzave<- drzave[-c(91,171),]
+
+celine$Country[12]<-c("Congo, Democratic Republic of the")
+celine$Country[13]<-c("Congo, Republic of the")
+celine$Country[72]<-c("North Korea")
+celine$Country[73]<-c("South Korea")
+celine$Country[86]<-c("Russia")
+celine$Country[60]<-c("Burma")
+
+
+##############################################################################
+
+
+
 #UREDI ŠE Z RELIGIJAMI (pri religijah vsem odstrani prvo črko!!!)
 anti_join(drzave, religije)
 anti_join(religije,drzave)
+
+
+
+# Zapišemo v datoteko CSV
+#write.csv(religije, "3.Podatki/religije.csv")
+
+# Zapišemo v datoteko CSV
+#write.csv(celine, "3.Podatki/celine.csv")
+
+# Zapišemo v datoteko CSV
+#write.csv(drzave, "3.Podatki/drzave.csv")
+
+
