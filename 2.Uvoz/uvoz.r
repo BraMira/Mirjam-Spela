@@ -55,6 +55,8 @@ napadi <- do.call("rbind", list(januar,februar, marec,april,maj,junij,julij,avgu
 napadi$Date1 <- `Encoding<-`(napadi$Date,"UTF-8")
 napadi$Injured1 <- `Encoding<-`(napadi$Injured,"UTF-8")
 napadi$Location1 <- `Encoding<-`(napadi$Location,"UTF-8")
+napadi$Perpetrator1 <- `Encoding<-`(napadi$Perpetrator,"UTF-8")
+napadi$`Part of1` <- `Encoding<-`(napadi$`Part of`,"UTF-8")
 napadi$Dead[180]<-"8-10"
 napadi$Dead[77]<-"10-20(+7)"
 
@@ -89,26 +91,50 @@ napadi$dead_perpetrators[is.na(napadi$dead_perpetrators)]<-0
 napadi$city <- 0
 napadi$country <-0
 for (i in 1:length(napadi$Location1)){
-  napadi$city[i]<-strsplit(napadi$Location1,",")[[i]][1];
-  napadi$country[i]<-strsplit(napadi$Location1,",")[[i]][2];
+  napadi$city[i]<-trimws(strsplit(napadi$Location1,",")[[i]][1]); #trimws odstrani white space
+  napadi$country[i]<-trimws(strsplit(napadi$Location1,",")[[i]][2]);
   
 }
-napadi$country[napadi$city=="East Jerusalem"]<- "Jerusalem" 
-napadi$country[192]<-"Nigeria"
+
+napadi$country[napadi$city=="East Jerusalem"]<- "Israel" 
+napadi$country[napadi$city=="West Bank"]<- "Palestine" 
+napadi$country[napadi$country==" West Bank"]<- "Palestine" 
+for (i in 1:length(napadi$country)){
+  if (napadi$country[i]==" West Bank" && is.na(napadi$country[i])!=TRUE){
+    napadi$country[i]<- "Palestine"
+  }
+  
+}
+napadi$country[c(82,91)]<-"Macedonia"
+napadi$country[c(159,104)]<-"Afghanistan"
+napadi$country[napadi$country==" Borno State"] <- "Nigeria"
+napadi$country[c(87,337,329)]<- "United States"
+napadi$country[c(230,34,229)]<-"Philippines"
+napadi$country[233]<-"Australia"
+napadi$city[233]<-"Sydney"
+napadi$country[384]<-"Russia"
+napadi$country[126]<-"Syria"
+napadi$country[c(225,74,75,216)]<-"Egypt"
+napadi$country[193]<-"Mali"
 napadi$city[192]<-NA
 napadi$country[266]<-"Pakistan"
 napadi$city[266]<-"Quetta"
 napadi$city[267]<-"NA"
+napadi$country[184]<-"Israel"
+napadi$city[184]<-"Jerusalem"
 napadi$country[267]<-"Bhutan"
+napadi$country[204]<-"Thailand"
+napadi$city[207]<-"Bangkok"
 napadi$country[207]<-"France"
 napadi$city[207]<-"Oignies"
 napadi$city[369]<-"Abadam"
-napadi$country[369]<-"Nigeria"
+napadi$country[c(369,192)]<-"Nigeria"
+#napadi$country[napadi$country=="Borno State"]<-"Nigeria"
 #spremenimo vrstni red
-napadi1 <- napadi[,c("start_date","end_date","month","Type","max_deaths","confirmed","Injured1","dead_perpetrators","country","city","Perpetrator","Part of")] 
+napadi1 <- napadi[,c("start_date","end_date","month","Type","max_deaths","confirmed","Injured1","dead_perpetrators","country","city","Perpetrator1","Part of1")] 
 
 #spremenimo imena
-names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city","Perpetrator","Part of")]<-c("type","injured","place","perpetrator","part_of") 
+names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city","Perpetrator1","Part of1")]<-c("type","injured","place","perpetrator","part_of") 
 
 
 # Zapišemo v datoteko CSV
