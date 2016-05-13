@@ -44,6 +44,15 @@ religion <- dbSendQuery(conn,build_sql("CREATE TABLE religion (
                                        name TEXT NOT NULL,
                                        followers INTEGER,
                                        proportion INTEGER)"))
+in_country <- dbSendQuery(conn, build_sql("CREATE TABLE in_country (
+                                          attack INTEGER REFERENCES attack(attack_id),
+                                          country TEXT REFERENCES country(name))"))
+in_continent <- dbSendQuery(conn, build_sql("CREATE TABLE in_continent (
+                                            continent INTEGER REFERENCES continent(continent_id),
+                                            country TEXT REFERENCES country(name))"))
+country_religion <- dbSendQuery(conn, build_sql("CREATE TABLE country_religion ( 
+                                                country TEXT REFERENCES country(name),
+                                                main_religion INTEGER REFERENCES religion(religion_id))"))
   
   
 }, finally = {
