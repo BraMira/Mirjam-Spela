@@ -2,52 +2,53 @@
 library(dplyr)
 library(RPostgreSQL)
 
-source("auth.R")
+source("4.baza/auth.R")
+
+#Vstavi funkcijo za brisanje tabel
 
 # Povežemo se z gonilnikom za PostgreSQL
 drv <- dbDriver("PostgreSQL")      
 
-# Uporabimo tryCatch,
+# Uporabimo tryCatch,(da se povežemo in bazo in odvežemo)
 # da prisilimo prekinitev povezave v primeru napake
 tryCatch({
-  
-  
-  
   # Vzpostavimo povezavo
-  conn <- dbConnect(drv, dbname = db, host = host,
+  conn <- dbConnect(drv, dbname = db, host = host,#drv=s čim se povezujemo
                     user = user, password = password)
   
-  
-  #ustvariva tabeleee!!! integer..... !!! MIRJAM
-  
-  
-#   # Poizvedbo zgradimo s funkcijo build_sql
-#   # in izvedemo s funkcijo dbGetQuery
-#   znesek <- 1000
-#   t <- dbGetQuery(conn, build_sql("SELECT * FROM transakcija
-#                                   WHERE znesek >", znesek, "
-#                                   ORDER BY znesek, id"))
-#   # Rezultat dobimo kot razpredelnico (data frame)
-#   
-#   # Vstavimo še eno transakcijo
-#   i <- round(runif(1, 1, nrow(t)))
-#   print("Storniramo transkacijo:")
-#   print(t[i,])
-#   znesek <- -t[i, "znesek"]
-#   racun <- t[i, "racun"]
-#   opis <- paste("Storno:", t[i, "opis"])
-#   
-#   # Pošljemo poizvedbo
-#   dbSendQuery(conn, build_sql("INSERT INTO transakcija (znesek, racun, opis)
-#                               VALUES (", znesek, ", ", racun, ", ", opis, ")"))
-  
-  
-  
+  #Glavne tabele
+  attack <- dbSendQuery(conn,build_sql("CREATE TABLE attack (
+                                       attack_id SERIAL PRIMARY KEY,
+                                       start_date INTEGER NOT NULL,
+                                       end_date INTEGER NOT NULL,
+                                       month INTEGER NOT NULL,
+                                       type TEXT NOT NULL,
+                                       max_deaths INTEGER,
+                                       confirmed TEXT NOT NULL,
+                                       injured TEXT,
+                                       dead_perpetrators INTEGER,
+                                       country TEXT NOT NULL,
+                                       place TEXT,
+                                       perpetrator TEXT,
+                                       part_of TEXT)"))
+  country <- dbSendQuery(conn,build_sql("CREATE TABLE country (
+                                        name TEXT PRIMARY KEY NOT NULL,
+                                        capital TEXT NOT NULL,
+                                        population INTEGER NOT NULL,
+                                        area INTEGER NOT NULL)"))
+continent <- dbSendQuery(conn,build_sql("CREATE TABLE continent (
+                                        continent_id SERIAL PRIMARY KEY,
+                                        name TEXT NOT NULL)")) #mogoče tu še REFERENCES/FOREIGN KEY?
+religion <- dbSendQuery(conn,build_sql("CREATE TABLE religion (
+                                       religion_id SERIAL PRIMARY KEY,
+                                       name TEXT NOT NULL,
+                                       followers INTEGER,
+                                       proportion INTEGER)"))
   
   
 }, finally = {
   # Na koncu nujno prekinemo povezavo z bazo,
   # saj preveč odprtih povezav ne smemo imeti
-  dbDisconnect(conn)
+  dbDisconnect(conn) #PREKINEMO POVEZAVO
   # Koda v finally bloku se izvede, preden program konča z napako
 })
