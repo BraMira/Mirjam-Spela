@@ -89,7 +89,7 @@ napadi$confirmed[c(4,27,30,42,65,88,175,190,196,198,201,208,214,217,219,304,328,
 napadi$dead_perpetrators <- napadi$Dead %>% strapplyc("\\(\\+([0-9]+)\\)") %>% as.numeric()
 napadi$dead_perpetrators[is.na(napadi$dead_perpetrators)]<-0
 napadi$city <- 0
-napadi$country <-0
+napadi$country <-NA
 for (i in 1:length(napadi$Location1)){
   napadi$city[i]<-trimws(strsplit(napadi$Location1,",")[[i]][1]); #trimws odstrani white space
   napadi$country[i]<-trimws(strsplit(napadi$Location1,",")[[i]][2]);
@@ -97,14 +97,8 @@ for (i in 1:length(napadi$Location1)){
 }
 
 napadi$country[napadi$city=="East Jerusalem"]<- "Israel" 
-napadi$country[napadi$city=="West Bank"]<- "Palestine" 
-napadi$country[napadi$country==" West Bank"]<- "Palestine" 
-for (i in 1:length(napadi$country)){
-  if (napadi$country[i]==" West Bank" && is.na(napadi$country[i])!=TRUE){
-    napadi$country[i]<- "Palestine"
-  }
-  
-}
+napadi$country[napadi$city=="West Bank"]<- "Israel" 
+
 napadi$country[c(82,91)]<-"Macedonia"
 napadi$country[c(159,104)]<-"Afghanistan"
 #napadi$country[napadi$country==" Borno State"] <- "Nigeria"
@@ -132,6 +126,7 @@ napadi$country[c(369,192,4,376)]<-"Nigeria"
 #napadi$country[napadi$country=="Borno State"]<-"Nigeria"
 #spremenimo vrstni red
 napadi1 <- napadi[,c("start_date","end_date","month","Type","max_deaths","confirmed","Injured1","dead_perpetrators","country","city","Perpetrator1","Part of1")] 
+napadi1$country[napadi1$country=="West Bank"]<-"Israel"
 
 #spremenimo imena
 names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city","Perpetrator1","Part of1")]<-c("type","injured","place","perpetrator","part_of") 
