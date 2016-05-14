@@ -12,7 +12,7 @@ delete_table <- function(){
     conn <- dbConnect(drv, dbname = db, host = host,
                       user = user, password = password)
     
-    #Če tabela obstaja jo zbrišemo, tako da najprej zbrišemo tiste, 
+    #Če tabela obstaja jo zbrišemo, ter najprej zbrišemo tiste, 
     #ki se navezujejo na druge
     dbSendQuery(conn,build_sql("DROP TABLE IF EXISTS country_religion"))
     dbSendQuery(conn,build_sql("DROP TABLE IF EXISTS in_continent"))
