@@ -107,8 +107,8 @@ for (i in 1:length(napadi$country)){
 }
 napadi$country[c(82,91)]<-"Macedonia"
 napadi$country[c(159,104)]<-"Afghanistan"
-napadi$country[napadi$country==" Borno State"] <- "Nigeria"
-napadi$country[c(87,337,329)]<- "United States"
+#napadi$country[napadi$country==" Borno State"] <- "Nigeria"
+napadi$country[c(87,337,329,118)]<- "United States"
 napadi$country[c(230,34,229)]<-"Philippines"
 napadi$country[233]<-"Australia"
 napadi$city[233]<-"Sydney"
@@ -128,7 +128,7 @@ napadi$city[207]<-"Bangkok"
 napadi$country[207]<-"France"
 napadi$city[207]<-"Oignies"
 napadi$city[369]<-"Abadam"
-napadi$country[c(369,192)]<-"Nigeria"
+napadi$country[c(369,192,4,376)]<-"Nigeria"
 #napadi$country[napadi$country=="Borno State"]<-"Nigeria"
 #spremenimo vrstni red
 napadi1 <- napadi[,c("start_date","end_date","month","Type","max_deaths","confirmed","Injured1","dead_perpetrators","country","city","Perpetrator1","Part of1")] 
