@@ -96,40 +96,52 @@ for (i in 1:length(napadi$Location1)){
   
 }
 
+#Popravimo narobe izpisane podatke
 napadi$country[napadi$city=="East Jerusalem"]<- "Israel" 
 napadi$country[napadi$city=="West Bank"]<- "Israel" 
-
-napadi$country[c(82,91)]<-"Macedonia"
+napadi$city[napadi$country=="Sydney"]<-"Sydney"
 napadi$country[c(159,104)]<-"Afghanistan"
-#napadi$country[napadi$country==" Borno State"] <- "Nigeria"
-napadi$country[c(87,337,329,118)]<- "United States"
 napadi$country[c(230,34,229)]<-"Philippines"
-napadi$country[233]<-"Australia"
-napadi$city[233]<-"Sydney"
 napadi$country[384]<-"Russia"
 napadi$country[126]<-"Syria"
-napadi$country[c(225,74,75,216)]<-"Egypt"
+napadi$country[216]<-"Egypt"
 napadi$country[193]<-"Mali"
 napadi$city[192]<-NA
+napadi$country[192]<-"Nigeria"
 napadi$country[266]<-"Pakistan"
 napadi$city[266]<-"Quetta"
 napadi$city[267]<-"NA"
+napadi$country[267]<-"Bhutan"
 napadi$country[184]<-"Israel"
 napadi$city[184]<-"Jerusalem"
-napadi$country[267]<-"Bhutan"
 napadi$country[204]<-"Thailand"
 napadi$city[207]<-"Bangkok"
 napadi$country[207]<-"France"
 napadi$city[207]<-"Oignies"
 napadi$city[369]<-"Abadam"
-napadi$country[c(369,192,4,376)]<-"Nigeria"
-#napadi$country[napadi$country=="Borno State"]<-"Nigeria"
-#spremenimo vrstni red
-napadi1 <- napadi[,c("start_date","end_date","month","Type","max_deaths","confirmed","Injured1","dead_perpetrators","country","city","Perpetrator1","Part of1")] 
-napadi1$country[napadi1$country=="West Bank"]<-"Israel"
+napadi$country[369]<-"Nigeria"
 
-#spremenimo imena
-names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city","Perpetrator1","Part of1")]<-c("type","injured","place","perpetrator","part_of") 
+#spremenimo vrstni red
+napadi1 <- napadi[,c("start_date","end_date","month","Type","max_deaths","confirmed",
+                     "Injured1","dead_perpetrators","country","city","Perpetrator1","Part of1")] 
+
+#Popravimo imena držav
+napadi1$country[napadi1$country=="West Bank"]<-"Israel"
+napadi1$country[napadi1$country=="Republic of Macedonia"]<-"Macedonia"
+napadi1$country[napadi1$country=="Texas"]<-"United States"
+napadi1$country[napadi1$country=="California"]<-"United States"
+napadi1$country[napadi1$country=="South Carolina"]<-"United States"
+napadi1$country[napadi1$country=="Colorado"]<-"United States"
+napadi1$country[napadi1$country=="Sydney"]<-"Australia"
+napadi1$country[napadi1$country=="Sinai"]<-"Egypt"
+napadi1$country[napadi1$country=="Borno State"]<-"Nigeria"
+
+
+
+#spremenimo imena stolpcev
+names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city",
+                                     "Perpetrator1","Part of1")]<-c("type","injured","place",
+                                                                    "perpetrator","part_of") 
 
 
 # Zapišemo v datoteko CSV
