@@ -1,6 +1,6 @@
 # Uvozimo potrebne knjižnice
 library(rvest)
-#library(dplyr) doma ne dela
+library(dplyr) 
 library(gsubfn)
 
 #########################################################################################
@@ -31,10 +31,9 @@ religije[,6] <- religije[,6] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
 
 
-# Encoding(religije$`Muslim%`) <- "UTF-8"
-#     
-# religije[,8] <- religije[,8] %>% strapplyc("([0-9.]+)") %>%
-#   unlist() %>% as.numeric()
+
+religije[,8] <- religije[,8] %>% strapplyc("([0-9.]+)") %>%
+  sapply(. %>% .[[1]]) %>% as.numeric()
 
 religije[,10] <- religije[,10] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
@@ -42,13 +41,13 @@ religije[,12] <- religije[,12] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
 religije[,14] <- religije[,14] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
-# Encoding(religije$`Folk Religion%`) <- "UTF-8"
-# religije[,16] <- religije[,16] %>% strapplyc("([0-9.]+)") %>%
-#   unlist() %>% as.numeric()
+religije[,16] <- religije[,16] %>% strapplyc("([0-9.]+)") %>%
+  sapply(. %>% .[[1]]) %>% as.numeric()
 religije[,18] <- religije[,18] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
 religije[,20] <- religije[,20] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
+
 
 
 # uvozi2 <- function() {
