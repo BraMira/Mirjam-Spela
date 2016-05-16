@@ -53,38 +53,47 @@ december$month <- 12
 #Združimo tabele
 napadi <- do.call("rbind", list(januar,februar, marec,april,maj,junij,julij,avgust,september,oktober,november,december))
 napadi$Date1 <- `Encoding<-`(napadi$Date,"UTF-8")
-napadi$Injured1 <- `Encoding<-`(napadi$Injured,"UTF-8")
+napadi$Injured2 <- `Encoding<-`(napadi$Injured,"UTF-8")
 napadi$Location1 <- `Encoding<-`(napadi$Location,"UTF-8")
 napadi$Perpetrator1 <- `Encoding<-`(napadi$Perpetrator,"UTF-8")
 napadi$`Part of1` <- `Encoding<-`(napadi$`Part of`,"UTF-8")
 napadi$Dead[180]<-"8-10"
 napadi$Dead[77]<-"10-20(+7)"
 
-napadi$start_date <- napadi$Date1%>% strapplyc("^([0-9]+)") %>% as.numeric()
-napadi$end_date <-  napadi$Date1%>% strapplyc("\\–([0-9]+)") %>% as.numeric()
-napadi$end_date[is.na(napadi$end_date)]<-0
+napadi$Injured1 <- napadi$Injured2 %>% strapplyc("^([0-9]+)") %>% as.numeric()
+napadi$start<- napadi$Date1%>% strapplyc("^([0-9]+)") %>% as.numeric()
+napadi$end <-  napadi$Date1%>% strapplyc("\\–([0-9]+)") %>% as.numeric()
+napadi$end[is.na(napadi$end)]<-0
 
 for(i in 1:length(napadi$Date1)){
-  if(napadi$end_date[i] == 0){
-    napadi$end_date[i]<-napadi$start_date[i];
+  if(napadi$end[i] == 0){
+    napadi$end[i]<-napadi$start[i];
   }
 }
-napadi$end_date[126]<-29;
-napadi$confirmed <- NA
+napadi$end[126]<-29;
+napadi$start_date <- 0
+napadi$end_date <- 0
+
+for (i in 1:length(napadi$month)){
+  napadi$start_date[i]<-paste("2015",as.character(napadi$month[i]),as.character(napadi$start[i]),sep="-")
+  napadi$end_date[i]<-paste("2015",as.character(napadi$month[i]),as.character(napadi$end[i]),sep="-")
+}
+
+napadi$confirmed <- FALSE
 napadi$max_deaths <- napadi$Dead %>% strapplyc("\\-([0-9]+)") %>% as.numeric()#napadi$Dead %>% strapplyc("^([0-9]+)") %>% as.numeric()
 napadi$max_deaths[is.na(napadi$max_deaths)]<-0
 t<-napadi$Dead %>% strapplyc("^([0-9]+)") %>% as.numeric();
 for (i in 1:length(napadi$Dead)){
   if(napadi$max_deaths[i]==0){
-    napadi$confirmed[i]<-"YES"
+    napadi$confirmed[i]<-TRUE
     napadi$max_deaths[i]<-t[i]
   }
-  else{
-    napadi$confirmed[i]<-"NO"
-  }
+  # else{
+  #   napadi$confirmed[i]<-"NO"
+  # }
 }
 napadi$max_deaths[4]<-2000;
-napadi$confirmed[c(4,27,30,42,65,88,175,190,196,198,201,208,214,217,219,304,328,374,385)]<-"NO";
+#napadi$confirmed[c(4,27,30,42,65,88,175,190,196,198,201,208,214,217,219,304,328,374,385)]<-"NO";
 
 napadi$dead_perpetrators <- napadi$Dead %>% strapplyc("\\(\\+([0-9]+)\\)") %>% as.numeric()
 napadi$dead_perpetrators[is.na(napadi$dead_perpetrators)]<-0
@@ -122,7 +131,7 @@ napadi$city[369]<-"Abadam"
 napadi$country[369]<-"Nigeria"
 
 #spremenimo vrstni red
-napadi1 <- napadi[,c("start_date","end_date","month","Type","max_deaths","confirmed",
+napadi1 <- napadi[,c("start_date","end_date","Type","max_deaths","confirmed",
                      "Injured1","dead_perpetrators","country","city","Perpetrator1","Part of1")] 
 
 #Popravimo imena držav

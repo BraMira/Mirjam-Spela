@@ -2,7 +2,7 @@
 library(dplyr)
 library(RPostgreSQL)
 
-source("4.baza/auth.R")
+source("4.Baza/auth.R")
 # Povežemo se z gonilnikom za PostgreSQL
 drv <- dbDriver("PostgreSQL")  
 
@@ -21,6 +21,7 @@ delete_table <- function(){
     dbSendQuery(conn,build_sql("DROP TABLE IF EXISTS continent"))
     dbSendQuery(conn,build_sql("DROP TABLE IF EXISTS country"))
     dbSendQuery(conn,build_sql("DROP TABLE IF EXISTS attack"))
+    
     
   }, finally = {
     dbDisconnect(conn)
@@ -41,13 +42,12 @@ tryCatch({
   #Glavne tabele
   attack <- dbSendQuery(conn,build_sql("CREATE TABLE attack (
                                        attack_id SERIAL PRIMARY KEY,
-                                       start_date INTEGER NOT NULL,
-                                       end_date INTEGER NOT NULL,
-                                       month INTEGER NOT NULL,
+                                       start_date DATE NOT NULL,
+                                       end_date DATE NOT NULL,
                                        type TEXT NOT NULL,
                                        max_deaths INTEGER,
-                                       confirmed TEXT NOT NULL,
-                                       injured TEXT,
+                                       confirmed BOOLEAN NOT NULL,
+                                       injured INTEGER,
                                        dead_perpetrators INTEGER,
                                        country TEXT NOT NULL,
                                        place TEXT,
@@ -86,23 +86,23 @@ tryCatch({
 }
 
 #Uvoz podatkov
-napad<-read.csv("3.Podatki/napadi.csv")
-celine<-read.csv("3.Podatki/celine.csv")
-drzave<-read.csv("3.Podatki/drzave.csv")
+napad<-read.csv("3.Podatki/napadi.csv",fileEncoding = "Windows-1250")
+celine<-read.csv("3.Podatki/celine.csv",fileEncoding = "Windows-1250")
+drzave<-read.csv("3.Podatki/drzave.csv",fileEncoding = "Windows-1250")
 drzave$population<-as.numeric(gsub(",","",drzave$population))
 drzave$area<-as.numeric(gsub(",","",drzave$area))
-religije<-read.csv("3.Podatki/religije.csv")
-vsi_kont <- read.csv("3.Podatki/vsi_kont.csv")
+religije<-read.csv("3.Podatki/religije.csv",fileEncoding = "Windows-1250")
+vsi_kont <- read.csv("3.Podatki/vsi_kont.csv",fileEncoding = "Windows-1250")
 #Funcija, ki vstavi podatke
 insert_data <- function(){
   tryCatch({
     conn <- dbConnect(drv, dbname = db, host = host,
                       user = user, password = password)
     
-    dbWriteTable(conn, name="attack",napad,overwrite=T,row.names=FALSE)
-    dbWriteTable(conn, name="continent",vsi_kont,overwrite=T,row.names=FALSE)
-    dbWriteTable(conn, name="country",subset(drzave, select=-X),overwrite=T,row.names=FALSE) 
-    #dbWriteTable(conn, name="religion",religje,overwrite=T,row.names=FALSE) #še ni urejena
+    dbWriteTable(conn, name="attack",napad,append=T,row.names=FALSE)
+    dbWriteTable(conn, name="continent",vsi_kont,append=T,row.names=FALSE)
+    dbWriteTable(conn, name="country",subset(drzave, select=-X),append=T,row.names=FALSE) 
+    #dbWriteTable(conn, name="religion",religje,append=T,row.names=FALSE) #še ni urejena
     
   }, finally = {
     dbDisconnect(conn) 
