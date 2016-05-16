@@ -55,9 +55,9 @@ tryCatch({
                                        part_of TEXT)"))
   country <- dbSendQuery(conn,build_sql("CREATE TABLE country (
                                         name TEXT PRIMARY KEY NOT NULL,
-                                        capital TEXT NOT NULL,
                                         population INTEGER NOT NULL,
-                                        area INTEGER NOT NULL)"))
+                                        area DECIMAL NOT NULL,
+                                        capital TEXT NOT NULL)"))
   continent <- dbSendQuery(conn,build_sql("CREATE TABLE continent (
                                         continent_id SERIAL PRIMARY KEY,
                                         name TEXT NOT NULL)")) #mogoče tu še REFERENCES/FOREIGN KEY?
@@ -89,6 +89,8 @@ tryCatch({
 napad<-read.csv("3.Podatki/napadi.csv")
 celine<-read.csv("3.Podatki/celine.csv")
 drzave<-read.csv("3.Podatki/drzave.csv")
+drzave$population<-as.numeric(gsub(",","",drzave$population))
+drzave$area<-as.numeric(gsub(",","",drzave$area))
 religije<-read.csv("3.Podatki/religije.csv")
 vsi_kont <- read.csv("3.Podatki/vsi_kont.csv")
 #Funcija, ki vstavi podatke
@@ -99,8 +101,7 @@ insert_data <- function(){
     
     dbWriteTable(conn, name="attack",napad,overwrite=T,row.names=FALSE)
     dbWriteTable(conn, name="continent",vsi_kont,overwrite=T,row.names=FALSE)
-    
-    #dbWriteTable(conn, name="country",drzave,overwrite=T,row.names=FALSE) #potrebno popraviti imena stolpcev, ko bo link delal
+    dbWriteTable(conn, name="country",subset(drzave, select=-X),overwrite=T,row.names=FALSE) 
     #dbWriteTable(conn, name="religion",religje,overwrite=T,row.names=FALSE) #še ni urejena
     
   }, finally = {
