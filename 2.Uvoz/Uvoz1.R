@@ -13,15 +13,71 @@ stran3 <- html_session(link3) %>% read_html()
 religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
   .[[1]] %>% html_table()           #RELIGIJE
 
-names(religije)[1]<- c("Country")
+names(religije)<- c("Country","Region","Subregion","Population","Christian","Christian%",
+                    "Muslim","Muslim%","Unaffiliated","Unaffiliated%","Hindu","Hindu%",
+                    "Buddhist","Buddhist%","Folk Religion","Folk Religion%",
+                    "Other Religion","Other Religion%","Jewish","Jewish%")
 
-
+#odvečne vrstice
 religije<-religije[-c(22,33,40,60,64,71,81,88,97,108,121,130,140,155,161,169,181,191,203,229,239,256,263,278),]
 
-religije$Country1<- `Encoding<-`(religije$Country,"UTF-8")
+
+Encoding(religije$Country) <- "UTF-8"
+religije$Country <- religije$Country %>% strapplyc("([a-zA-Z -]+)") %>%
+  sapply(. %>% .[[1]]) %>% trimws()
+
+
+religije[,6] <- religije[,6] %>% strapplyc("([0-9.]+)") %>%
+  unlist() %>% as.numeric()
+
+
+# Encoding(religije$`Muslim%`) <- "UTF-8"
+#     
+# religije[,8] <- religije[,8] %>% strapplyc("([0-9.]+)") %>%
+#   unlist() %>% as.numeric()
+
+religije[,10] <- religije[,10] %>% strapplyc("([0-9.]+)") %>%
+  unlist() %>% as.numeric()
+religije[,12] <- religije[,12] %>% strapplyc("([0-9.]+)") %>%
+  unlist() %>% as.numeric()
+religije[,14] <- religije[,14] %>% strapplyc("([0-9.]+)") %>%
+  unlist() %>% as.numeric()
+# Encoding(religije$`Folk Religion%`) <- "UTF-8"
+# religije[,16] <- religije[,16] %>% strapplyc("([0-9.]+)") %>%
+#   unlist() %>% as.numeric()
+religije[,18] <- religije[,18] %>% strapplyc("([0-9.]+)") %>%
+  unlist() %>% as.numeric()
+religije[,20] <- religije[,20] %>% strapplyc("([0-9.]+)") %>%
+  unlist() %>% as.numeric()
+
+
+# uvozi2 <- function() {
+#   return(read.csv("3.Podatki/drzave.csv", sep = ",", as.is = TRUE,
+#                   fileEncoding = "Windows-1250"))
+# }
+# 
+# drzave <- uvozi2() 
+# 
+# dr <- drzave[,0:2]
+# rl <- religije[,20:21]
+# anti_join(dr, rl)
+# anti_join(rl,dr)
+
+
+
+religije$Country[39] <- c("Burkina")
+religije$Country[26] <- c("Congo, Democratic Republic of the")
+religije$Country[27] <- c("Congo, Republic of the")
+religije$Country[108] <- c("East Timor")
+religije$Country[41] <- c("Gambia")
+religije$Country[27] <- c("Congo, Republic of the")
+
+
+write.csv(religije, "3.Podatki/religije.csv")
 
 #######################################################################################################
 
+#KONTINENTI 
 #KONTINENTI 
 uvozi1 <- function() {
   return(read.csv("2.Uvoz/Kontinenti.csv", sep = ",", as.is = TRUE,
@@ -30,12 +86,21 @@ uvozi1 <- function() {
 }
 
 kontinenti <- uvozi1()
+kontinenti[86,2]<-"Russia"; #spremenila Russian Federation v Russia
+kontinenti$Country[12]<-c("Congo, Democratic Republic of the")
+kontinenti$Country[13]<-c("Congo, Republic of the")
+kontinenti$Country[72]<-c("North Korea")
+kontinenti$Country[73]<-c("South Korea")
+kontinenti$Country[86]<-c("Russia")
+kontinenti$Country[60]<-c("Burma")
+
 sk<-data.frame(Continent="Asia",Country="South Korea") #manjka South Korea
 celine1<- kontinenti[,0:2] #celine - polepšana tabela                #CELINE
 
 celine2 <- rbind(celine1,sk) #dodala South Korea
+
 celine <- arrange(celine2, Continent, Country) #urejeno po abecedi
-celine[86,2]<-"Russia"; #spremenila Russian Federation v Russia
+
 
 #Preimenovala stolpce z malimi črkami
 names(celine)[names(celine) %in% c("Continent","Country")] <- c("continent","country")
@@ -47,7 +112,6 @@ names(vsi_kontinenti)<-"continent"
 # Zapišemo v datoteko CSV
 write.csv(celine, "3.Podatki/celine.csv")
 write.csv(vsi_kontinenti,"3.Podatki/vsi_kont.csv")
-
 
 ############################################################################################
 
