@@ -30,7 +30,8 @@ religije$Country <- religije$Country %>% strapplyc("([a-zA-Z -]+)") %>%
 religije[,6] <- religije[,6] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
 
-
+religije$Population <- religije$Population %>% strsplit(split = " ") %>%
+  sapply(. %>% paste(collapse = "")) %>% as.numeric()
 
 religije[,8] <- religije[,8] %>% strapplyc("([0-9.]+)") %>%
   sapply(. %>% .[[1]]) %>% as.numeric()
@@ -47,6 +48,30 @@ religije[,18] <- religije[,18] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
 religije[,20] <- religije[,20] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
+
+religije$Christian <- religije$Christian %>% strsplit(split = " ") %>%
+  sapply(. %>% paste(collapse = "")) %>% as.numeric()
+
+religije$Muslim <- religije$Muslim  %>% strsplit(split = " ") %>%
+  sapply(. %>% paste(collapse = "")) %>% as.numeric()
+
+religije$Unaffiliated <- religije$Unaffiliated %>% strsplit(split = " ") %>%
+  sapply(. %>% paste(collapse = "")) %>% as.numeric()
+
+religije$Hindu <- religije$Hindu %>% strsplit(split = " ") %>%
+  sapply(. %>% paste(collapse = "")) %>% as.numeric()
+
+religije$Buddhist <- religije$Buddhist %>% strsplit(split = " ") %>%
+  sapply(. %>% paste(collapse = "")) %>% as.numeric()
+
+religije$`Folk Religion` <- religije$`Folk Religion` %>% strsplit(split = " ") %>%
+  sapply(. %>% paste(collapse = "")) %>% as.numeric()
+
+religije$`Other Religion` <- religije$`Other Religion` %>% strsplit(split = " ") %>%
+  sapply(. %>% paste(collapse = "")) %>% as.numeric()
+
+religije$Jewish <- religije$Jewish %>% strsplit(split = " ") %>%
+  sapply(. %>% paste(collapse = "")) %>% as.numeric()
 
 
 
@@ -71,6 +96,7 @@ religije$Country[108] <- c("East Timor")
 religije$Country[41] <- c("Gambia")
 religije$Country[27] <- c("Congo, Republic of the")
 
+religije<- religije[,-c(2,3,4)]
 
 write.csv(religije, "3.Podatki/religije.csv")
 
