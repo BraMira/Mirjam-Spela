@@ -1,0 +1,196 @@
+"","country","name","followers","proportion"
+"1","Afghanistan","Muslim",31315770,99.7
+"2","Albania","Muslim",2569600,80.3
+"3","Algeria","Muslim",34725130,97.9
+"4","Andorra","Christian",71600,89.5
+"5","Angola","Christian",17267400,90.5
+"6","Antigua and Barbuda","Christian",83700,93
+"7","Argentina","Christian",34429320,85.2
+"8","Armenia","Christian",3043650,98.5
+"9","Australia","Christian",14987710,67.3
+"10","Austria","Christian",6745560,80.4
+"11","Azerbaijan","Muslim",8905110,96.9
+"12","Bahamas","Christian",326400,96
+"13","Bahrain","Muslim",885780,70.3
+"14","Bangladesh","Muslim",133523620,89.8
+"15","Barbados","Christian",257040,95.2
+"16","Belarus","Christian",6835200,71.2
+"17","Belgium","Christian",6875820,64.2
+"18","Belize","Christian",271560,87.6
+"19","Benin","Christian",4690500,53
+"20","Bhutan","Buddhist",545310,74.7
+"21","Bolivia","Christian",9324270,93.9
+"22","Bosnia and Herzegovina","Christian",1966480,52.3
+"23","Botswana","Christian",1449210,72.1
+"24","Brazil","Christian",173310550,88.9
+"25","Brunei","Muslim",300400,75.1
+"26","Bulgaria","Christian",6149290,82.1
+"27","Burkina Faso","Muslim",10145520,61.6
+"28","Burundi","Christian",7667700,91.5
+"29","Cambodia","Buddhist",13701660,96.9
+"30","Cameroon","Christian",13778800,70.3
+"31","Canada","Christian",23473800,69
+"32","Cape Verde","Christian",445500,89.1
+"33","Central African Republic","Christian",3938000,89.5
+"34","Chad","Muslim",6210190,55.3
+"35","Chile","Christian",15296340,89.4
+"36","China","Unaffiliated",700179480,52.2
+"37","Colombia","Christian",42818250,92.5
+"38","Comoros","Muslim",717590,98.3
+"39","Congo, Democratic Republic of the","Christian",63199260,95.8
+"40","Congo, Republic of the","Christian",3470360,85.9
+"41","Costa Rica","Christian",4235940,90.9
+"42","Ivory Coast","Christian",8705340,44.1
+"43","Croatia","Christian",4109600,93.4
+"44","Cuba","Christian",6665920,59.2
+"45","Cyprus","Christian",805200,73.2
+"46","Czech Republic","Unaffiliated",8014360,76.4
+"47","Denmark","Christian",4634250,83.5
+"48","Djibouti","Muslim",862410,96.9
+"49","Dominica","Christian",66080,94.4
+"50","Dominican Republic","Christian",8738400,88
+"51","Ecuador","Christian",13606860,94.1
+"52","Egypt","Muslim",76982880,94.9
+"53","El Salvador","Christian",5459580,88.2
+"54","Equatorial Guinea","Christian",620900,88.7
+"55","Eritrea","Christian",3302250,62.9
+"56","Estonia","Unaffiliated",798640,59.6
+"57","Ethiopia","Christian",52092600,62.8
+"58","Fiji","Christian",553840,64.4
+"59","Finland","Christian",4373760,81.6
+"60","France","Christian",39557700,63
+"61","Gabon","Christian",1155150,76.5
+"62","Gambia","Muslim",1645230,95.1
+"63","Georgia","Christian",3849750,88.5
+"64","Germany","Christian",56540100,68.7
+"65","Ghana","Christian",18268110,74.9
+"66","Greece","Christian",10008160,88.1
+"67","Grenada","Christian",96600,96.6
+"68","Guatemala","Christian",13699280,95.2
+"69","Guinea","Muslim",8423120,84.4
+"70","Guinea-Bissau","Muslim",685520,45.1
+"71","Guyana","Christian",495000,66
+"72","Haiti","Christian",8681310,86.9
+"73","Honduras","Christian",6657600,87.6
+"74","Hungary","Christian",8083800,81
+"75","Iceland","Christian",304000,95
+"76","India","Hindu",973564950,79.5
+"77","Indonesia","Muslim",209166640,87.2
+"78","Iran","Muslim",73600150,99.5
+"79","Iraq","Muslim",31353300,99
+"80","Ireland","Christian",4112400,92
+"81","Israel","Jewish",5609520,75.6
+"82","Italy","Christian",50438150,83.3
+"83","Jamaica","Christian",2115280,77.2
+"84","Japan","Unaffiliated",72127800,57
+"85","Jordan","Muslim",6016680,97.2
+"86","Kazakhstan","Muslim",11285120,70.4
+"87","Kenya","Christian",34352480,84.8
+"88","Kiribati","Christian",97000,97
+"89","North Korea","Unaffiliated",17361550,71.3
+"90","South Korea","Unaffiliated",22355520,46.4
+"91","Kosovo","Muslim",1809600,87
+"92","Kuwait","Muslim",2030340,74.1
+"93","Kyrgyzstan","Muslim",4690400,88
+"94","Laos","Buddhist",4092000,66
+"95","Latvia","Christian",1255500,55.8
+"96","Lebanon","Muslim",2592990,61.3
+"97","Lesotho","Christian",2100560,96.8
+"98","Liberia","Christian",3427410,85.9
+"99","Libya","Muslim",6143760,96.6
+"100","Liechtenstein","Christian",36760,91.9
+"101","Lithuania","Christian",2981360,89.8
+"102","Luxembourg","Christian",359040,70.4
+"103","Macedonia","Christian",1221580,59.3
+"104","Madagascar","Christian",17665630,85.3
+"105","Malawi","Christian",12322300,82.7
+"106","Malaysia","Muslim",18090800,63.7
+"107","Maldives","Muslim",314880,98.4
+"108","Mali","Muslim",14201880,92.4
+"109","Malta","Christian",407400,97
+"110","Marshall Islands","Christian",48750,97.5
+"111","Mauritania","Muslim",3428860,99.1
+"112","Mauritius","Hindu",733200,56.4
+"113","Mexico","Christian",107862420,95.1
+"114","Micronesia","Christian",104830,95.3
+"115","Moldova","Christian",3477180,97.4
+"116","Monaco","Christian",34400,86
+"117","Mongolia","Buddhist",1520760,55.1
+"118","Montenegro","Christian",461526,71
+"119","Morocco","Muslim",31918050,99.9
+"120","Mozambique","Christian",13262130,56.7
+"121","Burma","Buddhist",38415960,80.1
+"122","Namibia","Christian",2223000,97.5
+"123","Nauru","Christian",7900,79
+"124","Nepal","Hindu",24177720,80.7
+"125","Netherlands","Christian",8404660,50.6
+"126","New Zealand","Christian",2490900,57
+"127","Nicaragua","Christian",4967820,85.8
+"128","Niger","Muslim",15261840,98.4
+"129","Nigeria","Christian",78101060,49.3
+"130","Norway","Christian",4133360,84.7
+"131","Oman","Muslim",2388020,85.9
+"132","Pakistan","Muslim",167340760,96.4
+"133","Palau","Christian",17340,86.7
+"134","Panama","Christian",3273600,93
+"135","Papua New Guinea","Christian",6805120,99.2
+"136","Paraguay","Christian",6250050,96.9
+"137","Peru","Christian",26753600,93
+"138","Philippines","Christian",86123000,85.8
+"139","Poland","Christian",36098040,94.3
+"140","Portugal","Christian",10017840,93.8
+"141","Qatar","Muslim",1191520,67.7
+"142","Romania","Christian",21382550,99.5
+"143","Russia","Christian",104789680,73.3
+"144","Rwanda","Christian",9919080,93.4
+"145","Saint Kitts and Nevis","Christian",47300,94.6
+"146","Saint Lucia","Christian",154870,91.1
+"147","Saint Vincent and the Grenadines","Christian",97570,88.7
+"148","Samoa","Christian",174240,96.8
+"149","San Marino","Christian",27480,91.6
+"150","Sao Tome and Principe","Christian",139740,82.2
+"151","Saudi Arabia","Muslim",25528500,93
+"152","Senegal","Muslim",11982520,96.4
+"153","Serbia","Christian",7187250,92.5
+"154","Seychelles","Christian",84600,94
+"155","Sierra Leone","Muslim",4578600,78
+"156","Singapore","Buddhist",1725510,33.9
+"157","Slovakia","Christian",4657380,85.3
+"158","Slovenia","Christian",1591520,78.4
+"159","Solomon Islands","Christian",525960,97.4
+"160","Somalia","Muslim",9311340,99.8
+"161","South Africa","Christian",40705560,81.2
+"162","South Sudan","Christian",6019750,60.5
+"163","Spain","Christian",36218880,78.6
+"164","Sri Lanka","Buddhist",14455980,69.3
+"165","Sudan","Muslim",30475200,90.7
+"166","Suriname","Christian",268320,51.6
+"167","Swaziland","Christian",1048390,88.1
+"168","Sweden","Christian",6303360,67.2
+"169","Switzerland","Christian",6227580,81.3
+"170","Syria","Muslim",18940480,92.8
+"171","Taiwan","Folk Religion",10263240,44.2
+"172","Tajikistan","Muslim",6652960,96.7
+"173","Tanzania","Christian",27531760,61.4
+"174","Thailand","Buddhist",64419840,93.2
+"175","Timor-Leste","Christian",1115520,99.6
+"176","Togo","Christian",2635110,43.7
+"177","Tonga","Christian",98900,98.9
+"178","Trinidad and Tobago","Christian",883060,65.9
+"179","Tunisia","Muslim",10427600,99.5
+"180","Turkey","Muslim",71295000,98
+"181","Turkmenistan","Muslim",4687200,93
+"182","Tuvalu","Christian",10637,96.7
+"183","Uganda","Christian",28975140,86.7
+"184","Ukraine","Christian",38087100,83.8
+"185","United Arab Emirates","Muslim",5775190,76.9
+"186","United Kingdom","Christian",44110440,71.1
+"187","United States","Christian",243027540,78.3
+"188","Uruguay","Christian",1951230,57.9
+"189","Uzbekistan","Muslim",26534480,96.7
+"190","Vanuatu","Christian",223920,93.3
+"191","Vatican City","Christian",800,100
+"192","Venezuela","Christian",25879140,89.3
+"193","Yemen","Muslim",23833550,99.1
+"194","Zambia","Christian",12775840,97.6
+"195","Zimbabwe","Christian",10935900,87

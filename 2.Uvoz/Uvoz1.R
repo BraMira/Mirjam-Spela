@@ -13,17 +13,17 @@ stran3 <- html_session(link3) %>% read_html()
 religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
   .[[1]] %>% html_table()           #RELIGIJE
 
-names(religije)<- c("Country","Region","Subregion","Population","Christian","Christian%",
+names(religije)<- c("country","Region","Subregion","Population","Christian","Christian%",
                     "Muslim","Muslim%","Unaffiliated","Unaffiliated%","Hindu","Hindu%",
                     "Buddhist","Buddhist%","Folk Religion","Folk Religion%",
                     "Other Religion","Other Religion%","Jewish","Jewish%")
 
 #odvečne vrstice
-religije<-religije[-c(22,33,40,60,64,71,81,88,97,108,121,130,140,155,161,169,181,191,203,229,239,256,263,278),]
+religije<-religije[-c(22,33,40,60,64,71,81,88,96,97,108,121,130,140,155,161,169,181,191,203,229,239,256,263,278),]
 
 
-Encoding(religije$Country) <- "UTF-8"
-religije$Country <- religije$Country %>% strapplyc("([a-zA-Z -]+)") %>%
+Encoding(religije$country) <- "UTF-8"
+religije$country <- religije$country %>% strapplyc("([a-zA-Z -]+)") %>%
   sapply(. %>% .[[1]]) %>% trimws()
 
 
@@ -89,21 +89,65 @@ religije$Jewish <- religije$Jewish %>% strsplit(split = " ") %>%
 
 
 
-religije$Country[39] <- c("Burkina")
-religije$Country[26] <- c("Congo, Democratic Republic of the")
-religije$Country[27] <- c("Congo, Republic of the")
-religije$Country[108] <- c("East Timor")
-religije$Country[41] <- c("Gambia")
-religije$Country[27] <- c("Congo, Republic of the")
+religije$country[39] <- c("Burkina Faso")
+religije$country[26] <- c("Congo, Democratic Republic of the")
+religije$country[27] <- c("Congo, Republic of the")
+religije$country[108] <- c("East Timor")
+religije$country[41] <- c("Gambia")
+religije$country[27] <- c("Congo, Republic of the")
 
-religije<- religije[,-c(2,3,4)]
 
-write.csv(religije, "3.Podatki/religije.csv")
 
+religije<- religije[ ,-c(2,3,4)]
+
+#Damo drzave ven iz csv, da lahko uporabimo samo tiste države ki jih imamo
+dr<-read.csv("3.Podatki/drzave.csv",fileEncoding = "Windows-1250",stringsAsFactors=FALSE)
+dr$population<-as.numeric(gsub(",","",dr$population))
+dr$area<-as.numeric(gsub(",","",dr$area))
+drzave <- subset(dr, select=-X)
+drzave$country[drzave$country=="Korea, South"] <- "South Korea"
+drzave$country[drzave$country=="Korea, North"] <- "North Korea"
+drzave$country[drzave$country=="The Bahamas"] <- "Bahamas"
+drzave$country[drzave$country=="Micronesia, Federated States of"] <- "Micronesia"
+drzave$country[drzave$country=="Myanmar (Burma)"]<- "Burma"
+drzave$country[drzave$country=="Timor-Leste"]<- "Timor-Leste"
+
+#združimo katere države so v data.frame drzave in religije
+rel <- semi_join(religije,drzave,by="country")
+
+#glavne religije držav
+religion <- data.frame(country=rel$country,name=NA,followers=NA,proportion=NA)
+
+for (k in 1:length(religion$country)){
+  i <- 2
+  for (j in seq(4,16,2)){
+    if (rel[k,j]>rel[k,i]){
+      i <- j
+    }
+    religion$name[k] <- colnames(rel)[i]
+    religion$followers[k] <- rel[k,i]
+    religion$proportion[k] <- rel[k,i+1]
+  }
+}
+
+write.csv(religion, "3.Podatki/religije_relacija.csv")
+write.csv(rel, "3.Podatki/religije.csv")
+
+#naredimo novi data frame, kjer bodo not imena religij in koliko ljudi pripada tej religiji po svetu
+main_religion <- data.frame(name=colnames(religije)[c(seq(2,16,2))],followers=NA,proportion=NA)
+n <- length(religije$country);
+m <- 2;
+for (i in 1:length(main_religion$name)){
+  main_religion$followers[i] <- religije[n,m]
+  main_religion$proportion[i] <- religije[n,m+1]
+  m <- m+2;
+}
+
+write.csv(main_religion,"3.Podatki/glavne_religije.csv")
 #######################################################################################################
 
 #KONTINENTI 
-#KONTINENTI 
+
 uvozi1 <- function() {
   return(read.csv("2.Uvoz/Kontinenti.csv", sep = ",", as.is = TRUE,
                   na.strings=c("-", "z") ,

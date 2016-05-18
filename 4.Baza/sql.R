@@ -64,8 +64,8 @@ tryCatch({
   religion <- dbSendQuery(conn,build_sql("CREATE TABLE religion (
                                        religion_id SERIAL PRIMARY KEY,
                                        name TEXT NOT NULL,
-                                       followers INTEGER,
-                                       proportion INTEGER)"))
+                                       followers BIGINT,
+                                       proportion DECIMAL)"))
   in_country <- dbSendQuery(conn, build_sql("CREATE TABLE in_country (
                                           attack INTEGER REFERENCES attack(attack_id),
                                           country TEXT REFERENCES country(name))"))
@@ -74,7 +74,7 @@ tryCatch({
                                             country TEXT REFERENCES country(name))"))
   country_religion <- dbSendQuery(conn, build_sql("CREATE TABLE country_religion ( 
                                                 country TEXT REFERENCES country(name),
-                                                main_religion INTEGER REFERENCES religion(religion_id))"))
+                                                main_religion INTEGER REFERENCES religion(religion_id))"))#mogoče bi tu dodale še dva stolpca followers in proportions?
   
   
 }, finally = {
@@ -91,7 +91,9 @@ celine<-read.csv("3.Podatki/celine.csv",fileEncoding = "Windows-1250")
 drzave<-read.csv("3.Podatki/drzave.csv",fileEncoding = "Windows-1250")
 drzave$population<-as.numeric(gsub(",","",drzave$population))
 drzave$area<-as.numeric(gsub(",","",drzave$area))
-religije<-read.csv("3.Podatki/religije.csv",fileEncoding = "Windows-1250")
+glavne_religije<- read.csv("3.Podatki/glavne_religije.csv",fileEncoding = "Windows-1250")
+#religije<-read.csv("3.Podatki/religije.csv",fileEncoding = "Windows-1250")
+#religije_relacija <- read.csv("3.Podatki/religije_relacija.csv")
 vsi_kont <- read.csv("3.Podatki/vsi_kont.csv",fileEncoding = "Windows-1250")
 #Funcija, ki vstavi podatke
 insert_data <- function(){
@@ -102,7 +104,7 @@ insert_data <- function(){
     dbWriteTable(conn, name="attack",napad,append=T,row.names=FALSE)
     dbWriteTable(conn, name="continent",vsi_kont,append=T,row.names=FALSE)
     dbWriteTable(conn, name="country",subset(drzave, select=-X),append=T,row.names=FALSE) 
-    #dbWriteTable(conn, name="religion",religje,append=T,row.names=FALSE) #še ni urejena
+    dbWriteTable(conn, name="religion",glavne_religije,append=T,row.names=FALSE) 
     
   }, finally = {
     dbDisconnect(conn) 
