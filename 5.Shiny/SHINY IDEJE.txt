@@ -12,7 +12,7 @@ http://shiny.rstudio.com/gallery/telephones-by-region.html
 4. KROGCI - ŠTEVILO NAPADOV PO MESCIH IN PO KONTINENTIH
 http://shiny.rstudio.com/gallery/google-charts.html
 
-5. KATERA GLAVNA MESTA SO BILA NAPADENA (PREŠTEJVA ÈE JE BIL KATERI VEÈKRAT)
+#5. KATERA GLAVNA MESTA SO BILA NAPADENA (PREŠTEJVA ÈE JE BIL KATERI VEÈKRAT)
 
 6. VRNE TABELO, KJER LAHKO IZBEREŠ KATERI KONTINENT TE ZANIMA, KATERI MESEC IN ÈE JE GLAVNO MESTO ALI NE
 http://shiny.rstudio.com/gallery/basic-datatable.html
