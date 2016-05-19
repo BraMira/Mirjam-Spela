@@ -1,20 +1,57 @@
 library(shiny)
 
+
+#################################################
+#ŠTEVILO MRTVIH
 shinyUI(fluidPage(
   
-  titlePanel("Banka"),
+  titlePanel("Napadi - žrtve"),
   
   sidebarLayout(
     sidebarPanel(
       sliderInput("min",
-                  "Minimalni znesek transakcije:",
-                  min = -10000,
-                  max = 10000,
-                  value = 1000)
+                  "Število mrtvih:",
+                  min = 0,
+                  max = 2000,
+                  value =1 )
     ),
     
     mainPanel(
-      tableOutput("transakcije")
+      tableOutput("attack")
     )
   )
 ))
+
+######################################################
+#ŠTEVILO NAPADOV V POSAMEZNEM MESECU
+
+# Define the overall UI
+shinyUI(
+  
+  # Use a fluid Bootstrap layout
+  fluidPage(    
+    
+    # Give the page a title
+    titlePanel("Število napadov po kontinentih"),
+    
+    # Generate a row with a sidebar
+    sidebarLayout(      
+      
+      # Define the sidebar with one input
+      sidebarPanel(
+        selectInput("continent", "Kontinenti:", 
+                    choices=rownames(continent$name),
+        hr()
+      ),
+      
+      # Create a spot for the barplot
+      mainPanel(
+        plotOutput("meseci")  
+      )
+      
+    )
+  )
+)
+)
+
+########################################################

@@ -1,0 +1,21 @@
+SHINY APLIKACIJA:
+
+1. ZEMLJEVID SVETA - DRŽAVE KJER SE NAJVEÈ NAPADOV DOGAJA
+http://shiny.rstudio.com/gallery/superzip-example.html
+
+2. BESEDE GLEDE NA VELIKOST - NAJPOGOSTEJŠA RELIGIJA
+http://shiny.rstudio.com/gallery/word-cloud.html
+
+3. HISTOGRAM - ŠTEVILO NAPADOV V POSAMEZNEM MESECU
+http://shiny.rstudio.com/gallery/telephones-by-region.html
+
+4. KROGCI - ŠTEVILO NAPADOV PO MESCIH IN PO KONTINENTIH
+http://shiny.rstudio.com/gallery/google-charts.html
+
+5. KATERA GLAVNA MESTA SO BILA NAPADENA (PREŠTEJVA ÈE JE BIL KATERI VEÈKRAT)
+
+6. VRNE TABELO, KJER LAHKO IZBEREŠ KATERI KONTINENT TE ZANIMA, KATERI MESEC IN ÈE JE GLAVNO MESTO ALI NE
+http://shiny.rstudio.com/gallery/basic-datatable.html
+
+7. SLIDERS - SPREMINJAŠ KOLIKO MRTVIH JE BILO (MAX_DEATH)
+http://shiny.rstudio.com/gallery/sliders.html

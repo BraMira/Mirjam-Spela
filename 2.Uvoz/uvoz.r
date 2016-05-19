@@ -145,7 +145,7 @@ napadi1$country[napadi1$country=="Sydney"]<-"Australia"
 napadi1$country[napadi1$country=="Sinai"]<-"Egypt"
 napadi1$country[napadi1$country=="Borno State"]<-"Nigeria"
 
-
+napadi1$max_deaths[61]<-0
 
 #spremenimo imena stolpcev
 names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city",
