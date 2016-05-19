@@ -2,7 +2,7 @@ library(shiny)
 library(dplyr)
 library(RPostgreSQL)
 
-source("4.Baza/auth.R")
+source("../auth.R")
 
 #########################################################
 #ŠTEVILO MRTVIH
@@ -14,7 +14,7 @@ shinyServer(function(input, output) {
   # Pripravimo tabelo
   tbl.attack <- tbl(conn, "attack")
   
-  output$attack <- renderTable({
+  output$attacks <- renderTable({
     # Naredimo poizvedbo
     # x %>% f(y, ...) je ekvivalentno f(x, y, ...)
     t <- tbl.attack %>% filter(max_deaths > input$min) %>%
@@ -30,23 +30,23 @@ shinyServer(function(input, output) {
 ##############################################################
 #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 
-shinyServer(function(input, output) {
-  
-  conn <- src_postgres(dbname = db, host = host,
-                       user = user, password = password)
-  
-  # Pripravimo tabelo
-  tbl.attack <- tbl(conn, "attack")
-  
-  # Fill in the spot we created for a plot
-  output$meseci <- renderPlot({
-    
-    # Render a barplot
-    barplot(attack[,input$mesec??], 
-            main=input$name,
-            ylab="Število napadov",
-            xlab="Mesec")
-  })
-})
+# shinyServer(function(input, output) {
+#   
+#   conn <- src_postgres(dbname = db, host = host,
+#                        user = user, password = password)
+#   
+#   # Pripravimo tabelo
+#   tbl.attack <- tbl(conn, "attack")
+#   
+#   # Fill in the spot we created for a plot
+#   output$meseci <- renderPlot({
+#     
+#     # Render a barplot
+#     barplot(attack[,input$mesec??], 
+#             main=input$name,
+#             ylab="Število napadov",
+#             xlab="Mesec")
+#   })
+# })
 
 
