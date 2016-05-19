@@ -100,6 +100,9 @@ religije$country[27] <- c("Congo, Republic of the")
 
 religije<- religije[ ,-c(2,3,4)]
 
+new<-c("Vietnam",0,0,0,0,0,0,0,0,0,0,67971428,73.2,0,0,0,0)
+religije <- rbind  (religije[1:(length(religije$country)-2),], new, religije[(length(religije$country)),])
+
 #Damo drzave ven iz csv, da lahko uporabimo samo tiste države ki jih imamo
 dr<-read.csv("3.Podatki/drzave.csv",fileEncoding = "Windows-1250",stringsAsFactors=FALSE)
 dr$population<-as.numeric(gsub(",","",dr$population))

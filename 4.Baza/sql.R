@@ -74,7 +74,9 @@ tryCatch({
                                             country TEXT REFERENCES country(name))"))
   country_religion <- dbSendQuery(conn, build_sql("CREATE TABLE country_religion ( 
                                                 country TEXT REFERENCES country(name),
-                                                main_religion INTEGER REFERENCES religion(religion_id))"))#mogoče bi tu dodale še dva stolpca followers in proportions?
+                                                main_religion INTEGER REFERENCES religion(religion_id),
+                                                  followers BIGINT,
+                                       proportion DECIMAL)"))
   
   
 }, finally = {
