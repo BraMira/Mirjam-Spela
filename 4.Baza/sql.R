@@ -53,30 +53,36 @@ tryCatch({
                                        place TEXT,
                                        perpetrator TEXT,
                                        part_of TEXT)"))
+  
   country <- dbSendQuery(conn,build_sql("CREATE TABLE country (
                                         name TEXT PRIMARY KEY NOT NULL,
                                         population INTEGER NOT NULL,
                                         area DECIMAL NOT NULL,
                                         capital TEXT NOT NULL)"))
+  
   continent <- dbSendQuery(conn,build_sql("CREATE TABLE continent (
                                         continent_id SERIAL PRIMARY KEY,
                                         name TEXT NOT NULL)")) #mogoče tu še REFERENCES/FOREIGN KEY?
+  
   religion <- dbSendQuery(conn,build_sql("CREATE TABLE religion (
                                        religion_id SERIAL PRIMARY KEY,
                                        name TEXT NOT NULL,
                                        followers BIGINT,
                                        proportion DECIMAL)"))
+  
   in_country <- dbSendQuery(conn, build_sql("CREATE TABLE in_country (
                                           attack INTEGER REFERENCES attack(attack_id),
                                           country TEXT REFERENCES country(name))"))
+  
   in_continent <- dbSendQuery(conn, build_sql("CREATE TABLE in_continent (
                                             continent INTEGER REFERENCES continent(continent_id),
                                             country TEXT REFERENCES country(name))"))
+  
   country_religion <- dbSendQuery(conn, build_sql("CREATE TABLE country_religion ( 
                                                 country TEXT REFERENCES country(name),
                                                 main_religion INTEGER REFERENCES religion(religion_id),
-                                                  followers BIGINT,
-                                       proportion DECIMAL)"))
+                                                followers BIGINT,
+                                                proportion DECIMAL)"))
   
   
 }, finally = {
@@ -95,8 +101,11 @@ drzave$population<-as.numeric(gsub(",","",drzave$population))
 drzave$area<-as.numeric(gsub(",","",drzave$area))
 glavne_religije<- read.csv("3.Podatki/glavne_religije.csv",fileEncoding = "Windows-1250")
 #religije<-read.csv("3.Podatki/religije.csv",fileEncoding = "Windows-1250")
-#religije_relacija <- read.csv("3.Podatki/religije_relacija.csv")
+religije_relacija <- read.csv("3.Podatki/religije_relacija.csv")
 vsi_kont <- read.csv("3.Podatki/vsi_kont.csv",fileEncoding = "Windows-1250")
+
+
+
 #Funcija, ki vstavi podatke
 insert_data <- function(){
   tryCatch({
@@ -107,6 +116,31 @@ insert_data <- function(){
     dbWriteTable(conn, name="continent",vsi_kont,append=T,row.names=FALSE)
     dbWriteTable(conn, name="country",subset(drzave, select=-X),append=T,row.names=FALSE) 
     dbWriteTable(conn, name="religion",glavne_religije,append=T,row.names=FALSE) 
+    
+    con <- src_postgres(dbname = db, host = host, user = user, password = password)
+    
+    tbl.religion <- tbl(con, "religion")
+    data.country_religion <- inner_join(religion,
+                                        tbl.religion %>% select(religion_id, name),
+                                        copy = TRUE) %>%
+    select(country, main_religion = religion_id, followers, proportion)
+     
+    tbl.in_continent <- tbl(con, "continent")
+    data.in_continent <- inner_join(continent,
+                                        tbl.in_continent %>% select(continent_id, name),
+                                        copy = TRUE) %>%
+      select(continent = continent_id,  country)
+     
+    tbl.in_country <- tbl(con, "attack")
+    data.in_country <- inner_join(attack,
+                                    tbl.in_country%>% select(attack_id,name),
+                                    copy = TRUE) %>%
+      select(attack=attack_id, country)
+     
+    
+    
+    
+    
     
   }, finally = {
     dbDisconnect(conn) 
