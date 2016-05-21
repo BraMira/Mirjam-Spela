@@ -1,8 +1,10 @@
 # Neposredno klicanje SQL ukazov v R
 library(dplyr)
 library(RPostgreSQL)
-
+#source("2.Uvoz/Uvoz.R")
+source("2.Uvoz/Uvoz1.R")
 source("4.Baza/auth.R")
+
 # Povežemo se z gonilnikom za PostgreSQL
 drv <- dbDriver("PostgreSQL")  
 
@@ -49,8 +51,6 @@ tryCatch({
                                        confirmed BOOLEAN NOT NULL,
                                        injured INTEGER,
                                        dead_perpetrators INTEGER,
-                                       country TEXT NOT NULL,
-                                       place TEXT,
                                        perpetrator TEXT,
                                        part_of TEXT)"))
   
@@ -62,7 +62,7 @@ tryCatch({
   
   continent <- dbSendQuery(conn,build_sql("CREATE TABLE continent (
                                         continent_id SERIAL PRIMARY KEY,
-                                        name TEXT NOT NULL)")) #mogoče tu še REFERENCES/FOREIGN KEY?
+                                        name TEXT NOT NULL)")) 
   
   religion <- dbSendQuery(conn,build_sql("CREATE TABLE religion (
                                        religion_id SERIAL PRIMARY KEY,
@@ -72,7 +72,8 @@ tryCatch({
   
   in_country <- dbSendQuery(conn, build_sql("CREATE TABLE in_country (
                                           attack INTEGER REFERENCES attack(attack_id),
-                                          country TEXT REFERENCES country(name))"))
+                                          country TEXT REFERENCES country(name),
+                                            place TEXT)"))
   
   in_continent <- dbSendQuery(conn, build_sql("CREATE TABLE in_continent (
                                             continent INTEGER REFERENCES continent(continent_id),
@@ -94,17 +95,28 @@ tryCatch({
 }
 
 #Uvoz podatkov
+#1. napadi
 napad<-read.csv("3.Podatki/napadi.csv",fileEncoding = "Windows-1250")
-celine<-read.csv("3.Podatki/celine.csv",fileEncoding = "Windows-1250")
-drzave<-read.csv("3.Podatki/drzave.csv",fileEncoding = "Windows-1250")
-drzave$population<-as.numeric(gsub(",","",drzave$population))
-drzave$area<-as.numeric(gsub(",","",drzave$area))
-glavne_religije<- read.csv("3.Podatki/glavne_religije.csv",fileEncoding = "Windows-1250")
-#religije<-read.csv("3.Podatki/religije.csv",fileEncoding = "Windows-1250")
-religije_relacija <- read.csv("3.Podatki/religije_relacija.csv")
+
+#2. vsi kontinenti
 vsi_kont <- read.csv("3.Podatki/vsi_kont.csv",fileEncoding = "Windows-1250")
 
+#3. vse države
+drzave<-read.csv("3.Podatki/drzave.csv",fileEncoding = "Windows-1250",stringsAsFactors=FALSE)
+#Uredimo
+drzave$population<-as.numeric(gsub(",","",drzave$population))
+drzave$area<-as.numeric(gsub(",","",drzave$area))
+drzave$country[drzave$country=="Korea, South"] <- "South Korea"
+drzave$country[drzave$country=="Korea, North"] <- "North Korea"
+drzave$country[drzave$country=="The Bahamas"] <- "Bahamas"
+drzave$country[drzave$country=="Micronesia, Federated States of"] <- "Micronesia"
+drzave$country[drzave$country=="Myanmar (Burma)"]<- "Burma"
+drzave$country[drzave$country=="Timor-Leste"]<- "Timor-Leste"
 
+#4. vse religije
+glavne_religije<- read.csv("3.Podatki/glavne_religije.csv",fileEncoding = "Windows-1250")
+#religije<-read.csv("3.Podatki/religije.csv",fileEncoding = "Windows-1250")
+#religije_relacija <- read.csv("3.Podatki/religije_relacija.csv")
 
 #Funcija, ki vstavi podatke
 insert_data <- function(){
@@ -112,36 +124,11 @@ insert_data <- function(){
     conn <- dbConnect(drv, dbname = db, host = host,
                       user = user, password = password)
     
-    dbWriteTable(conn, name="attack",napad,append=T,row.names=FALSE)
-    dbWriteTable(conn, name="continent",vsi_kont,append=T,row.names=FALSE)
-    dbWriteTable(conn, name="country",subset(drzave, select=-X),append=T,row.names=FALSE) 
-    dbWriteTable(conn, name="religion",glavne_religije,append=T,row.names=FALSE) 
-    
-    con <- src_postgres(dbname = db, host = host, user = user, password = password)
-    
-    tbl.religion <- tbl(con, "religion")
-    data.country_religion <- inner_join(religion,
-                                        tbl.religion %>% select(religion_id, name),
-                                        copy = TRUE) %>%
-    select(country, main_religion = religion_id, followers, proportion)
-     
-    tbl.in_continent <- tbl(con, "continent")
-    data.in_continent <- inner_join(continent,
-                                        tbl.in_continent %>% select(continent_id, name),
-                                        copy = TRUE) %>%
-      select(continent = continent_id,  country)
-     
-    tbl.in_country <- tbl(con, "attack")
-    data.in_country <- inner_join(attack,
-                                    tbl.in_country%>% select(attack_id,name),
-                                    copy = TRUE) %>%
-      select(attack=attack_id, country)
-     
-    
-    
-    
-    
-    
+    dbWriteTable(conn, name="attack", napad, append=T, row.names=FALSE)
+    dbWriteTable(conn, name="continent",vsi_kont,append=T, row.names=FALSE)
+    dbWriteTable(conn, name="country", subset(drzave, select=-X), append=T, row.names=FALSE) 
+    dbWriteTable(conn, name="religion", glavne_religije, append=T, row.names=FALSE) 
+
   }, finally = {
     dbDisconnect(conn) 
     
@@ -151,3 +138,48 @@ insert_data <- function(){
 delete_table()
 create_table()
 insert_data()
+
+con <- src_postgres(dbname = db, host = host, user = user, password = password)
+
+#relacija country_religion
+tbl.religion <- tbl(con, "religion")
+data.country_religion <- inner_join(religion,
+                                    tbl.religion %>% select(religion_id, name),
+                                    copy = TRUE) %>%
+  select(country, main_religion = religion_id, followers, proportion)
+
+#relacija in_continent
+#celine<-read.csv("3.Podatki/celine.csv",fileEncoding = "Windows-1250")
+
+tbl.continent <- tbl(con,"continent")
+data.in_continent <- inner_join(celine,
+                                tbl.continent %>% select(continent_id, name),
+                                copy=TRUE) %>%
+  select(continent = continent_id, country)
+
+#relacija in_country
+napadi2 <-read.csv("3.Podatki/napadi_drzave.csv",fileEncoding = "Windows-1250")
+names(napadi2)<-c("attack_id","country","place")
+tbl.attack <-tbl(con,"attack")
+data.in_country <- inner_join(napadi2,
+                              tbl.attack %>% select(attack_id),
+                              copy=TRUE) %>%
+  select(attack_id,country,place)
+
+#Funkcija, ki vstavi relacije
+insert_relation_data <- function(){
+  tryCatch({
+    conn <- dbConnect(drv, dbname = db, host = host,
+                      user = user, password = password)
+    dbWriteTable(conn, name="country_religion", data.country_religion, append=T, row.names=FALSE)
+    dbWriteTable(conn, name="in_continent", data.in_continent, append=T, row.names=FALSE)
+    dbWriteTable(conn, name="in_country", data.in_country, append=T, row.names=FALSE)
+
+    
+  }, finally = {
+    dbDisconnect(conn) 
+    
+  })
+}
+
+insert_relation_data()
