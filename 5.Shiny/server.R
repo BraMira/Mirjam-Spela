@@ -2,7 +2,7 @@ library(shiny)
 library(dplyr)
 library(RPostgreSQL)
 
-source("../auth.R")
+source("4.Baza/auth.R")
 
 #########################################################
 #ŠTEVILO MRTVIH

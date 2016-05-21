@@ -13,7 +13,7 @@ shinyUI(fluidPage(
                   "Število mrtvih:",
                   min = 0,
                   max = 2000,
-                  value =1 )
+                  value = 1 )
     ),
     
     mainPanel(
