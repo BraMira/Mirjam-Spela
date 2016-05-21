@@ -151,7 +151,9 @@ napadi1$max_deaths[61]<-0
 names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city",
                                      "Perpetrator1","Part of1")]<-c("type","injured","place",
                                                                     "perpetrator","part_of") 
-
+napadi2<-napadi1[, c("country","place")]
+napadi1 <- subset(napadi1,select=-c(country,place))
 
 # Zapišemo v datoteko CSV
 write.csv(napadi1, "3.Podatki/napadi.csv")
+write.csv(napadi2,"3.Podatki/napadi_drzave.csv")

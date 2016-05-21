@@ -86,7 +86,7 @@ religije$Jewish <- religije$Jewish %>% strsplit(split = " ") %>%
 # rl <- religije[,20:21]
 # anti_join(dr, rl)
 # anti_join(rl,dr)
-
+religije<- religije[ ,-c(2,3,4)]
 
 
 religije$country[39] <- c("Burkina Faso")
@@ -95,13 +95,14 @@ religije$country[27] <- c("Congo, Republic of the")
 religije$country[108] <- c("East Timor")
 religije$country[41] <- c("Gambia")
 religije$country[27] <- c("Congo, Republic of the")
+religije$country[262]<-c("Vietnam")
+religije[262,2:17]<-c(0,0,0,0,0,0,0,0,0,0,67971428,73.2,0,0,0,0)
 
 
 
-religije<- religije[ ,-c(2,3,4)]
-
-new<-c("Vietnam",0,0,0,0,0,0,0,0,0,0,67971428,73.2,0,0,0,0)
-religije <- rbind  (religije[1:(length(religije$country)-2),], new, religije[(length(religije$country)),])
+# neww <- c(0,0,0,0,0,0,0,0,0,0,67971428,73.2,0,0,0,0)
+# new<-c("Vietnam",neww)
+# religije <- rbind  (religije[1:(length(religije$country)-2),], new, religije[(length(religije$country)),])
 
 #Damo drzave ven iz csv, da lahko uporabimo samo tiste države ki jih imamo
 dr<-read.csv("3.Podatki/drzave.csv",fileEncoding = "Windows-1250",stringsAsFactors=FALSE)
@@ -127,14 +128,14 @@ for (k in 1:length(religion$country)){
     if (rel[k,j]>rel[k,i]){
       i <- j
     }
-    religion$name[k] <- colnames(rel)[i]
-    religion$followers[k] <- rel[k,i]
-    religion$proportion[k] <- rel[k,i+1]
+  religion$name[k] <- colnames(rel)[i]
+  religion$followers[k] <- rel[k,i]
+  religion$proportion[k] <- rel[k,i+1]
   }
 }
 
-write.csv(religion, "3.Podatki/religije_relacija.csv")
-write.csv(rel, "3.Podatki/religije.csv")
+#write.csv(religion, "3.Podatki/religije_relacija.csv")
+write.csv(religion, "3.Podatki/religije.csv")
 
 #naredimo novi data frame, kjer bodo not imena religij in koliko ljudi pripada tej religiji po svetu
 main_religion <- data.frame(name=colnames(religije)[c(seq(2,16,2))],followers=NA,proportion=NA)
@@ -166,7 +167,7 @@ kontinenti$Country[73]<-c("South Korea")
 kontinenti$Country[86]<-c("Russia")
 kontinenti$Country[60]<-c("Burma")
 
-sk<-data.frame(Continent="Asia",Country="South Korea") #manjka South Korea
+sk<-data.frame(Continent=c("Europe","Asia"),Country=c("Kosovo","Taiwan")) #manjkata Kosovo in Taiwan
 celine1<- kontinenti[,0:2] #celine - polepšana tabela                #CELINE
 
 celine2 <- rbind(celine1,sk) #dodala South Korea
@@ -175,10 +176,11 @@ celine <- arrange(celine2, Continent, Country) #urejeno po abecedi
 
 
 #Preimenovala stolpce z malimi črkami
-names(celine)[names(celine) %in% c("Continent","Country")] <- c("continent","country")
-
+names(celine)[names(celine) %in% c("Continent","Country")] <- c("name","country")
+celine$country[celine$country=="Burkina"]<-"Burkina Faso"
+celine$country[celine$country=="East Timor"]<-"Timor-Leste"
 #dokument kjer so našteti vsi kontinenti
-vsi_kontinenti <- data.frame(sort(unique(celine$continent)))
+vsi_kontinenti <- data.frame(sort(unique(celine$name)))
 names(vsi_kontinenti)<-"continent"
 
 # Zapišemo v datoteko CSV
