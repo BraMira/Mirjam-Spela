@@ -7,10 +7,12 @@ SHINY APLIKACIJA:
 http://shiny.rstudio.com/gallery/superzip-example.html
 KROGCI 
 http://shiny.rstudio.com/gallery/google-charts.html
+Ali pa da vrže seznam držav, ki so bile najbolj pogojsto napadene, in sam lahko izbereš ali te zanima top 10, 20 ,itd
+podobno kakor v linku http://shiny.rstudio.com/gallery/widgets.html
 
+########################
 
 3. HISTOGRAM - ŠTEVILO NAPADOV V POSAMEZNEM MESECU (x os so meseci?)
-#-MESEC + All: prestej napade za usak mesec
 -KONTINENT+ All: plus lahko izbiras se za ker kontinent te zanima
 -RELIGIJA+ All: plus lahko se izbirava drzave z posamezno religijo
 -GL. MESTO napadeno +All: da/ne
@@ -18,21 +20,22 @@ http://shiny.rstudio.com/gallery/telephones-by-region.html
 #Ali
 #KROGCI 
 #http://shiny.rstudio.com/gallery/google-charts.html
+#Ali pa samo za različne kontinente kakor je tu: http://shiny.rstudio.com/gallery/telephones-by-region.html
 
 
+######################
 4.RELIGIJE PRIMERJAVA - ŠTEVILO NAPADOV (x os so vse religije(6))
 HISTOGRAM - vsak stolpec je posamezna religija -izbiraš za kateri mesec te zanima in ti kaže 6 stolpcev za usako religijo koliko napadov je bilo v tistem mesecu PLUS lahko izbiraš za posamezen mesec Plus za celo LETO
 -MESEC +All:
 -KONTINENTI + All:
-
 
 5..RELIGIJE PRIMERJAVA - ŽRTVE (SEZNAM ALI PA HISTOGRAM?? ) (x os so vse religije(6))
 enako kot 4. -> samo da namesto št napadov gledaš št žrtev, ki pa je max_deaths + injured + dead_preparator..
 -MESEC + All
 -KONTINENT + All
 
-
-
+--->> 4 in 5 lahko dava v eno  (torej izbiraš med št napadov in med žrtvami ) tako kot je v tem primeru http://shiny.rstudio.com/gallery/tabsets.html
+########################
 
 6. VRNE TABELO/SEZNAM (ti pove splošne podatke o teh napadih) , KJER LAHKO IZBEREŠ 
 -DATUM ZAČETKA: od kdaj do kdaj gledaš
@@ -45,7 +48,18 @@ http://shiny.rstudio.com/gallery/basic-datatable.html
 -naj vrze napade kjer 
 http://shiny.rstudio.com/gallery/slider
 
+##############################################
+
+
+
+
+
+
+
+
 ############################################################################
+NE BOVA UPORABILI:
+
 #5. KATERA GLAVNA MESTA SO BILA NAPADENA (PREŠTEJVA čE JE BIL KATERI VEÈKRAT)
 #2. BESEDE GLEDE NA VELIKOST - NAJPOGOSTEJŠA RELIGIJA
 #-v tabeli attack prestej religije ki so dane v tabeli religije
