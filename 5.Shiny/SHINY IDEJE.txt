@@ -26,11 +26,10 @@ HISTOGRAM - vsak stolpec je posamezna religija -izbiraš za kateri mesec te zani
 -KONTINENTI + All:
 
 
-5..RELIGIJE PRIMERJAVA - ŽRTVE (SEZNAM ALI PA HISTOGRAM?? ) (vrne samo vsoto število žrtev?)
+5..RELIGIJE PRIMERJAVA - ŽRTVE (SEZNAM ALI PA HISTOGRAM?? ) (x os so vse religije(6))
 enako kot 4. -> samo da namesto št napadov gledaš št žrtev, ki pa je max_deaths + injured + dead_preparator..
 -MESEC + All
--KONTINENT
--RELIGIJA
+-KONTINENT + All
 
 
 
