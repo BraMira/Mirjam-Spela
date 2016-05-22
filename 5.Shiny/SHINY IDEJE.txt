@@ -1,21 +1,53 @@
 SHINY APLIKACIJA:
 
-1. ZEMLJEVID SVETA - DR�AVE KJER SE NAJVE� NAPADOV DOGAJA
+1. ZEMLJEVID SVETA - DRŽAVE KJER SE NAJVEČ NAPADOV DOGAJA ? (mogoče prezahtevno??)
+-torej aplikacija vsaki drzavi dodeli stevilo napadov in potem naj ene bolj pobarva druge manj
+-Ali pa naj pobarva države, kjer se je zgodil napad, obarva pa naj se na podlagi religije - vsaka religija svoja barva - ali pa izbereš katero religijo bi si izbral in naj tiste obarva
+-Mogoče kaj z populacijo?
 http://shiny.rstudio.com/gallery/superzip-example.html
-
-2. BESEDE GLEDE NA VELIKOST - NAJPOGOSTEJ�A RELIGIJA
-http://shiny.rstudio.com/gallery/word-cloud.html
-
-3. HISTOGRAM - �TEVILO NAPADOV V POSAMEZNEM MESECU
-http://shiny.rstudio.com/gallery/telephones-by-region.html
-
-4. KROGCI - �TEVILO NAPADOV PO MESCIH IN PO KONTINENTIH
+KROGCI 
 http://shiny.rstudio.com/gallery/google-charts.html
 
-#5. KATERA GLAVNA MESTA SO BILA NAPADENA (PRE�TEJVA �E JE BIL KATERI VE�KRAT)
 
-6. VRNE TABELO, KJER LAHKO IZBERE� KATERI KONTINENT TE ZANIMA, KATERI MESEC IN �E JE GLAVNO MESTO ALI NE
+3. HISTOGRAM - ŠTEVILO NAPADOV V POSAMEZNEM MESECU (x os so meseci?)
+#-MESEC + All: prestej napade za usak mesec
+-KONTINENT+ All: plus lahko izbiras se za ker kontinent te zanima
+-RELIGIJA+ All: plus lahko se izbirava drzave z posamezno religijo
+-GL. MESTO napadeno +All: da/ne
+http://shiny.rstudio.com/gallery/telephones-by-region.html
+#Ali
+#KROGCI 
+#http://shiny.rstudio.com/gallery/google-charts.html
+
+
+4.RELIGIJE PRIMERJAVA - ŠTEVILO NAPADOV (x os so vse religije(6))
+HISTOGRAM - vsak stolpec je posamezna religija -izbiraš za kateri mesec te zanima in ti kaže 6 stolpcev za usako religijo koliko napadov je bilo v tistem mesecu PLUS lahko izbiraš za posamezen mesec Plus za celo LETO
+-MESEC +All:
+-KONTINENTI + All:
+
+
+5..RELIGIJE PRIMERJAVA - ŽRTVE (SEZNAM ALI PA HISTOGRAM?? ) (vrne samo vsoto število žrtev?)
+enako kot 4. -> samo da namesto št napadov gledaš št žrtev, ki pa je max_deaths + injured + dead_preparator..
+-MESEC + All
+-KONTINENT
+-RELIGIJA
+
+
+
+
+6. VRNE TABELO/SEZNAM (ti pove splošne podatke o teh napadih) , KJER LAHKO IZBEREŠ 
+-DATUM ZAČETKA: od kdaj do kdaj gledaš
+-KATERI KONTINENT TE ZANIMA
+-KATERI MESEC + All
+-čE JE GLAVNO MESTO napadeno ALI NE
 http://shiny.rstudio.com/gallery/basic-datatable.html
+#-max_deaths + All:
+#-SLIDERS - SPREMINJAŠ KOLIKO MRTVIH JE BILO (MAX_DEATH)?
+-naj vrze napade kjer 
+http://shiny.rstudio.com/gallery/slider
 
-7. SLIDERS - SPREMINJA� KOLIKO MRTVIH JE BILO (MAX_DEATH)
-http://shiny.rstudio.com/gallery/sliders.html
+############################################################################
+#5. KATERA GLAVNA MESTA SO BILA NAPADENA (PREŠTEJVA čE JE BIL KATERI VEÈKRAT)
+#2. BESEDE GLEDE NA VELIKOST - NAJPOGOSTEJŠA RELIGIJA
+#-v tabeli attack prestej religije ki so dane v tabeli religije
+#http://shiny.rstudio.com/gallery/word-cloud.html
