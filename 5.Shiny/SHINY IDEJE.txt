@@ -42,6 +42,7 @@ enako kot 4. -> samo da namesto št napadov gledaš št žrtev, ki pa je max_dea
 -KATERI KONTINENT TE ZANIMA
 -KATERI MESEC + All
 -čE JE GLAVNO MESTO napadeno ALI NE
+-RELIGIJA v državi
 http://shiny.rstudio.com/gallery/basic-datatable.html
 #-max_deaths + All:
 #-SLIDERS - SPREMINJAŠ KOLIKO MRTVIH JE BILO (MAX_DEATH)?
