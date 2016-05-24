@@ -1,7 +1,9 @@
 library(shiny)
 library(dplyr)
 library(RPostgreSQL)
-
+if ("server.R" %in% dir()) {
+  setwd("..")
+}
 source("4.Baza/auth.R")
 
 #########################################################
