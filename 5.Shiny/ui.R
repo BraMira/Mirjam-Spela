@@ -3,24 +3,26 @@ library(shiny)
 
 #################################################
 #ŠTEVILO MRTVIH
-shinyUI(fluidPage(
-  
-  titlePanel("Napadi - žrtve"),
-  
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("min",
-                  "Število mrtvih:",
-                  min = 0,
-                  max = 2000,
-                  value = 1 )
-    ),
-    
-    mainPanel(
-      tableOutput("attacks")
-    )
-  )
-))
+# 
+# shinyUI(fluidPage(
+# 
+#   titlePanel("Napadi - žrtve"),
+# 
+#   sidebarLayout(
+#     sidebarPanel(
+#       sliderInput("min",
+#                   "Število mrtvih:",
+#                   min = 0,
+#                   max = 2000,
+#                   value = 0 )
+#     ),
+# 
+#     mainPanel(
+#       tableOutput("attacks")
+#     )
+#   )
+# ))
+
 
 ######################################################
 #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
@@ -55,3 +57,20 @@ shinyUI(fluidPage(
 # )
 
 ########################################################
+#SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
+shinyUI(fluidPage(
+  titlePanel('NAPADI'),
+  sidebarLayout(
+    sidebarPanel(
+      dateRangeInput("dates", label = h3("Date range")),
+      selectInput("kontinent", "Izberi celino:",
+                  choices = c("All",tbl.continent$name),
+      selectInput("glmesto", "Prikaži samo napade, ki so bili v glavnih mestih:",
+                  choices = c("Da","Ne")
+    ),
+    mainPanel(
+      tableOutput('napadi')
+    )
+  )
+))
+)
