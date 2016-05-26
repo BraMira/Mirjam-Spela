@@ -25,6 +25,8 @@ library(shiny)
 
 
 ######################################################
+#APLIKACIJA 1
+
 #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 
 # Define the overall UI
@@ -66,7 +68,7 @@ shinyUI(
 shinyUI(fluidPage(
   
 #########################################################
-#APLIKACIJA 1
+#APLIKACIJA 2
 
 #SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
   titlePanel('NAPADI'),
