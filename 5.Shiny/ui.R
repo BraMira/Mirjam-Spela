@@ -57,8 +57,10 @@ library(shiny)
 # )
 
 ########################################################
-#SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
 shinyUI(fluidPage(
+  
+#########################################################
+#SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
   titlePanel('NAPADI'),
   sidebarLayout(
     sidebarPanel(
@@ -78,4 +80,12 @@ shinyUI(fluidPage(
       tableOutput('napadi1')
     )
   )
-)
+####################################################################
+
+
+
+
+
+
+#####################################################################
+))
