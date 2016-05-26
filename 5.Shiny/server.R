@@ -36,24 +36,50 @@ source("4.Baza/auth.R")
 ##############################################################
 #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 
-# shinyServer(function(input, output) {
-#   
-#   conn <- src_postgres(dbname = db, host = host,
-#                        user = user, password = password)
-#   
-#   # Pripravimo tabelo
-#   tbl.attack <- tbl(conn, "attack")
-#   
-#   # Fill in the spot we created for a plot
-#   output$meseci <- renderPlot({
-#     
-#     # Render a barplot
-#     barplot(attack[,input$mesec??], 
-#             main=input$name,
-#             ylab="Število napadov",
-#             xlab="Mesec")
-#   })
-# })
+shinyServer(function(input, output) {
+  
+  conn <- src_postgres(dbname = db, host = host,
+                       user = user, password = password)
+  
+  output$kontinent <- renderUI({
+    celine <- data.frame(tbl.continent)
+    selectInput("kontinent", "Choose continent:",
+                choices = c("All" = 0, setNames(celine$continent_id,
+                                                celine$name)))
+  })
+    output$religije <- renderUI({
+      religije <- data.frame(tbl.religion)
+      selectInput("religije", "Choose religion:",
+                  choices = c("All" = 0, setNames(religion$name)))
+  })
+  # Pripravimo tabelo
+    tbl.religion <- tbl(conn, "religion")
+    tbl.country_religion <- tbl(conn, "country_religion")
+    tbl.continent <- tbl(conn, "continent")
+    tbl.attack <- tbl(conn, "attack")
+    tbl.country <- tbl(conn, "country")
+    tbl.in_country <- tbl(conn, "in_country")
+    tbl.in_continent <- tbl(conn, "in_continent")
+    tt <- inner_join(tbl.in_country,tbl.country,by=c("country"="name"),copy=TRUE)
+    ttt <- inner_join(tbl.in_continent,tt,copy =TRUE)
+    ttt1 <- inner_join(ttt,tbl.continent, by=c("continent"="continent_id"),copy=TRUE)
+    ttt2 <- inner_join(ttt1,tbl.country_religion,copy=TRUE)
+    ttt3 <- inner_join(ttt2,tbl.religion, by=c("main_religion"="religion_id"),copy=TRUE) 
+    ttt4 <- inner_join(ttt3,tbl.attack %>% select(attack_id,start_date),
+                       by=c("attack"="attack_id"),copy=TRUE) %>% select(name.y,country,place,capital,name,start_date)
+    
+    
+  
+  # Fill in the spot we created for a plot
+  output$monthPlot <- renderPlot({
+    
+    # Render a barplot
+    barplot(, 
+            main=input$name,
+            ylab="Number of attacks",
+            xlab="Month")
+  })
+})
 ############################################################
 shinyServer(function(input, output) { 
   conn <- src_postgres(dbname = db, host = host,
