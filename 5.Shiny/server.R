@@ -34,6 +34,9 @@ source("4.Baza/auth.R")
 # })
 
 ##############################################################
+#APLIKACIJA 1
+
+
 #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 
 shinyServer(function(input, output) {
@@ -95,7 +98,7 @@ shinyServer(function(input, output) {
   tbl.religion <- tbl(conn, "religion")
 
 ##############################################################################################
-#APLIKACIJA 1
+#APLIKACIJA 2
 
 #SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
   
