@@ -69,6 +69,8 @@ shinyServer(function(input, output) {
   tbl.religion <- tbl(conn, "religion")
 
 ##############################################################################################
+#APLIKACIJA 1
+
 #SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
   
   output$kontinent <- renderUI({
