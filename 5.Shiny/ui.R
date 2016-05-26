@@ -62,15 +62,16 @@ shinyUI(fluidPage(
   titlePanel('NAPADI'),
   sidebarLayout(
     sidebarPanel(
-      dateRangeInput("dates", label = h3("Date range")),
-      selectInput("kontinent", "Izberi celino:",
-                  choices = c("All",tbl.continent$name),
-      selectInput("glmesto", "Prikaži samo napade, ki so bili v glavnih mestih:",
-                  choices = c("Da","Ne")
+      uiOutput("kontinent"),
+      uiOutput("datum"),
+      uiOutput("glmesto"),
+      SelectInput("mesec", "Choose month:",choices=c("All","January","February", "March", "April"
+                                                     , "May", "June", "July", "August", "September",
+                                                     "October", "November", "December")
+      
     ),
-    mainPanel(
-      tableOutput('napadi')
+#     mainPanel(
+#       tableOutput('napadi')
     )
   )
-))
 )

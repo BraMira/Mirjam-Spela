@@ -1,6 +1,8 @@
 library(shiny)
 library(dplyr)
 library(RPostgreSQL)
+library(lubridate)
+
 if ("server.R" %in% dir()) {
   setwd("..")
 }
@@ -67,6 +69,36 @@ shinyServer(function(input, output) {
   tbl.religion <- tbl(conn, "religion")
   
 #SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
-  output$napadi <- 
+  
+  output$kontinent <- renderUI({
+    celine <- data.frame(tbl.continent)
+    selectInput("kontinent", "Izberi celino:",
+                choices = c("All" = 0, setNames(celine$continent_id,
+                                                celine$name)))
+  
+  output$datum <- renderUI({
+    MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
+    MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
+    dateRangeInput("datum",label="Izberi interval za datum začetka:",start=as.Date(MINdatum[1,1]),
+                     end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
+    })    
+    
+  output$glmesto <- renderUI({
+    selectInput("gl.mesto", "Pokaži SAMO napade, ki so se zgodili v glavnem mestu:",
+                choices = c("Da" = 1, "Ne" = 0))
+  
+  output$religije <- renderUI({
+    religion <- data.frame(tbl.religion)
+    selectInput("religije", "Izberi religije:",
+                  choices = c("All" = 0, setNames(religion$religion_id,
+                                                  religion$name)))
+    
+  output$napadi<-
+    attack <- data.frame(tbl.napadi)
+    place_capital <- left_join(tbl.in_country,tbl.country, by=c("country"="name"),copy=TRUE) %>% select(place,capital)
+    
+    
+  }))
+  
   
   
