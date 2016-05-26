@@ -28,33 +28,39 @@ library(shiny)
 #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 
 # Define the overall UI
-# shinyUI(
-#   
-#   # Use a fluid Bootstrap layout
-#   fluidPage(    
-#     
-#     # Give the page a title
-#     titlePanel("Število napadov po kontinentih"),
-#     
-#     # Generate a row with a sidebar
-#     sidebarLayout(      
-#       
-#       # Define the sidebar with one input
-#       sidebarPanel(
-#         selectInput("continent", "Kontinenti:", 
-#                     choices=rownames(continent$name),
-#         hr()
-#       ),
-#       
-#       # Create a spot for the barplot
-#       mainPanel(
-#         plotOutput("meseci")  
-#       )
-#       
-#     )
-#   )
-# )
-# )
+shinyUI(
+  
+  # Use a fluid Bootstrap layout
+  fluidPage(    
+    
+    # Give the page a title
+    titlePanel("Number of attacks by months"),
+    
+    # Generate a row with a sidebar
+    sidebarLayout(      
+      
+      # Define the sidebar with one input
+      sidebarPanel(
+        uiOutput("kontinent"),
+        uiOutput("religije"),
+        selectInput("continent", "Continents:", 
+                    choices=c("Africa","Asia","Europe","North America","Oceania","South America"),
+        hr()
+      ),
+      selectInput("religije", "Religions:", 
+                  choices=c("Christian", "Muslim", "Unaffiliated","Hindu","Buddhist","Folk Religion","Other Religion","Jewish"),
+                  hr()
+      ),
+      
+      # Create a spot for the barplot
+      mainPanel(
+        plotOutput("monthPlot")  
+      )
+      
+    )
+  )
+)
+)
 
 ########################################################
 shinyUI(fluidPage(
