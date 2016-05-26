@@ -83,15 +83,13 @@ shinyServer(function(input, output) {
                      end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
     })    
     
-  output$glmesto <- renderUI({
-    selectInput("gl.mesto", "Pokaži SAMO napade, ki so se zgodili v glavnem mestu:",
-                choices = c("Da" = 1, "Ne" = 0))
+
   
-  output$religije <- renderUI({
-    religion <- data.frame(tbl.religion)
+  output$religije1 <- renderUI({
+    religije1 <- data.frame(tbl.religion)
     selectInput("religije", "Izberi religije:",
-                  choices = c("All" = 0, setNames(religion$religion_id,
-                                                  religion$name)))
+                  choices = c("All" = 0, setNames(religije1$religion_id,
+                                                  religije1$name)))
     
   output$napadi<-
     attack <- data.frame(tbl.napadi)

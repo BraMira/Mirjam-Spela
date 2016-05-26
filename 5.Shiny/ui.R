@@ -64,11 +64,14 @@ shinyUI(fluidPage(
     sidebarPanel(
       uiOutput("kontinent"),
       uiOutput("datum"),
-      uiOutput("glmesto"),
-      SelectInput("mesec", "Choose month:",choices=c("All","January","February", "March", "April"
+      uiOutput("religije1"),
+      SelectInput("mesec", "Choose month:",
+                  choices=c("All","January","February", "March", "April"
                                                      , "May", "June", "July", "August", "September",
-                                                     "October", "November", "December")
-      
+                                                     "October", "November", "December")),
+      SelectInput("gl.mesto", "Pokaži SAMO napade, ki so se zgodili v glavnem mestu:",
+                                choices = c("Da" = 1, "Ne" = 0))
+      #uiOutput("glmesto"),
     ),
 #     mainPanel(
 #       tableOutput('napadi')
