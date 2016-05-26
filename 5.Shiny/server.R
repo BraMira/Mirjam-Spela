@@ -44,17 +44,6 @@ shinyServer(function(input, output) {
   conn <- src_postgres(dbname = db, host = host,
                        user = user, password = password)
   
-  output$kontinent <- renderUI({
-    celine <- data.frame(tbl.continent)
-    selectInput("kontinent", "Choose continent:",
-                choices = c("All" = 0, setNames(celine$continent_id,
-                                                celine$name)))
-  })
-    output$religije <- renderUI({
-      religije <- data.frame(tbl.religion)
-      selectInput("religije", "Choose religion:",
-                  choices = c("All" = 0, setNames(religion$name)))
-  })
   # Pripravimo tabelo
     tbl.religion <- tbl(conn, "religion")
     tbl.country_religion <- tbl(conn, "country_religion")
@@ -69,9 +58,30 @@ shinyServer(function(input, output) {
     ttt2 <- inner_join(ttt1,tbl.country_religion,copy=TRUE)
     ttt3 <- inner_join(ttt2,tbl.religion, by=c("main_religion"="religion_id"),copy=TRUE) 
     ttt4 <- inner_join(ttt3,tbl.attack %>% select(attack_id,start_date),
-                       by=c("attack"="attack_id"),copy=TRUE) %>% select(name.y,country,place,capital,name,start_date)
+                       by=c("attack"="attack_id"),copy=TRUE) %>% select(name.y=continent,country,place,capital,name,start_date)
+    #dala vse podatke v data frame
+    ttt5 <- data.frame(ttt4)
+    #prešteje št napadov vsak mesec
+    no_attacks <- count(ttt5,month(start_date))
+    output$kontinent <- renderUI({
+      celine <- data.frame(tbl.continent)
+      selectInput("kontinent", "Choose a continent:",
+                  choices = c("All" = 0, setNames(celine$continent_id,
+                                                  celine$name)))
+    })
     
     
+    output$napadi1<-   renderTable({
+      attack <- data.frame(tbl.attack)
+      nap <- tbl.attack %>% filter(input$kontinent & input$religije1 &
+                                     input$datum & input$mesec & input$glmesto) %>% data.frame()
+    })
+    
+    output$religije <- renderUI({
+      religije <- data.frame(tbl.religion)
+      selectInput("religije", "Choose religion:",
+                  choices = c("All" = 0, setNames(religion$name)))
+    })
   
   # Fill in the spot we created for a plot
   output$monthPlot <- renderPlot({
@@ -107,7 +117,7 @@ shinyServer(function(input, output) {
     selectInput("kontinent", "Izberi celino:",
                 choices = c("All" = 0, setNames(celine$continent_id,
                                                 celine$name)))
-  
+  })
   output$datum <- renderUI({
     MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
     MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
@@ -121,11 +131,14 @@ shinyServer(function(input, output) {
     selectInput("religije", "Izberi religije:",
                   choices = c("All" = 0, setNames(religije1$religion_id,
                                                   religije1$name)))
+    })
     
   output$napadi1<-   renderTable({
-    attack <- data.frame(tbl.napadi)
-    nap <- tbl.attack %>% filter(input$kontinent & input$religije1 &input$datum & input$mesec & input$glmesto) %>%
-    %>% data.frame()
+    attack <- data.frame(tbl.attack)
+    nap <- tbl.attack %>% filter(input$kontinent & input$religije1 &
+                                   input$datum & input$mesec & input$glmesto) %>% data.frame()
+  })
+  
   
   #gl.mesta
   #place_capital <- left_join(tbl.in_country,tbl.country, by=c("country"="name"),copy=TRUE) %>% select(place,capital)
@@ -137,6 +150,6 @@ shinyServer(function(input, output) {
     
 ########################################################################################################  
     
-  }))
+  })
   
 
