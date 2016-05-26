@@ -73,8 +73,9 @@ shinyUI(fluidPage(
                                 choices = c("Da" = 1, "Ne" = 0))
       #uiOutput("glmesto"),
     ),
-#     mainPanel(
-#       tableOutput('napadi')
+    mainPanel(
+      h4("Napadi"),
+      tableOutput('napadi1')
     )
   )
 )

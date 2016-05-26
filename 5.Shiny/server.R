@@ -67,7 +67,8 @@ shinyServer(function(input, output) {
   tbl.in_country <- tbl(conn, "in_country")
   tbl.in_continent <- tbl(conn, "in_continent")
   tbl.religion <- tbl(conn, "religion")
-  
+
+##############################################################################################
 #SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
   
   output$kontinent <- renderUI({
@@ -83,7 +84,6 @@ shinyServer(function(input, output) {
                      end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
     })    
     
-
   
   output$religije1 <- renderUI({
     religije1 <- data.frame(tbl.religion)
@@ -91,12 +91,16 @@ shinyServer(function(input, output) {
                   choices = c("All" = 0, setNames(religije1$religion_id,
                                                   religije1$name)))
     
-  output$napadi<-
+  output$napadi1<-   renderTable({
     attack <- data.frame(tbl.napadi)
-    place_capital <- left_join(tbl.in_country,tbl.country, by=c("country"="name"),copy=TRUE) %>% select(place,capital)
+    nap <- tbl.attack %>% filter(input$kontinent & input$religije1 &input$datum & input$mesec & input$glmesto) %>%
+    %>% data.frame()
+  
+  #gl.mesta
+  #place_capital <- left_join(tbl.in_country,tbl.country, by=c("country"="name"),copy=TRUE) %>% select(place,capital)
     
     
   }))
   
-  
+########################################################################################################  
   
