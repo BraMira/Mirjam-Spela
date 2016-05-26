@@ -61,6 +61,7 @@ napadi$Dead[180]<-"8-10"
 napadi$Dead[77]<-"10-20(+7)"
 
 napadi$Injured1 <- napadi$Injured2 %>% strapplyc("^([0-9]+)") %>% as.numeric()
+napadi$Injured1[is.na(napadi$Injured1)] <- 0
 napadi$start<- napadi$Date1%>% strapplyc("^([0-9]+)") %>% as.numeric()
 napadi$end <-  napadi$Date1%>% strapplyc("\\–([0-9]+)") %>% as.numeric()
 napadi$end[is.na(napadi$end)]<-0
