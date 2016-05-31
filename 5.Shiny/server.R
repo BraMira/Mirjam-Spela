@@ -81,7 +81,7 @@ shinyServer(function(input, output) {
     output$religije <- renderUI({
       religije <- data.frame(tbl.religion)
       selectInput("religije", "Choose religion:",
-                  choices = c("All" = 0, setNames(religije$name, religije$religion_id)))
+                  choices = c("All" = 0, setNames(religije$religion_id, religije$name )))
     })
   
   meseci <- factor(month.name, levels = month.name, ordered = TRUE)
