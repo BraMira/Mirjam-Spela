@@ -1,0 +1,15 @@
+*~
+__pycache__
+*.aux
+*.log
+*.out
+*.pyc
+*.db
+*.sqlite3
+.DS_Store
+.Rproj.user
+auth.py
+auth.R
+.RData
+.Rhistory
+Thumbs.db
