@@ -12,12 +12,10 @@ shinyUI(fluidPage(
       uiOutput("kontinent"),
       uiOutput("datum"),
       uiOutput("religije1"),
-      SelectInput("mesec", "Choose month:",
-                  choices=c("All","January","February", "March", "April"
-                            , "May", "June", "July", "August", "September",
-                            "October", "November", "December")),
-      SelectInput("gl.mesto", "Pokaži SAMO napade, ki so se zgodili v glavnem mestu:",
-                  choices = c("Da" = 1, "Ne" = 0))
+      selectInput("mesec", "Choose month:",
+                  choices=c("All" = 0, setNames(1:12, month.name))),
+      selectInput("gl.mesto", "Pokaži SAMO napade, ki so se zgodili v glavnem mestu:",
+                  choices = c("Da" = TRUE, "Ne" = FALSE))
       #uiOutput("glmesto"),
     ),
     mainPanel(
