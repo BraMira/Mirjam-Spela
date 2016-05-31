@@ -15,7 +15,7 @@ shinyUI(fluidPage(
       #selectInput("mesec", "Choose month:",
        #           choices=c("All" = 0, setNames(1:12, month.name))),
       selectInput("gl.mesto", "Pokaži SAMO napade, ki so se zgodili v glavnem mestu:",
-                  choices = c("Da, samo v glavnih mestih" = TRUE, "Ne, pokaži vse napade" = FALSE))
+                  choices = c("Ne, pokaži vse napade" = FALSE, "Da, samo v glavnih mestih" = TRUE))
       #uiOutput("glmesto"),
     ),
     mainPanel(
