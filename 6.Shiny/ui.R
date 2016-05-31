@@ -26,7 +26,9 @@ shinyUI(fluidPage(
   ####################################################################
   
   
-  
+  #Start_date, end_date ne izpiše lepo v tabeli nakoncu
+  #ali se lahko spremenijo naslovčki v tabelah? oznake
+  #nakoncu v seznamu tudi nekaj o državi - splošne stvari, ali ok 
   
   
   
