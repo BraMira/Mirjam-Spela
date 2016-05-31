@@ -72,7 +72,10 @@ shinyServer(function(input, output) {
     if (input$gl.mesto) {
       nap <- nap %>% filter(place == capital)
     }
-    nap %>% data.frame()
+    nap %>% select(start_date, end_date, place, country,name.y,
+                   type, max_deaths, confirmed, injured, dead_perpetrators, perpetrator, part_of,
+                   population, area,  name, followers.x, proportion.x
+                   ) %>%data.frame()
   })
   
   
