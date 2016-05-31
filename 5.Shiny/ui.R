@@ -44,15 +44,7 @@ shinyUI(
       # Define the sidebar with one input
       sidebarPanel(
         uiOutput("kontinent"),
-        uiOutput("religije"),
-        selectInput("continent", "Continents:", 
-                    choices=c("Africa","Asia","Europe","North America","Oceania","South America"),
-        hr()
-      ),
-      selectInput("religije", "Religions:", 
-                  choices=c("Christian", "Muslim", "Unaffiliated","Hindu","Buddhist","Folk Religion","Other Religion","Jewish"),
-                  hr()
-      ),
+        uiOutput("religije")
     ),
     # Create a spot for the barplot
     mainPanel(

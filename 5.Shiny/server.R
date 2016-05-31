@@ -2,6 +2,7 @@ library(shiny)
 library(dplyr)
 library(RPostgreSQL)
 library(lubridate)
+library(ggplot2)
 
 if ("server.R" %in% dir()) {
   setwd("..")
@@ -52,17 +53,17 @@ shinyServer(function(input, output) {
     tbl.country <- tbl(conn, "country")
     tbl.in_country <- tbl(conn, "in_country")
     tbl.in_continent <- tbl(conn, "in_continent")
-    tt <- inner_join(tbl.in_country,tbl.country,by=c("country"="name"),copy=TRUE)
-    ttt <- inner_join(tbl.in_continent,tt,copy =TRUE)
-    ttt1 <- inner_join(ttt,tbl.continent, by=c("continent"="continent_id"),copy=TRUE)
-    ttt2 <- inner_join(ttt1,tbl.country_religion,copy=TRUE)
-    ttt3 <- inner_join(ttt2,tbl.religion, by=c("main_religion"="religion_id"),copy=TRUE) 
-    ttt4 <- inner_join(ttt3,tbl.attack %>% select(attack_id,start_date),
-                       by=c("attack"="attack_id"),copy=TRUE) %>% select(name.y=continent,country,place,capital,name,start_date)
+    tt <- inner_join(tbl.in_country,tbl.country,by=c("country"="name"))
+    ttt <- inner_join(tbl.in_continent,tt)
+    ttt1 <- inner_join(ttt,tbl.continent, by=c("continent"="continent_id"))
+    ttt2 <- inner_join(ttt1,tbl.country_religion)
+    ttt3 <- inner_join(ttt2,tbl.religion, by=c("main_religion"="religion_id")) 
+    ttt4 <- inner_join(ttt3,tbl.attack, by=c("attack"="attack_id"))
+    #%>% select(name.y=continent,country,place,capital,name,start_date)
     #dala vse podatke v data frame
-    ttt5 <- data.frame(ttt4)
+    #ttt5 <- data.frame(ttt4)
     #prešteje št napadov vsak mesec
-    no_attacks <- count(ttt5,month(start_date))
+    #no_attacks <- count(ttt5,month(start_date))
     output$kontinent <- renderUI({
       celine <- data.frame(tbl.continent)
       selectInput("kontinent", "Choose a continent:",
@@ -80,16 +81,28 @@ shinyServer(function(input, output) {
     output$religije <- renderUI({
       religije <- data.frame(tbl.religion)
       selectInput("religije", "Choose religion:",
-                  choices = c("All" = 0, setNames(religion$name)))
+                  choices = c("All" = 0, setNames(religije$name, religije$religion_id)))
     })
+  
+  meseci <- factor(month.name, levels = month.name, ordered = TRUE)
   
   # Fill in the spot we created for a plot
   output$monthPlot <- renderPlot({
-    
+    nap <- ttt4
+    if (!is.null(input$kontinent) && input$kontinent != 0) {
+      nap <- nap %>% filter(continent_id == input$kontinent)
+    }
+    if (!is.null(input$religije) && input$religije != 0) {
+      nap <- nap %>% filter(main_religion == input$religije)
+    }
+    nap <- nap %>% group_by(attack_id, mesec = month(start_date)) %>%
+      summarise() %>% group_by(mesec) %>%
+      summarise(stevilo = count(attack_id)) %>% data.frame()
+    manjkajo <- which(! 1:12 %in% nap$mesec)
+    nap <- rbind(nap, data.frame(mesec = manjkajo,
+                                 stevilo = rep(0, length(manjkajo))))
     # Render a barplot
-    barplot(, 
-            main=input$name,
-            ylab="Number of attacks",
-            xlab="Month")
+    ggplot(nap, aes(x = meseci[mesec], y = stevilo)) +
+      geom_bar(stat = "identity") + xlab("Mesec") + ylab("Število napadov")
   })
 })
