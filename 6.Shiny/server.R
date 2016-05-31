@@ -66,9 +66,9 @@ shinyServer(function(input, output) {
     if (!is.null(input$religije) && input$religije != 0) {
       nap <- nap %>% filter(main_religion == input$religije)
     }
-    if (input$mesec != 0) {
-      nap <- nap %>% filter(month(start_date) == input$mesec)
-    }
+    #if (input$mesec != 0) {
+    #  nap <- nap %>% filter(month(start_date) == input$mesec)
+    #}
     if (input$gl.mesto) {
       nap <- nap %>% filter(place == capital)
     }
