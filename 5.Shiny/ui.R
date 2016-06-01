@@ -40,7 +40,7 @@ shinyUI(fluidPage(
 # #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 # 
     # Give the page a title
-    titlePanel("Number of attacks by months"),
+    #titlePanel("Number of attacks by months"),
       tabPanel("Number of attacks",
     # Generate a row with a sidebar
     sidebarLayout(
