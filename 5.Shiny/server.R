@@ -130,9 +130,9 @@ shinyServer(function(input, output) {
   #   if (input$gl.mesto) {
   #     nap1 <- nap1 %>% filter(place == capital)
   #   }
-  #   nap1 %>% select(start_date, end_date, place, country,name.y,
-  #                  type, max_deaths, confirmed, injured, dead_perpetrators, perpetrator, part_of,
-  #                  population, area,  name, followers.x, proportion.x
-  #   ) %>%data.frame()
+  #   nap1 %>% select("start date"=start_date, "end date"=end_date, place, country,"continent"=name.y,
+  #                 type, "max deaths"=max_deaths, "confirmed victims"=confirmed, injured, "dead perpetrators"=dead_perpetrators, perpetrator, part_of,
+  #                 population, area,  "main religion"=name, "followers"=followers.x, "proportion"=proportion.x
+  #                 ) %>%data.frame()
   # })
 })
