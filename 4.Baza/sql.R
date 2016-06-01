@@ -55,36 +55,38 @@ tryCatch({
                                        perpetrator TEXT,
                                        part_of TEXT)"))
   
+  dbSendQuery(conn, build_sql("GRANT SELECT ON attack TO javnost"))
   country <- dbSendQuery(conn,build_sql("CREATE TABLE country (
                                         name TEXT PRIMARY KEY NOT NULL,
                                         population INTEGER NOT NULL,
                                         area DECIMAL NOT NULL,
                                         capital TEXT NOT NULL)"))
-  
+  dbSendQuery(conn, build_sql("GRANT SELECT ON country TO javnost"))
   continent <- dbSendQuery(conn,build_sql("CREATE TABLE continent (
                                         continent_id SERIAL PRIMARY KEY,
                                         name TEXT NOT NULL)")) 
-  
+  dbSendQuery(conn, build_sql("GRANT SELECT ON continent TO javnost"))
   religion <- dbSendQuery(conn,build_sql("CREATE TABLE religion (
                                        religion_id SERIAL PRIMARY KEY,
                                        name TEXT NOT NULL,
                                        followers BIGINT,
                                        proportion DECIMAL)"))
-  
+  dbSendQuery(conn, build_sql("GRANT SELECT ON religion TO javnost"))
   in_country <- dbSendQuery(conn, build_sql("CREATE TABLE in_country (
                                           attack INTEGER REFERENCES attack(attack_id),
                                           country TEXT REFERENCES country(name),
                                             place TEXT)"))
-  
+  dbSendQuery(conn, build_sql("GRANT SELECT ON in_country TO javnost"))
   in_continent <- dbSendQuery(conn, build_sql("CREATE TABLE in_continent (
                                             continent INTEGER REFERENCES continent(continent_id),
                                             country TEXT REFERENCES country(name))"))
-  
+  dbSendQuery(conn, build_sql("GRANT SELECT ON in_continent TO javnost"))
   country_religion <- dbSendQuery(conn, build_sql("CREATE TABLE country_religion ( 
                                                 country TEXT REFERENCES country(name),
                                                 main_religion INTEGER REFERENCES religion(religion_id),
                                                 followers BIGINT,
                                                 proportion DECIMAL)"))
+  dbSendQuery(conn, build_sql("GRANT SELECT ON country_religion TO javnost"))
   
   
 }, finally = {
