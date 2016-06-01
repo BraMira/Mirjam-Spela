@@ -7,32 +7,33 @@ library(ggplot2)
 if ("server.R" %in% dir()) {
   setwd("..")
 }
-source("4.Baza/auth.R")
+#source("4.Baza/auth.R")
+source("5.Shiny/auth-public.R")
 
 #########################################################
 #ŠTEVILO MRTVIH
 
 #ŠTEVILO MRTVIH
-# 
-# shinyServer(function(input, output) {
-# #  Vzpostavimo povezavo
-#   conn <- src_postgres(dbname = db, host = host,
-#                        user = user, password = password)
-# #  Pripravimo tabelo
-#   tbl.attack <- tbl(conn, "attack")
-# 
-#   output$attacks <- renderTable({
-#     # Naredimo poizvedbo
-#     # x %>% f(y, ...) je ekvivalentno f(x, y, ...)
-#     t <- tbl.attack %>% filter(max_deaths > input$min) %>%
-#       arrange(max_deaths) %>% data.frame()
-# #     # Čas izpišemo kot niz
-# #     t$cas <- as.character(t$cas)
-#     # Vrnemo dobljeno razpredelnico
-#     t
-#   })
-# 
-# })
+
+shinyServer(function(input, output) {
+#  Vzpostavimo povezavo
+  conn <- src_postgres(dbname = db, host = host,
+                       user = user, password = password)
+#  Pripravimo tabelo
+  tbl.attack <- tbl(conn, "attack")
+
+  output$attacks <- renderTable({
+    # Naredimo poizvedbo
+    # x %>% f(y, ...) je ekvivalentno f(x, y, ...)
+    t <- tbl.attack %>% filter(max_deaths >= input$min[1] && max_deaths <= input$min[2]
+                               && injured >= input$min2[1] && injured <= input$min2[2]
+                               && dead_perpetrators >= input$min3[1]
+                               && dead_perpetrators <= input$min3[2]) %>%
+      arrange(max_deaths,injured, dead_perpetrators) %>% data.frame()
+    # Vrnemo dobljeno razpredelnico
+    t
+  })
+
 
 ##############################################################
 #APLIKACIJA 1
@@ -40,16 +41,16 @@ source("4.Baza/auth.R")
 
 #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 
-shinyServer(function(input, output) {
-  
-  conn <- src_postgres(dbname = db, host = host,
-                       user = user, password = password)
-  
+# shinyServer(function(input, output) {
+#   
+#   conn <- src_postgres(dbname = db, host = host,
+#                        user = user, password = password)
+#   
   # Pripravimo tabelo
     tbl.religion <- tbl(conn, "religion")
     tbl.country_religion <- tbl(conn, "country_religion")
     tbl.continent <- tbl(conn, "continent")
-    tbl.attack <- tbl(conn, "attack")
+    # tbl.attack <- tbl(conn, "attack")
     tbl.country <- tbl(conn, "country")
     tbl.in_country <- tbl(conn, "in_country")
     tbl.in_continent <- tbl(conn, "in_continent")
@@ -103,6 +104,6 @@ shinyServer(function(input, output) {
                                  stevilo = rep(0, length(manjkajo))))
     # Render a barplot
     ggplot(nap, aes(x = meseci[mesec], y = stevilo)) +
-      geom_bar(stat = "identity") + xlab("Mesec") + ylab("Število napadov")
+      geom_bar(stat = "identity", fill="#FF9999", colour="black") + xlab("Month") + ylab("Number of attacks")
   })
 })
