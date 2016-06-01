@@ -41,7 +41,6 @@ shinyUI(fluidPage(
 # #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 # 
     # Give the page a title
-    
       tabPanel("Number of attacks",
                h2("Number of attacks by months"),
     # Generate a row with a sidebar
