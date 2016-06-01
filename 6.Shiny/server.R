@@ -5,9 +5,8 @@ library(RPostgreSQL)
 if ("server.R" %in% dir()) {
   setwd("..")
 }
-source("4.Baza/auth.R")
-
-
+#source("4.Baza/auth.R")
+source("5.Shiny/auth-public.R")
 ############################################################
 shinyServer(function(input, output) { 
   conn <- src_postgres(dbname = db, host = host,
@@ -35,21 +34,21 @@ shinyServer(function(input, output) {
   
   output$kontinent <- renderUI({
     celine <- data.frame(tbl.continent)
-    selectInput("kontinent", "Izberi celino:",
+    selectInput("kontinent", "Choose a continent:",
                 choices = c("All" = 0, setNames(celine$continent_id,
                                                 celine$name)))
   })
   output$datum <- renderUI({
     MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
     MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
-    dateRangeInput("datum",label="Izberi interval za datum začetka:",start=as.Date(MINdatum[1,1]),
+    dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
                    end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
   })    
   
   
   output$religije1 <- renderUI({
     religije1 <- data.frame(tbl.religion)
-    selectInput("religije", "Izberi religije:",
+    selectInput("religije", "Choose a religion:",
                 choices = c("All" = 0, setNames(religije1$religion_id,
                                                 religije1$name)))
   })
