@@ -1,8 +1,9 @@
 # Neposredno klicanje SQL ukazov v R
 library(dplyr)
 library(RPostgreSQL)
-#source("2.Uvoz/Uvoz.R")
-source("2.Uvoz/Uvoz1.R")
+
+source("2.Uvoz/uvoz.r", encoding="UTF-8")
+source("2.Uvoz/Uvoz1.R",encoding="UTF-8")
 source("4.Baza/auth.R")
 
 # Povežemo se z gonilnikom za PostgreSQL
