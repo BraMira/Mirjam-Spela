@@ -13,8 +13,6 @@ source("5.Shiny/auth-public.R")
 #########################################################
 #ŠTEVILO MRTVIH
 
-#ŠTEVILO MRTVIH
-
 shinyServer(function(input, output) {
 #  Vzpostavimo povezavo
   conn <- src_postgres(dbname = db, host = host,
@@ -36,16 +34,8 @@ shinyServer(function(input, output) {
 
 
 ##############################################################
-#APLIKACIJA 1
+#APLIKACIJA 1: ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 
-
-#ŠTEVILO NAPADOV V POSAMEZNEM MESECU
-
-# shinyServer(function(input, output) {
-#   
-#   conn <- src_postgres(dbname = db, host = host,
-#                        user = user, password = password)
-#   
   # Pripravimo tabelo
     tbl.religion <- tbl(conn, "religion")
     tbl.country_religion <- tbl(conn, "country_religion")
