@@ -75,7 +75,7 @@ shinyUI(fluidPage(
 #     #uiOutput("glmesto"),
 #   ),
 #   mainPanel(
-#     tableOutput('napadi2')
+#     DT::dataTableOutput('napadi2')
 #   )
 # )
 # )
