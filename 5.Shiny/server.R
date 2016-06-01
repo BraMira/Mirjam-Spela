@@ -2,6 +2,7 @@ library(shiny)
 library(dplyr)
 library(RPostgreSQL)
 library(ggplot2)
+library(DT)
 
 if ("server.R" %in% dir()) {
   setwd("..")
@@ -111,7 +112,7 @@ shinyServer(function(input, output) {
   #                  end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
   # })    
   # 
-  # output$napadi2<-   renderTable({
+  # output$napadi2<- DT::renderDataTable({
   #   nap1 <- ttt4
   #   if (!is.null(input$kontinent) && input$kontinent != 0) {
   #     nap1 <- nap1 %>% filter(continent_id == input$kontinent)
