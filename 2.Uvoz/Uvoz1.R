@@ -118,14 +118,15 @@ drzave$country[drzave$country=="Timor-Leste"]<- "Timor-Leste"
 
 #združimo katere države so v data.frame drzave in religije
 rel <- semi_join(religije,drzave,by="country")
-
+rel[11,16] <- 0
+rel[36,16] <- 0
 #glavne religije držav
 religion <- data.frame(country=rel$country,name=NA,followers=NA,proportion=NA)
 
 for (k in 1:length(religion$country)){
   i <- 2
   for (j in seq(4,16,2)){
-    if (rel[k,j]>rel[k,i]){
+    if (rel[k,j] > rel[k,i]){
       i <- j
     }
   religion$name[k] <- colnames(rel)[i]
