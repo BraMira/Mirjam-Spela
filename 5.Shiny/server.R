@@ -1,7 +1,6 @@
 library(shiny)
 library(dplyr)
 library(RPostgreSQL)
-library(lubridate)
 library(ggplot2)
 
 if ("server.R" %in% dir()) {
@@ -19,6 +18,12 @@ shinyServer(function(input, output) {
                        user = user, password = password)
 #  Pripravimo tabelo
   tbl.attack <- tbl(conn, "attack")
+  tbl.religion <- tbl(conn, "religion")
+  tbl.country_religion <- tbl(conn, "country_religion")
+  tbl.continent <- tbl(conn, "continent")
+  tbl.country <- tbl(conn, "country")
+  tbl.in_country <- tbl(conn, "in_country")
+  tbl.in_continent <- tbl(conn, "in_continent")
 
   output$attacks <- renderTable({
     # Naredimo poizvedbo
@@ -27,12 +32,14 @@ shinyServer(function(input, output) {
                                && injured >= input$min2[1] && injured <= input$min2[2]
                                && dead_perpetrators >= input$min3[1]
                                && dead_perpetrators <= input$min3[2]) %>%
-      arrange(max_deaths,injured, dead_perpetrators) %>% select(start_date, 
-                                                                end_date, max_deaths, injured, 
-                                                                dead_perpetrators, type, perpetrator, 
-                                                                part_of) %>% data.frame()
+      arrange(max_deaths,injured, dead_perpetrators) %>% data.frame()
     # Vrnemo dobljeno razpredelnico
-    t
+    d <-inner_join(t,tbl.in_country,by=c("attack_id"="attack"), copy=TRUE) %>% select(start_date,
+                                                                                      end_date, max_deaths, injured,
+                                                                                      dead_perpetrators, type, country,
+                                                                                      place, perpetrator,
+                                                                                      part_of)
+    d
   })
 
 
@@ -40,13 +47,6 @@ shinyServer(function(input, output) {
 #APLIKACIJA 1: ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 
   # Pripravimo tabelo
-    tbl.religion <- tbl(conn, "religion")
-    tbl.country_religion <- tbl(conn, "country_religion")
-    tbl.continent <- tbl(conn, "continent")
-    # tbl.attack <- tbl(conn, "attack")
-    tbl.country <- tbl(conn, "country")
-    tbl.in_country <- tbl(conn, "in_country")
-    tbl.in_continent <- tbl(conn, "in_continent")
     tt <- inner_join(tbl.in_country,tbl.country,by=c("country"="name"))
     ttt <- inner_join(tbl.in_continent,tt)
     ttt1 <- inner_join(ttt,tbl.continent, by=c("continent"="continent_id"))
@@ -58,6 +58,7 @@ shinyServer(function(input, output) {
     #ttt5 <- data.frame(ttt4)
     #prešteje št napadov vsak mesec
     #no_attacks <- count(ttt5,month(start_date))
+    
     output$kontinent <- renderUI({
       celine <- data.frame(tbl.continent)
       selectInput("kontinent", "Choose a continent:",
@@ -97,6 +98,40 @@ shinyServer(function(input, output) {
                                  stevilo = rep(0, length(manjkajo))))
     # Render a barplot
     ggplot(nap, aes(x = meseci[mesec], y = stevilo)) +
-      geom_bar(stat = "identity", fill="#FF9999", colour="black") + xlab("Month") + ylab("Number of attacks")
+      geom_bar(stat = "identity", fill="#FF9999", colour="black") +
+      xlab("Month") + ylab("Number of attacks") + theme_minimal()
   })
+##############################################################################################
+#APLIKACIJA 2: SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
+  
+  # output$datum <- renderUI({
+  #   MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
+  #   MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
+  #   dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
+  #                  end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
+  # })    
+  # 
+  # output$napadi2<-   renderTable({
+  #   nap1 <- ttt4
+  #   if (!is.null(input$kontinent) && input$kontinent != 0) {
+  #     nap1 <- nap1 %>% filter(continent_id == input$kontinent)
+  #   }
+  #   if (!is.null(input$datum)) {
+  #     nap1 <- nap1 %>% filter(start_date >= input$datum[1],
+  #                           end_date <= input$datum[2])
+  #   }
+  #   if (!is.null(input$religije) && input$religije != 0) {
+  #     nap1 <- nap1 %>% filter(main_religion == input$religije)
+  #   }
+  #   #if (input$mesec != 0) {
+  #   #  nap <- nap %>% filter(month(start_date) == input$mesec)
+  #   #}
+  #   if (input$gl.mesto) {
+  #     nap1 <- nap1 %>% filter(place == capital)
+  #   }
+  #   nap1 %>% select(start_date, end_date, place, country,name.y,
+  #                  type, max_deaths, confirmed, injured, dead_perpetrators, perpetrator, part_of,
+  #                  population, area,  name, followers.x, proportion.x
+  #   ) %>%data.frame()
+  # })
 })
