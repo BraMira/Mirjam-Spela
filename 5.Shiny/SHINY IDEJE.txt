@@ -10,18 +10,6 @@ http://shiny.rstudio.com/gallery/google-charts.html
 Ali pa da vrže seznam držav, ki so bile najbolj pogojsto napadene, in sam lahko izbereš ali te zanima top 10, 20 ,itd
 podobno kakor v linku http://shiny.rstudio.com/gallery/widgets.html
 
-########################
-
-3. HISTOGRAM - ŠTEVILO NAPADOV V POSAMEZNEM MESECU (x os so meseci?)
--KONTINENT+ All: plus lahko izbiras se za ker kontinent te zanima
--RELIGIJA+ All: plus lahko se izbirava drzave z posamezno religijo
--GL. MESTO napadeno +All: da/ne
-http://shiny.rstudio.com/gallery/telephones-by-region.html
-#Ali
-#KROGCI 
-#http://shiny.rstudio.com/gallery/google-charts.html
-#Ali pa samo za različne kontinente kakor je tu: http://shiny.rstudio.com/gallery/telephones-by-region.html
-
 
 ######################
 4.RELIGIJE PRIMERJAVA - ŠTEVILO NAPADOV (x os so vse religije(6))
@@ -35,6 +23,28 @@ enako kot 4. -> samo da namesto št napadov gledaš št žrtev, ki pa je max_dea
 -KONTINENT + All
 
 --->> 4 in 5 lahko dava v eno  (torej izbiraš med št napadov in med žrtvami ) tako kot je v tem primeru http://shiny.rstudio.com/gallery/tabsets.html
+
+
+
+
+
+
+
+
+#######################################################
+že nardili
+########################
+
+3. HISTOGRAM - ŠTEVILO NAPADOV V POSAMEZNEM MESECU (x os so meseci?)
+-KONTINENT+ All: plus lahko izbiras se za ker kontinent te zanima
+-RELIGIJA+ All: plus lahko se izbirava drzave z posamezno religijo
+-GL. MESTO napadeno +All: da/ne
+http://shiny.rstudio.com/gallery/telephones-by-region.html
+#Ali
+#KROGCI 
+#http://shiny.rstudio.com/gallery/google-charts.html
+#Ali pa samo za različne kontinente kakor je tu: http://shiny.rstudio.com/gallery/telephones-by-region.html
+
 ########################
 
 6. VRNE TABELO/SEZNAM (ti pove splošne podatke o teh napadih) , KJER LAHKO IZBEREŠ 
@@ -50,11 +60,6 @@ http://shiny.rstudio.com/gallery/basic-datatable.html
 http://shiny.rstudio.com/gallery/slider
 
 ##############################################
-
-
-
-
-
 
 
 
