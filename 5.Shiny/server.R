@@ -27,7 +27,10 @@ shinyServer(function(input, output) {
                                && injured >= input$min2[1] && injured <= input$min2[2]
                                && dead_perpetrators >= input$min3[1]
                                && dead_perpetrators <= input$min3[2]) %>%
-      arrange(max_deaths,injured, dead_perpetrators) %>% data.frame()
+      arrange(max_deaths,injured, dead_perpetrators) %>% select(start_date, 
+                                                                end_date, max_deaths, injured, 
+                                                                dead_perpetrators, type, perpetrator, 
+                                                                part_of) %>% data.frame()
     # Vrnemo dobljeno razpredelnico
     t
   })

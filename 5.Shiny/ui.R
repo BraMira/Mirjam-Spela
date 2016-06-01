@@ -8,7 +8,7 @@ shinyUI(fluidPage(
 
   titlePanel("Details about attacks with selected casualties"),
   tabsetPanel(
-    tabPanel("Info dead",
+    tabPanel("Number of victims",
 
   sidebarLayout(
     sidebarPanel(
@@ -41,7 +41,7 @@ shinyUI(fluidPage(
 
     # Give the page a title
     titlePanel("Number of attacks by months"),
-      tabPanel("Barplot",
+      tabPanel("Number of attacks",
     # Generate a row with a sidebar
     sidebarLayout(      
       
