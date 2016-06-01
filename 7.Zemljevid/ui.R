@@ -1,10 +1,16 @@
+library(shiny)
 shinyUI(fluidPage(
-  titlePanel('World map'),
-  sidebarLayout(
-    sidebarPanel(
+  tabsetPanel(
+    tabPanel("Map",
+             h2("Map of the world"),
+             sidebarLayout(
+               sidebarPanel(
+                 p("miau")
+               ),
+                 mainPanel(
+                   plotOutput("zemljevid"))
       
-    )
-  )
-  
+    
+             )))
   
 ))
