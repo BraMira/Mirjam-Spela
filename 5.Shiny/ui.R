@@ -6,9 +6,10 @@ library(shiny)
 # 
 shinyUI(fluidPage(
 
-  titlePanel("Details about attacks with selected casualties"),
+  titlePanel("Terrorist attacks in 2015"),
   tabsetPanel(
     tabPanel("Number of victims",
+             h2("Details about attacks with selected casualties"),
 
   sidebarLayout(
     sidebarPanel(
@@ -31,7 +32,7 @@ shinyUI(fluidPage(
     ),
 
     mainPanel(
-      tableOutput("attacks")
+      DT::dataTableOutput("attacks")
     )
   )
 ),
@@ -40,8 +41,9 @@ shinyUI(fluidPage(
 # #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 # 
     # Give the page a title
-    titlePanel("Number of attacks by months"),
+    
       tabPanel("Number of attacks",
+               h2("Number of attacks by months"),
     # Generate a row with a sidebar
     sidebarLayout(
 
@@ -61,8 +63,9 @@ shinyUI(fluidPage(
 ######################################################
 #APLIKACIJA 2:SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
 
-#   titlePanel('List of terrorist attacks in 2015'),
+#   
 #     tabPanel("List of attacks",
+#       h2("List of terrosrist attacks in 2015"),
 #   sidebarLayout(
 #     sidebarPanel(
 #       uiOutput("kontinent"),
@@ -75,7 +78,7 @@ shinyUI(fluidPage(
 #     #uiOutput("glmesto"),
 #   ),
 #   mainPanel(
-#     tableOutput('napadi2')
+#     DT::dataTableOutput('napadi2')
 #   )
 # )
 # )

@@ -2,6 +2,7 @@ library(shiny)
 library(dplyr)
 library(RPostgreSQL)
 library(ggplot2)
+library(DT)
 
 if ("server.R" %in% dir()) {
   setwd("..")
@@ -25,20 +26,19 @@ shinyServer(function(input, output) {
   tbl.in_country <- tbl(conn, "in_country")
   tbl.in_continent <- tbl(conn, "in_continent")
 
-  output$attacks <- renderTable({
+  output$attacks <- DT::renderDataTable({
     # Naredimo poizvedbo
-    # x %>% f(y, ...) je ekvivalentno f(x, y, ...)
     t <- tbl.attack %>% filter(max_deaths >= input$min[1] && max_deaths <= input$min[2]
                                && injured >= input$min2[1] && injured <= input$min2[2]
                                && dead_perpetrators >= input$min3[1]
                                && dead_perpetrators <= input$min3[2]) %>%
       arrange(max_deaths,injured, dead_perpetrators) %>% data.frame()
     # Vrnemo dobljeno razpredelnico
-    d <-inner_join(t,tbl.in_country,by=c("attack_id"="attack"), copy=TRUE) %>% select(start_date,
-                                                                                      end_date, max_deaths, injured,
-                                                                                      dead_perpetrators, type, country,
-                                                                                      place, perpetrator,
-                                                                                      part_of)
+    d <-inner_join(t,tbl.in_country,by=c("attack_id"="attack"), copy=TRUE) %>% 
+      select(Start=start_date, End = end_date, "Max. deaths"=max_deaths, Injured = injured,
+             "Dead perpetrators"=dead_perpetrators, Type=type, Country=country, Location=place,
+             Perpetrator = perpetrator, "Part of"=part_of)
+                                                                                     
     d
   })
 
@@ -75,7 +75,7 @@ shinyServer(function(input, output) {
     
     output$religije <- renderUI({
       religije <- data.frame(tbl.religion)
-      selectInput("religije", "Choose religion:",
+      selectInput("religije", "Choose a religion:",
                   choices = c("All" = 0, setNames(religije$religion_id, religije$name )))
     })
   
@@ -111,7 +111,7 @@ shinyServer(function(input, output) {
   #                  end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
   # })    
   # 
-  # output$napadi2<-   renderTable({
+  # output$napadi2<-DT::renderDataTable({
   #   nap1 <- ttt4
   #   if (!is.null(input$kontinent) && input$kontinent != 0) {
   #     nap1 <- nap1 %>% filter(continent_id == input$kontinent)
