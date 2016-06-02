@@ -6,6 +6,7 @@ shinyUI(fluidPage(
 
 titlePanel('Religije1'),
  tabsetPanel(
+   tabPanel("Meseci1",
 sidebarLayout(
   sidebarPanel(
     uiOutput("kontinent"),
@@ -15,7 +16,7 @@ sidebarLayout(
     plotOutput('religionPlot1')
   )
 )),
- tabsetPanel(
+ tabPanel("Meseci2",
 sidebarLayout(
   sidebarPanel(
     uiOutput("kontinentA"),
@@ -28,4 +29,4 @@ sidebarLayout(
   
   
   #####################################################################
-))
+)))

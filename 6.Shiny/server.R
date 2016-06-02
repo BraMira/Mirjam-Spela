@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(RPostgreSQL)
+library(ggplot2)
 
 if ("server.R" %in% dir()) {
   setwd("..")
@@ -26,7 +27,8 @@ shinyServer(function(input, output) {
   ttt2 <- inner_join(ttt1,tbl.country_religion)
   ttt3 <- inner_join(ttt2,tbl.religion, by=c("main_religion"="religion_id")) 
   ttt4 <- inner_join(ttt3,tbl.attack, by=c("attack"="attack_id"))
-  religije <- tbl.religion 
+  religije <- tbl.religion %>%
+    transmute(religion_id, religija = name, stevilo = 0) %>% data.frame()
   
   ##############################################################################################
   
@@ -36,7 +38,7 @@ shinyServer(function(input, output) {
                 choices = c("All" = 0, setNames(celine$continent_id,
                                                 celine$name)))
   })
-  
+
   #stevilo napadov za posamezno religijo - na x osi religije, na y št napadov
   output$religionPlot1 <- renderPlot({
     nap <- ttt4
@@ -45,16 +47,21 @@ shinyServer(function(input, output) {
     }
     if (input$mesec != 0) {
       nap <- nap %>% filter(month(start_date) == input$mesec)}
-    
-    nap <- nap %>% group_by(attack_id, religion_id, religija = name) %>% 
+
+    nap <- nap %>% group_by(attack_id, religion_id, religija = name) %>%
       summarise() %>% group_by(religion_id, religija) %>%
       summarise(stevilo = count(religija)) %>% data.frame()
-    
-    vse <- tbl.religion %>% select(religion_id)
-    tiste<- nap %>% select(religion_id)
-    manjkajo <- which(! tiste %in% vse)
-    nap <- rbind(nap, data.frame(religija = manjkajo, stevilo = rep(0, length(manjkajo))))
-    
+
+    # vse <- tbl.religion %>% select(religion_id)
+    # tiste<- nap %>% select(religion_id)
+    # manjkajo <- which(! tiste %in% vse)
+    # nap <- rbind(nap, data.frame(religija = manjkajo, stevilo = rep(0, length(manjkajo))))
+    if (nrow(nap) > 0) {
+      manjkajo <- which(! religije$religion_id %in% nap$religion_id)
+      nap <- rbind(nap, religije[manjkajo,])
+    } else {
+      nap <- religije
+    }
     # Render a barplot
     ggplot(nap, aes(x = religija, y = stevilo)) +
       geom_bar(stat = "identity", fill="#FF9999", colour="black") +
@@ -79,10 +86,16 @@ shinyServer(function(input, output) {
     
     nap <- nap %>% group_by(religion_id, religija = name, max_deaths,injured) %>% 
       summarise() %>% group_by(religion_id, religija) %>%
-      summarise(stevilo = sum(max_deaths,injured)) %>% data.frame()
-    manjkajo <- which(! 1:12 %in% nap$mesec)
-    nap <- rbind(nap, data.frame(mesec = manjkajo,
-                                 stevilo = rep(0, length(manjkajo))))
+      summarise(stevilo = sum(max_deaths+injured)) %>% data.frame()
+    # manjkajo <- which(! 1:12 %in% nap$mesec)
+    # nap <- rbind(nap, data.frame(mesec = manjkajo,
+    #                              stevilo = rep(0, length(manjkajo))))
+    if (nrow(nap) > 0) {
+      manjkajo <- which(! religije$religion_id %in% nap$religion_id)
+      nap <- rbind(nap, religije[manjkajo,])
+    } else {
+      nap <- religije
+    }
     # Render a barplot
     ggplot(nap, aes(x = religija, y = stevilo)) +
       geom_bar(stat = "identity", fill="#FF9999", colour="black") +
