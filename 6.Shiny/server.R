@@ -26,6 +26,7 @@ shinyServer(function(input, output) {
   ttt2 <- inner_join(ttt1,tbl.country_religion)
   ttt3 <- inner_join(ttt2,tbl.religion, by=c("main_religion"="religion_id")) 
   ttt4 <- inner_join(ttt3,tbl.attack, by=c("attack"="attack_id"))
+  religije <- tbl.religion 
   
   ##############################################################################################
   #APLIKACIJA 2
@@ -82,8 +83,47 @@ shinyServer(function(input, output) {
   #place_capital <- left_join(tbl.in_country,tbl.country, by=c("country"="name"),copy=TRUE) %>% select(place,capital)
   ########################################################################################################  
   
+  #stevilo napadov za posamezno religijo - na x osi religije, na y št napadov
+  output$religionPlot1 <- renderPlot({
+    nap <- ttt4
+    if (!is.null(input$kontinent) && input$kontinent != 0) {
+      nap <- nap %>% filter(continent_id == input$kontinent)
+    }
+    if (input$mesec != 0) {
+      nap <- nap %>% filter(month(start_date) == input$mesec)}
+    
+    nap <- nap %>% group_by(attack_id, religion_id, religija = name) %>% 
+      summarise() %>% group_by(religion_id, religija) %>%
+      summarise(stevilo = count(religija)) %>% data.frame()
+       manjkajo <- which(! 1:8 %in% nap$religion_id)
+       nap <- rbind(nap, data.frame(religija = manjkajo, stevilo = rep(0, length(manjkajo))))
+    # Render a barplot
+    ggplot(nap, aes(x = religija, y = stevilo)) +
+      geom_bar(stat = "identity", fill="#FF9999", colour="black") +
+      xlab("Religion") + ylab("Number of attacks") + theme_minimal()
+  })
   
-  
+      
+  #max_deaths + injured : - na x osi religije, na y max_deaths + injured
+  output$religionPlot2 <- renderPlot({
+    nap <- ttt4
+    if (!is.null(input$kontinent) && input$kontinent != 0) {
+      nap <- nap %>% filter(continent_id == input$kontinent)
+    }
+    if (input$mesec != 0) {
+      nap <- nap %>% filter(month(start_date) == input$mesec)}
+    
+    nap <- nap %>% group_by(religion_id, religija = name, max_deaths,injured) %>% 
+      summarise() %>% group_by(religion_id, religija) %>%
+      summarise(stevilo = sum(max_deaths,injured)) %>% data.frame()
+    manjkajo <- which(! 1:12 %in% nap$mesec)
+    nap <- rbind(nap, data.frame(mesec = manjkajo,
+                                 stevilo = rep(0, length(manjkajo))))
+    # Render a barplot
+    ggplot(nap, aes(x = religija2[religija2], y = stevilo)) +
+      geom_bar(stat = "identity", fill="#FF9999", colour="black") +
+      xlab("Religion") + ylab("Number of attacks") + theme_minimal()
+  })
   
   
   ########################################################################################################  
