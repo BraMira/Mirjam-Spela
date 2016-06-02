@@ -3,6 +3,8 @@ library(dplyr)
 library(RPostgreSQL)
 library(ggplot2)
 library(DT)
+library(rworldmap)
+
 
 if ("server.R" %in% dir()) {
   setwd("..")
@@ -104,34 +106,128 @@ shinyServer(function(input, output) {
 ##############################################################################################
 #APLIKACIJA 2: SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
   
-  # output$datum <- renderUI({
-  #   MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
-  #   MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
-  #   dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
-  #                  end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
-  # })    
-  # 
-  # output$napadi2<-DT::renderDataTable({
-  #   nap1 <- ttt4
-  #   if (!is.null(input$kontinent) && input$kontinent != 0) {
-  #     nap1 <- nap1 %>% filter(continent_id == input$kontinent)
-  #   }
-  #   if (!is.null(input$datum)) {
-  #     nap1 <- nap1 %>% filter(start_date >= input$datum[1],
-  #                           end_date <= input$datum[2])
-  #   }
-  #   if (!is.null(input$religije) && input$religije != 0) {
-  #     nap1 <- nap1 %>% filter(main_religion == input$religije)
-  #   }
-  #   #if (input$mesec != 0) {
-  #   #  nap <- nap %>% filter(month(start_date) == input$mesec)
-  #   #}
-  #   if (input$gl.mesto) {
-  #     nap1 <- nap1 %>% filter(place == capital)
-  #   }
-  #   nap1 %>% select(Start=start_date, End=end_date, Location=place, Country=country,"Continent"=name.y,
-  #                 Tpye= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Parto of"=part_of,
-  #                 Population=population, Area=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (in %)"=proportion.x
-  #                 ) %>%data.frame()
-  # })
+  output$kontinent1 <- renderUI({
+    celine <- data.frame(tbl.continent)
+    selectInput("kontinent", "Choose a continent:",
+                choices = c("All" = 0, setNames(celine$continent_id,
+                                                celine$name)))
+  })
+  output$datum <- renderUI({
+    MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
+    MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
+    dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
+                   end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
+  })    
+  
+  
+  output$religije1 <- renderUI({
+    religije1 <- data.frame(tbl.religion)
+    selectInput("religije", "Choose a religion:",
+                choices = c("All" = 0, setNames(religije1$religion_id,
+                                                religije1$name)))
+  }) 
+  
+  output$napadi2<-DT::renderDataTable({
+    nap1 <- ttt4
+    if (!is.null(input$kontinent) && input$kontinent != 0) {
+      nap1 <- nap1 %>% filter(continent_id == input$kontinent)
+    }
+    if (!is.null(input$datum)) {
+      nap1 <- nap1 %>% filter(start_date >= input$datum[1],
+                            end_date <= input$datum[2])
+    }
+    if (!is.null(input$religije) && input$religije != 0) {
+      nap1 <- nap1 %>% filter(main_religion == input$religije)
+    }
+    #if (input$mesec != 0) {
+    #  nap <- nap %>% filter(month(start_date) == input$mesec)
+    #}
+    if (input$gl.mesto) {
+      nap1 <- nap1 %>% filter(place == capital)
+    }
+    nap1 %>% select(Start=start_date, End=end_date, Location=place, Country=country,"Continent"=name.y,
+                  Tpye= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Parto of"=part_of,
+                  Population=population, Area=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (in %)"=proportion.x
+                  ) %>%data.frame()
+  })
+#######################################################################
+#APLIKACIJA 3: ZEMLJEVID
+  
+  output$kontinent2 <- renderUI({
+    celine <- data.frame(tbl.continent)
+    selectInput("kontinent", "Choose a continent:",
+                choices = c("All" = 0, setNames(celine$continent_id,
+                                                celine$name)))
+  })
+  output$datum1 <- renderUI({
+    MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
+    MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
+    dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
+                   end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
+  })    
+  
+  #   output$napadi3<-   renderTable({
+  #     attack <- data.frame(tbl.attack)
+  #     nap <- tbl.attack %>% filter(input$kontinent & input$religije1 &
+  #                                    input$datum & input$mesec & input$glmesto) %>% data.frame()
+  #   
+  
+  output$zemljevid <- renderPlot({
+    nap3 <- ttt4 %>% select(attack,country,continent_id,start_date,end_date)
+    world_map <- map_data(map="world")
+    world_map <- subset(world_map, region!="Antarctica")
+    HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
+      group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+    
+    if (!is.null(input$kontinent) && input$kontinent != 0) {
+      HH <- nap3 %>% filter(continent_id == input$kontinent)%>% group_by(attack,region=country) %>% 
+        summarise() %>% group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+    }
+    if (!is.null(input$datum)) {
+      HH <- nap3 %>% filter(start_date >= input$datum[1],
+                            end_date <= input$datum[2])%>% group_by(attack,region=country) %>% summarise() %>% 
+        group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+    }
+    #prešeteje v vsaki državi kolko napadov
+    #HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
+    # group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+    HH$region[HH$region=="United States"]<- "USA"
+    HH$region[HH$region=="United Kingdom"]<- "UK"
+    HHH <- merge(world_map,HH, sort =FALSE, by="region")
+    HHH <- HHH[order(HHH$order),]
+    
+    #grdo
+    # qplot(long,lat, data = HHH, group=group, fill=stevilo, geom = "polygon")
+    
+    g <- ggplot(HHH)
+    g <- g + geom_map(dat=world_map, map=world_map, aes(map_id=region),fill="white", color="#7f7f7f",size=0.25)
+    g <- g+ geom_map(map=world_map, aes(map_id=region,fill=HHH$stevilo),size=0.25)
+    g <- g+scale_fill_gradient(low="yellow",high="red",name="Number of attacks",guide="colourbar")
+    g <- g+expand_limits(x=world_map$long,y=world_map$lat)
+    g <- g + labs(x="",y="")
+    g <- g+ theme(panel.grid=element_blank(), panel.border=element_blank(),axis.ticks=element_blank(), axis.text=element_blank(),legend.position="top")
+    #       geom_map(data=HHH, map = world_map, aes(map_id=region, x = long, y=lat, fill=HHH$stevilo))+
+    #       scale_fill_gradient(low="yellow",high="red",name ="Number of attacks",guide = "colourbar")+ 
+    #       theme(panel.grid=element_blank(), panel.border=element_blank(),axis.ticks=element_blank(), axis.text=element_blank(),legend.position="top")
+    if (input$kontinent==1){
+      g <- g+coord_cartesian(xlim=c(-25,60),ylim=c(37,-40))
+    }
+    if (input$kontinent==2){
+      g <- g+coord_cartesian(xlim=c(20,200),ylim=c(-10,80))
+    }
+    if (input$kontinent==3){
+      g<- g+coord_cartesian(xlim=c(-20,59),ylim=c(35,71))
+    }
+    if (input$kontinent==4){
+      g <- g+coord_cartesian(xlim=c(-20,-170),ylim=c(10,80))
+    }
+    if (input$kontinent==6){
+      g <- g+coord_cartesian(xlim=c(-20,-120),ylim=c(-70,20))
+    }
+    if (input$kontinent==5){
+      g <- g+coord_cartesian(xlim=c(80,190),ylim=c(-50,10))
+    }
+    g
+    
+  })
 })

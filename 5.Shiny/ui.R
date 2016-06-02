@@ -58,28 +58,40 @@ shinyUI(fluidPage(
       plotOutput("monthPlot")
     )
   )
-)
+),
 ######################################################
 #APLIKACIJA 2:SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
 
-#   
-#     tabPanel("List of attacks",
-#       h2("List of terrosrist attacks in 2015"),
-#   sidebarLayout(
-#     sidebarPanel(
-#       uiOutput("kontinent"),
-#       uiOutput("datum"),
-#       uiOutput("religije1"),
-#     #selectInput("mesec", "Choose a month:",
-#     #           choices=c("All" = 0, setNames(1:12, month.name))),
-#     selectInput("gl.mesto", "Show attacks that happened ONLY in the capital:",
-#                 choices = c("No, show all attacks" = FALSE, "Yes, show attacks in capitals" = TRUE))
-#     #uiOutput("glmesto"),
-#   ),
-#   mainPanel(
-#     DT::dataTableOutput('napadi2')
-#   )
-# )
-# )
+  
+    tabPanel("List of attacks",
+      h2("List of terrosrist attacks in 2015"),
+  sidebarLayout(
+    sidebarPanel(
+      uiOutput("kontinent1"),
+      uiOutput("datum"),
+      uiOutput("religije1"),
+    #selectInput("mesec", "Choose a month:",
+    #           choices=c("All" = 0, setNames(1:12, month.name))),
+    selectInput("gl.mesto", "Show attacks that happened ONLY in the capital:",
+                choices = c("No, show all attacks" = FALSE, "Yes, show attacks in capitals" = TRUE))
+    #uiOutput("glmesto"),
+  ),
+  mainPanel(
+    DT::dataTableOutput('napadi2')
+  )
+)
+),
+  tabPanel("Map",
+           h2("Map of the world"),
+           sidebarLayout(
+             sidebarPanel(
+               uiOutput("kontinent2"),
+               uiOutput("datum1")
+             ),
+             mainPanel(
+               plotOutput("zemljevid"))
+             
+             
+           ))
 )
 ))
