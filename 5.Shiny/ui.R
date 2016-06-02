@@ -67,7 +67,7 @@ shinyUI(fluidPage(
 ######################################################
 #APLIKACIJA 2:SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
 
-<<<<<<< HEAD
+
 ##########  
 
 tabPanel("List of attacks", 
@@ -81,7 +81,6 @@ tabPanel("List of attacks",
       uiOutput("religije"),
       selectInput("gl.mesto", "Show attacks that happened ONLY in the capital:",
                   choices = c("No, show all attacks" = FALSE, "Yes, show attacks in capitals" = TRUE))
-=======
   
     tabPanel("List of attacks",
       h2("List of terrorist attacks in 2015"),
@@ -95,17 +94,17 @@ tabPanel("List of attacks",
     selectInput("gl.mesto", "Show attacks that happened ONLY in the capital:",
                 choices = c("No, show all attacks" = FALSE, "Yes, show attacks in capitals" = TRUE))
     #uiOutput("glmesto"),
->>>>>>> 4f0207413b025fd5b821e324ac98d51f072a6d5a
+
   ),
   mainPanel(
     DT::dataTableOutput('napadi2')
   )
 )
-<<<<<<< HEAD
+
 )
 
 
-=======
+
 ),
   tabPanel("Map",
            h2("Number of attacks by country on a map"),
@@ -121,6 +120,6 @@ tabPanel("List of attacks",
              
              
            ))
->>>>>>> 4f0207413b025fd5b821e324ac98d51f072a6d5a
+
 )
 ))

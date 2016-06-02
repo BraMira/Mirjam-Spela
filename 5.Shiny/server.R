@@ -112,15 +112,14 @@ shinyServer(function(input, output) {
 ##############################################################################################
 #APLIKACIJA 2: SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
   
-<<<<<<< HEAD
-=======
+
   output$kontinent1 <- renderUI({
     celine <- data.frame(tbl.continent)
     selectInput("kontinent", "Choose a continent:",
                 choices = c("All" = 0, setNames(celine$continent_id,
                                                 celine$name)))
   })
->>>>>>> 4f0207413b025fd5b821e324ac98d51f072a6d5a
+
   output$datum <- renderUI({
     MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
     MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
@@ -128,8 +127,7 @@ shinyServer(function(input, output) {
                    end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
   })    
   
-<<<<<<< HEAD
-=======
+
   
   output$religije1 <- renderUI({
     religije1 <- data.frame(tbl.religion)
@@ -138,7 +136,7 @@ shinyServer(function(input, output) {
                                                 religije1$name)))
   }) 
   
->>>>>>> 4f0207413b025fd5b821e324ac98d51f072a6d5a
+
   output$napadi2<-DT::renderDataTable({
     nap1 <- ttt4
     if (!is.null(input$kontinent) && input$kontinent != 0) {
@@ -162,12 +160,12 @@ shinyServer(function(input, output) {
                   Population=population, Area=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (in %)"=proportion.x
                   ) %>%data.frame()
   })
-<<<<<<< HEAD
+
 
       
       
       
-=======
+
 #######################################################################
 #APLIKACIJA 3: ZEMLJEVID
   
@@ -248,5 +246,5 @@ shinyServer(function(input, output) {
     g
     
   })
->>>>>>> 4f0207413b025fd5b821e324ac98d51f072a6d5a
+
 })
