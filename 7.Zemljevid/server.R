@@ -54,9 +54,11 @@ shinyServer(function(input, output) {
   
   output$zemljevid <- renderPlot({
     nap3 <- ttt4 %>% select(attack,country,continent_id,start_date,end_date)
+    world_map <- map_data(map="world")
+    world_map <- subset(world_map, region!="Antarctica")
     HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
       group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
-    world_map <- map_data(map="world")
+    
     if (!is.null(input$kontinent) && input$kontinent != 0) {
       HH <- nap3 %>% filter(continent_id == input$kontinent)%>% group_by(attack,region=country) %>% 
         summarise() %>% group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
@@ -77,14 +79,41 @@ shinyServer(function(input, output) {
     #grdo
     # qplot(long,lat, data = HHH, group=group, fill=stevilo, geom = "polygon")
 
-    ggplot()+geom_map(data=HHH, map = world_map, aes(map_id=region, x = long, y=lat,fill=HHH$stevilo))+
-      scale_fill_gradient2(low="green",mid="yellow",high="red", guide = "colourbar")+
-      theme_bw()
+    g <- ggplot(HHH)
+    g <- g + geom_map(dat=world_map, map=world_map, aes(map_id=region),fill="white", color="#7f7f7f",size=0.25)
+    g <- g+ geom_map(map=world_map, aes(map_id=region,fill=HHH$stevilo),size=0.25)
+    g <- g+scale_fill_gradient(low="yellow",high="red",name="Number of attacks",guide="colourbar")
+    g <- g+expand_limits(x=world_map$long,y=world_map$lat)
+    g <- g + labs(x="",y="")
+    g <- g+ theme(panel.grid=element_blank(), panel.border=element_blank(),axis.ticks=element_blank(), axis.text=element_blank(),legend.position="top")
+#       geom_map(data=HHH, map = world_map, aes(map_id=region, x = long, y=lat, fill=HHH$stevilo))+
+#       scale_fill_gradient(low="yellow",high="red",name ="Number of attacks",guide = "colourbar")+ 
+#       theme(panel.grid=element_blank(), panel.border=element_blank(),axis.ticks=element_blank(), axis.text=element_blank(),legend.position="top")
+    if (input$kontinent==1){
+      g <- g+coord_cartesian(xlim=c(-25,60),ylim=c(37,-40))
+    }
+    if (input$kontinent==2){
+      g <- g+coord_cartesian(xlim=c(20,200),ylim=c(-10,80))
+    }
+    if (input$kontinent==3){
+      g<- g+coord_cartesian(xlim=c(-20,59),ylim=c(35,71))
+    }
+    if (input$kontinent==4){
+      g <- g+coord_cartesian(xlim=c(-20,-170),ylim=c(10,80))
+    }
+    if (input$kontinent==6){
+      g <- g+coord_cartesian(xlim=c(-20,-120),ylim=c(-70,20))
+    }
+    if (input$kontinent==5){
+      g <- g+coord_cartesian(xlim=c(80,190),ylim=c(-50,10))
+    }
+    g
+    
   })
   
   
-  
-  
+  #europe
+  #ggplot() + geom_map(data=world_map, map=world_map, aes(map_id=region, x=long, y=lat))+coord_cartesian(xlim=c(-20,59),ylim=c(35,71))
   
   
 })
