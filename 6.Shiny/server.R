@@ -99,7 +99,7 @@ shinyServer(function(input, output) {
     # Render a barplot
     ggplot(nap, aes(x = religija, y = stevilo)) +
       geom_bar(stat = "identity", fill="#FF9999", colour="black") +
-      xlab("Religion") + ylab("Number of attacks") + theme_minimal()
+      xlab("Religion") + ylab("Number of dead and injured") + theme_minimal()
   })
   
   
