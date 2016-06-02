@@ -69,19 +69,6 @@ shinyUI(fluidPage(
 
 
 ##########  
-
-tabPanel("List of attacks", 
-         h2("List of terrosrist attacks in 2015"),
-      
-  sidebarLayout(
-    
-    sidebarPanel(
-      uiOutput("kontinent"),
-      uiOutput("datum"),
-      uiOutput("religije"),
-      selectInput("gl.mesto", "Show attacks that happened ONLY in the capital:",
-                  choices = c("No, show all attacks" = FALSE, "Yes, show attacks in capitals" = TRUE))
-  
     tabPanel("List of attacks",
       h2("List of terrorist attacks in 2015"),
   sidebarLayout(
@@ -102,10 +89,9 @@ tabPanel("List of attacks",
 )
 
 )
+,
+#############################################
 
-
-
-),
   tabPanel("Map",
            h2("Number of attacks by country on a map"),
            sidebarLayout(
