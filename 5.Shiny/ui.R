@@ -68,7 +68,6 @@ shinyUI(fluidPage(
 #APLIKACIJA 2:SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
 
 
-##########  
     tabPanel("List of attacks",
       h2("List of terrorist attacks in 2015"),
   sidebarLayout(
@@ -88,9 +87,15 @@ shinyUI(fluidPage(
   )
 )
 
-)
-,
+
+
+
+
+),
+
+
 #############################################
+
 
   tabPanel("Map",
            h2("Number of attacks by country on a map"),

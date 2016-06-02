@@ -209,6 +209,7 @@ shinyServer(function(input, output) {
     # group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
     HH$region[HH$region=="United States"]<- "USA"
     HH$region[HH$region=="United Kingdom"]<- "UK"
+    HH$region[HH$region=="Russia"]<- "USSR"
     HHH <- merge(world_map,HH, sort =FALSE, by="region")
     HHH <- HHH[order(HHH$order),]
     
