@@ -84,6 +84,7 @@ shinyServer(function(input, output) {
   ########################################################################################################  
   
   #stevilo napadov za posamezno religijo - na x osi religije, na y št napadov
+  religije <- tbl.religion 
   output$religionPlot1 <- renderPlot({
     nap <- ttt4
     if (!is.null(input$kontinent) && input$kontinent != 0) {
@@ -95,8 +96,8 @@ shinyServer(function(input, output) {
     nap <- nap %>% group_by(attack_id, religion_id, religija = name) %>% 
       summarise() %>% group_by(religion_id, religija) %>%
       summarise(stevilo = count(religija)) %>% data.frame()
-       manjkajo <- which(! 1:8 %in% nap$religion_id)
-       nap <- rbind(nap, data.frame(religija = manjkajo, stevilo = rep(0, length(manjkajo))))
+        manjkajo <- which(! 1:8 %in% religije$name)
+        nap <- rbind(nap, data.frame(religija = manjkajo, stevilo = rep(0, length(manjkajo))))
     # Render a barplot
     ggplot(nap, aes(x = religija, y = stevilo)) +
       geom_bar(stat = "identity", fill="#FF9999", colour="black") +
