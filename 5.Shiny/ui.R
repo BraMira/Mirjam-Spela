@@ -64,7 +64,7 @@ shinyUI(fluidPage(
 
   
     tabPanel("List of attacks",
-      h2("List of terrosrist attacks in 2015"),
+      h2("List of terrorist attacks in 2015"),
   sidebarLayout(
     sidebarPanel(
       uiOutput("kontinent1"),
@@ -82,10 +82,12 @@ shinyUI(fluidPage(
 )
 ),
   tabPanel("Map",
-           h2("Map of the world"),
+           h2("Number of attacks by country on a map"),
            sidebarLayout(
              sidebarPanel(
+               p("Choose a continent you wish to see on the map more closely."),
                uiOutput("kontinent2"),
+               p("Choose a date interval."),
                uiOutput("datum1")
              ),
              mainPanel(
