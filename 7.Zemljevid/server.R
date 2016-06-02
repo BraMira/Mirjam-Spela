@@ -33,13 +33,16 @@ shinyServer(function(input, output) {
     group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
   HH$region[HH$region=="United States"]<- "USA"
   HH$region[HH$region=="United Kingdom"]<- "UK"
+  HHH <- merge(world_map,HH, sort =FALSE, by="region")
   HHH <- HHH[order(HHH$order),]
+  
   
   output$zemljevid <- renderPlot({
     #grdo
     # qplot(long,lat, data = HHH, group=group, fill=stevilo, geom = "polygon")
+
     ggplot()+geom_map(data=HHH, map = world_map, aes(map_id=region, x = long, y=lat,fill=HHH$stevilo))+
-      scale_fill_gradient2(low="green",mid="yellow",high="red", guide = "colourbar")+
+      scale_fill_gradient2(low="yellow",mid="green",high="red", guide = "colourbar")+
       theme_bw()
   })
   
