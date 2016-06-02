@@ -157,13 +157,86 @@ shinyServer(function(input, output) {
     if (input$gl.mesto) {
       nap1 <- nap1 %>% filter(place == capital)
     }
-    nap1 %>% select(Start=start_date, End=end_date, Location=place, Country=country,"Continent"=name.y,
-                  Tpye= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Parto of"=part_of,
-                  Population=population, Area=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (in %)"=proportion.x
-                  ) %>%data.frame()
+    nap1 %>% data.frame() %>% select(Start=start_date, End=end_date, Location=place, Country=country,
+                  Type= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Part of"=part_of,
+                  Population=population, "Area (mi2)"=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (%)"=proportion.x
+                  ) 
   })
 
-
+  religije <- tbl.religion %>%
+    transmute(religion_id, religija = name, stevilo = 0) %>% data.frame()
+  
+  ##############################################################################################
+  
+  output$kontinent3 <- renderUI({
+    celine <- data.frame(tbl.continent)
+    selectInput("kontinent", "Choose a continent:",
+                choices = c("All" = 0, setNames(celine$continent_id,
+                                                celine$name)))
+  })
+  
+  #stevilo napadov za posamezno religijo - na x osi religije, na y št napadov
+  output$religionPlot1 <- renderPlot({
+    nap <- ttt4
+    if (!is.null(input$kontinent) && input$kontinent != 0) {
+      nap <- nap %>% filter(continent_id == input$kontinent)
+    }
+    if (input$mesec != 0) {
+      nap <- nap %>% filter(month(start_date) == input$mesec)}
+    
+    nap <- nap %>% group_by(attack_id, religion_id, religija = name) %>%
+      summarise() %>% group_by(religion_id, religija) %>%
+      summarise(stevilo = count(religija)) %>% data.frame()
+    
+    # vse <- tbl.religion %>% select(religion_id)
+    # tiste<- nap %>% select(religion_id)
+    # manjkajo <- which(! tiste %in% vse)
+    # nap <- rbind(nap, data.frame(religija = manjkajo, stevilo = rep(0, length(manjkajo))))
+    if (nrow(nap) > 0) {
+      manjkajo <- which(! religije$religion_id %in% nap$religion_id)
+      nap <- rbind(nap, religije[manjkajo,])
+    } else {
+      nap <- religije
+    }
+    # Render a barplot
+    ggplot(nap, aes(x = religija, y = stevilo)) +
+      geom_bar(stat = "identity", fill="#FF9999", colour="black") +
+      xlab("Religion") + ylab("Number of attacks") + theme_minimal()
+  })
+  ########################################################################################################  
+  output$kontinentA <- renderUI({
+    celine <- data.frame(tbl.continent)
+    selectInput("kontinent", "Choose a continent:",
+                choices = c("All" = 0, setNames(celine$continent_id,
+                                                celine$name)))
+  })
+  
+  #max_deaths + injured : - na x osi religije, na y max_deaths + injured
+  output$religionPlot2 <- renderPlot({
+    nap <- ttt4
+    if (!is.null(input$kontinent) && input$kontinent != 0) {
+      nap <- nap %>% filter(continent_id == input$kontinent)
+    }
+    if (input$mesec != 0) {
+      nap <- nap %>% filter(month(start_date) == input$mesec)}
+    
+    nap <- nap %>% group_by(religion_id, religija = name, max_deaths,injured) %>% 
+      summarise() %>% group_by(religion_id, religija) %>%
+      summarise(stevilo = sum(max_deaths+injured)) %>% data.frame()
+    # manjkajo <- which(! 1:12 %in% nap$mesec)
+    # nap <- rbind(nap, data.frame(mesec = manjkajo,
+    #                              stevilo = rep(0, length(manjkajo))))
+    if (nrow(nap) > 0) {
+      manjkajo <- which(! religije$religion_id %in% nap$religion_id)
+      nap <- rbind(nap, religije[manjkajo,])
+    } else {
+      nap <- religije
+    }
+    # Render a barplot
+    ggplot(nap, aes(x = religija, y = stevilo)) +
+      geom_bar(stat = "identity", fill="#FF9999", colour="black") +
+      xlab("Religion") + ylab("Number of dead and injured") + theme_minimal()
+  })
       
       
       

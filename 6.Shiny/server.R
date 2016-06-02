@@ -32,7 +32,7 @@ shinyServer(function(input, output) {
   
   ##############################################################################################
   
-  output$kontinent <- renderUI({
+  output$kontinent3 <- renderUI({
     celine <- data.frame(tbl.continent)
     selectInput("kontinent", "Choose a continent:",
                 choices = c("All" = 0, setNames(celine$continent_id,

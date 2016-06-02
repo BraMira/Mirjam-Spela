@@ -9,7 +9,7 @@ titlePanel('Religije1'),
    tabPanel("Meseci1",
 sidebarLayout(
   sidebarPanel(
-    uiOutput("kontinent"),
+    uiOutput("kontinent3"),
     selectInput("mesec", "Choose a month:",choices=c("All" = 0, setNames(1:12, month.name)))
   ),
   mainPanel(
