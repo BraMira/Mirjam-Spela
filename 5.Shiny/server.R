@@ -4,7 +4,9 @@ library(RPostgreSQL)
 library(ggplot2)
 library(DT)
 library(rworldmap)
-
+library(maps)
+library(sp)
+library(leaflet)
 
 if ("server.R" %in% dir()) {
   setwd("..")
@@ -195,6 +197,7 @@ shinyServer(function(input, output) {
     HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
       group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
     
+    
     if (!is.null(input$kontinent) && input$kontinent != 0) {
       HH <- nap3 %>% filter(continent_id == input$kontinent)%>% group_by(attack,region=country) %>% 
         summarise() %>% group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
@@ -209,7 +212,7 @@ shinyServer(function(input, output) {
     # group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
     HH$region[HH$region=="United States"]<- "USA"
     HH$region[HH$region=="United Kingdom"]<- "UK"
-    HH$region[HH$region=="Russia"]<- "USSR"
+    #HH$region[HH$region=="Russia"]<- "USSR"
     HHH <- merge(world_map,HH, sort =FALSE, by="region")
     HHH <- HHH[order(HHH$order),]
     
@@ -219,30 +222,42 @@ shinyServer(function(input, output) {
     g <- ggplot(HHH)
     g <- g + geom_map(dat=world_map, map=world_map, aes(map_id=region),fill="white", color="#7f7f7f",size=0.25)
     g <- g+ geom_map(map=world_map, aes(map_id=region,fill=HHH$stevilo),size=0.25)
-    g <- g+scale_fill_gradient(low="yellow",high="red",name="Number of attacks",guide="colourbar")
+    g <- g+scale_fill_gradient(low="#fff7bc",high="#cc4c02",name="Number of attacks",guide="colourbar")
     g <- g+expand_limits(x=world_map$long,y=world_map$lat)
     g <- g + labs(x="",y="")
-    g <- g+ theme(panel.grid=element_blank(), panel.border=element_blank(),axis.ticks=element_blank(), axis.text=element_blank(),legend.position="top")
+    g <- g+ theme(panel.grid=element_blank(), panel.border=element_blank(),axis.ticks=element_blank(), 
+                  axis.text=element_blank(),legend.position="top")
     #       geom_map(data=HHH, map = world_map, aes(map_id=region, x = long, y=lat, fill=HHH$stevilo))+
     #       scale_fill_gradient(low="yellow",high="red",name ="Number of attacks",guide = "colourbar")+ 
     #       theme(panel.grid=element_blank(), panel.border=element_blank(),axis.ticks=element_blank(), axis.text=element_blank(),legend.position="top")
-    if (input$kontinent==1){
-      g <- g+coord_cartesian(xlim=c(-25,60),ylim=c(37,-40))
-    }
-    if (input$kontinent==2){
-      g <- g+coord_cartesian(xlim=c(20,200),ylim=c(-10,80))
-    }
-    if (input$kontinent==3){
-      g<- g+coord_cartesian(xlim=c(-20,59),ylim=c(35,71))
-    }
-    if (input$kontinent==4){
-      g <- g+coord_cartesian(xlim=c(-20,-170),ylim=c(10,80))
-    }
-    if (input$kontinent==6){
-      g <- g+coord_cartesian(xlim=c(-20,-120),ylim=c(-70,20))
-    }
-    if (input$kontinent==5){
-      g <- g+coord_cartesian(xlim=c(80,190),ylim=c(-50,10))
+    # if (input$kontinent==1){
+    #   g <- g+coord_cartesian(xlim=c(-25,60),ylim=c(37,-40))
+    # }
+    # if (input$kontinent==2){
+    #   g <- g+coord_cartesian(xlim=c(20,200),ylim=c(-10,80))
+    # }
+    # if (input$kontinent==3){
+    #   g<- g+coord_cartesian(xlim=c(-20,59),ylim=c(35,71))
+    # }
+    # if (input$kontinent==4){
+    #   g <- g+coord_cartesian(xlim=c(-20,-170),ylim=c(10,80))
+    # }
+    # if (input$kontinent==6){
+    #   g <- g+coord_cartesian(xlim=c(-20,-120),ylim=c(-70,20))
+    # }
+    # if (input$kontinent==5){
+    #   g <- g+coord_cartesian(xlim=c(80,190),ylim=c(-50,10))
+    # }
+    # g
+    lim <- data.frame(xmin = c(-25, 20, -20, -170, 80, -120),
+                      xmax = c(60, 200, 59, -20, 190, -20),
+                      ymin = c(-40, -10, 35, 10, -50, -70),
+                      ymax = c(37, 80, 71, 85, 10, 20))
+    if (!is.null(input$kontinent) && input$kontinent!=0){
+      ln <- lim[input$kontinent,]
+      g <- g + coord_cartesian(xlim=c(ln[,"xmin"],ln[,"xmax"]),
+                               ylim=c(ln[,"ymin"],ln[,"ymax"])) +
+        theme(aspect.ratio=(ln[,"ymax"]-ln[,"ymin"])/(ln[,"xmax"]-ln[,"xmin"]))
     }
     g
     
