@@ -42,7 +42,7 @@ shinyServer(function(input, output) {
     # qplot(long,lat, data = HHH, group=group, fill=stevilo, geom = "polygon")
 
     ggplot()+geom_map(data=HHH, map = world_map, aes(map_id=region, x = long, y=lat,fill=HHH$stevilo))+
-      scale_fill_gradient2(low="yellow",mid="green",high="red", guide = "colourbar")+
+      scale_fill_gradient2(low="green",mid="yellow",high="red", guide = "colourbar")+
       theme_bw()
   })
   
