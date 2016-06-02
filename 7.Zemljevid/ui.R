@@ -5,7 +5,8 @@ shinyUI(fluidPage(
              h2("Map of the world"),
              sidebarLayout(
                sidebarPanel(
-                 p("miau")
+                 uiOutput("kontinent"),
+                 uiOutput("datum")
                ),
                  mainPanel(
                    plotOutput("zemljevid"))
