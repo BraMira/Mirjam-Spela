@@ -78,6 +78,12 @@ shinyServer(function(input, output) {
       selectInput("religije", "Choose a religion:",
                   choices = c("All" = 0, setNames(religije$religion_id, religije$name )))
     })
+    
+    output$religije2 <- renderUI({
+      religije <- data.frame(tbl.religion)
+      selectInput("religije2", "Choose a religion:",
+                  choices = c("All" = 0, setNames(religije$religion_id, religije$name )))
+    })
   
   meseci <- factor(month.name, levels = month.name, ordered = TRUE)
   
@@ -104,34 +110,38 @@ shinyServer(function(input, output) {
 ##############################################################################################
 #APLIKACIJA 2: SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
   
-  # output$datum <- renderUI({
-  #   MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
-  #   MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
-  #   dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
-  #                  end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
-  # })    
-  # 
-  # output$napadi2<-DT::renderDataTable({
-  #   nap1 <- ttt4
-  #   if (!is.null(input$kontinent) && input$kontinent != 0) {
-  #     nap1 <- nap1 %>% filter(continent_id == input$kontinent)
-  #   }
-  #   if (!is.null(input$datum)) {
-  #     nap1 <- nap1 %>% filter(start_date >= input$datum[1],
-  #                           end_date <= input$datum[2])
-  #   }
-  #   if (!is.null(input$religije) && input$religije != 0) {
-  #     nap1 <- nap1 %>% filter(main_religion == input$religije)
-  #   }
-  #   #if (input$mesec != 0) {
-  #   #  nap <- nap %>% filter(month(start_date) == input$mesec)
-  #   #}
-  #   if (input$gl.mesto) {
-  #     nap1 <- nap1 %>% filter(place == capital)
-  #   }
-  #   nap1 %>% select(Start=start_date, End=end_date, Location=place, Country=country,"Continent"=name.y,
-  #                 Tpye= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Parto of"=part_of,
-  #                 Population=population, Area=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (in %)"=proportion.x
-  #                 ) %>%data.frame()
-  # })
+  output$datum <- renderUI({
+    MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
+    MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
+    dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
+                   end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
+  })    
+  
+  output$napadi2<-DT::renderDataTable({
+    nap1 <- ttt4
+    if (!is.null(input$kontinent) && input$kontinent != 0) {
+      nap1 <- nap1 %>% filter(continent_id == input$kontinent)
+    }
+    if (!is.null(input$datum)) {
+      nap1 <- nap1 %>% filter(start_date >= input$datum[1],
+                            end_date <= input$datum[2])
+    }
+    if (!is.null(input$religije) && input$religije != 0) {
+      nap1 <- nap1 %>% filter(main_religion == input$religije)
+    }
+    #if (input$mesec != 0) {
+    #  nap <- nap %>% filter(month(start_date) == input$mesec)
+    #}
+    if (input$gl.mesto) {
+      nap1 <- nap1 %>% filter(place == capital)
+    }
+    nap1 %>% select(Start=start_date, End=end_date, Location=place, Country=country,"Continent"=name.y,
+                  Tpye= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Parto of"=part_of,
+                  Population=population, Area=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (in %)"=proportion.x
+                  ) %>%data.frame()
+  })
+
+      
+      
+      
 })

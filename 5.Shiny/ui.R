@@ -1,4 +1,5 @@
 library(shiny)
+library(DT)
 
 
 #################################################
@@ -7,7 +8,10 @@ library(shiny)
 shinyUI(fluidPage(
 
   titlePanel("Terrorist attacks in 2015"),
+  
   tabsetPanel(
+    
+#############    
     tabPanel("Number of victims",
              h2("Details about attacks with selected casualties"),
 
@@ -40,6 +44,7 @@ shinyUI(fluidPage(
 # #APLIKACIJA 1
 # #ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 # 
+##############
     # Give the page a title
       tabPanel("Number of attacks",
                h2("Number of attacks by months"),
@@ -58,28 +63,30 @@ shinyUI(fluidPage(
       plotOutput("monthPlot")
     )
   )
-)
+),
 ######################################################
 #APLIKACIJA 2:SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
 
-#   
-#     tabPanel("List of attacks",
-#       h2("List of terrosrist attacks in 2015"),
-#   sidebarLayout(
-#     sidebarPanel(
-#       uiOutput("kontinent"),
-#       uiOutput("datum"),
-#       uiOutput("religije1"),
-#     #selectInput("mesec", "Choose a month:",
-#     #           choices=c("All" = 0, setNames(1:12, month.name))),
-#     selectInput("gl.mesto", "Show attacks that happened ONLY in the capital:",
-#                 choices = c("No, show all attacks" = FALSE, "Yes, show attacks in capitals" = TRUE))
-#     #uiOutput("glmesto"),
-#   ),
-#   mainPanel(
-#     DT::dataTableOutput('napadi2')
-#   )
-# )
-# )
+##########  
+
+tabPanel("List of attacks", 
+         h2("List of terrosrist attacks in 2015"),
+      
+  sidebarLayout(
+    
+    sidebarPanel(
+      uiOutput("kontinent"),
+      uiOutput("datum"),
+      uiOutput("religije"),
+      selectInput("gl.mesto", "Show attacks that happened ONLY in the capital:",
+                  choices = c("No, show all attacks" = FALSE, "Yes, show attacks in capitals" = TRUE))
+  ),
+  mainPanel(
+    DT::dataTableOutput('napadi2')
+  )
+)
+)
+
+
 )
 ))
