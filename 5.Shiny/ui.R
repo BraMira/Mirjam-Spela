@@ -67,6 +67,7 @@ shinyUI(fluidPage(
 ######################################################
 #APLIKACIJA 2:SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
 
+<<<<<<< HEAD
 ##########  
 
 tabPanel("List of attacks", 
@@ -80,13 +81,46 @@ tabPanel("List of attacks",
       uiOutput("religije"),
       selectInput("gl.mesto", "Show attacks that happened ONLY in the capital:",
                   choices = c("No, show all attacks" = FALSE, "Yes, show attacks in capitals" = TRUE))
+=======
+  
+    tabPanel("List of attacks",
+      h2("List of terrorist attacks in 2015"),
+  sidebarLayout(
+    sidebarPanel(
+      uiOutput("kontinent1"),
+      uiOutput("datum"),
+      uiOutput("religije1"),
+    #selectInput("mesec", "Choose a month:",
+    #           choices=c("All" = 0, setNames(1:12, month.name))),
+    selectInput("gl.mesto", "Show attacks that happened ONLY in the capital:",
+                choices = c("No, show all attacks" = FALSE, "Yes, show attacks in capitals" = TRUE))
+    #uiOutput("glmesto"),
+>>>>>>> 4f0207413b025fd5b821e324ac98d51f072a6d5a
   ),
   mainPanel(
     DT::dataTableOutput('napadi2')
   )
 )
+<<<<<<< HEAD
 )
 
 
+=======
+),
+  tabPanel("Map",
+           h2("Number of attacks by country on a map"),
+           sidebarLayout(
+             sidebarPanel(
+               p("Choose a continent you wish to see on the map more closely."),
+               uiOutput("kontinent2"),
+               p("Choose a date interval."),
+               uiOutput("datum1")
+             ),
+             mainPanel(
+               plotOutput("zemljevid"))
+             
+             
+           ))
+>>>>>>> 4f0207413b025fd5b821e324ac98d51f072a6d5a
 )
 ))
