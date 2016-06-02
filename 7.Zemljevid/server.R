@@ -55,7 +55,7 @@ shinyServer(function(input, output) {
   output$zemljevid <- renderPlot({
     nap3 <- ttt4 %>% select(attack,country,continent_id,start_date,end_date)
     HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
-    group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+      group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
     world_map <- map_data(map="world")
     if (!is.null(input$kontinent) && input$kontinent != 0) {
       HH <- nap3 %>% filter(continent_id == input$kontinent)%>% group_by(attack,region=country) %>% 
