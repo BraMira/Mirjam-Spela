@@ -61,7 +61,13 @@ shinyServer(function(input, output) {
       xlab("Religion") + ylab("Number of attacks") + theme_minimal()
   })
   ########################################################################################################  
-      
+  output$kontinentA <- renderUI({
+    celine <- data.frame(tbl.continent)
+    selectInput("kontinent", "Choose a continent:",
+                choices = c("All" = 0, setNames(celine$continent_id,
+                                                celine$name)))
+  })
+  
   #max_deaths + injured : - na x osi religije, na y max_deaths + injured
   output$religionPlot2 <- renderPlot({
     nap <- ttt4
