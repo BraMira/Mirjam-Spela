@@ -109,20 +109,35 @@ tabPanel("List victims",
 #############################################
 
 
-  tabPanel("Attacks by country map",
-           h2("Number of attacks by country on a map"),
-           sidebarLayout(
-             sidebarPanel(
-               p("Choose a continent you wish to see on the map more closely."),
-               uiOutput("kontinent2"),
-               #p("Choose a date interval."),
-               uiOutput("datum1")
-             ),
-             mainPanel(
-               plotOutput("zemljevid"))
-             
-             
-           ))
+  # tabPanel("Attacks by country map",
+  #          h2("Number of attacks by country on a map"),
+  #          sidebarLayout(
+  #            sidebarPanel(
+  #              p("Choose a continent you wish to see on the map more closely."),
+  #              uiOutput("kontinent2"),
+  #              #p("Choose a date interval."),
+  #              uiOutput("datum1")
+  #            ),
+  #            mainPanel(
+  #              plotOutput("zemljevid"))
+  #            
+  #            
+  #          )),
+
+tabPanel("Attacks by country map",
+         h2("Number of attacks by country on map"),
+         sidebarLayout(
+           sidebarPanel(
+             #p("Choose a continent you wish to see on the map more closely."),
+             #uiOutput("kontinent2"),
+             p("Choose a date interval."),
+             uiOutput("datum1")
+           ),
+           mainPanel(
+             leafletOutput("map"))
+
+
+         ))
 
 )
 ))

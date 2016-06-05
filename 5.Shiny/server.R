@@ -7,6 +7,9 @@ library(rworldmap)
 library(maps)
 library(sp)
 library(leaflet)
+library(gsubfn)
+library(RColorBrewer)
+
 
 if ("server.R" %in% dir()) {
   setwd("..")
@@ -126,7 +129,7 @@ shinyServer(function(input, output) {
     MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
     MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
     dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
-                   end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
+                   end=as.Date(MAXdatum[1,1]),language="sl", separator = "to", weekstart = 1)
   })    
   
 
@@ -254,7 +257,7 @@ shinyServer(function(input, output) {
     MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
     MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
     dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
-                   end=as.Date(MAXdatum[1,1]),language="sl", separator = "do", weekstart = 1)
+                   end=as.Date(MAXdatum[1,1]),language="sl", separator = "to", weekstart = 1)
   })    
   
   #   output$napadi3<-   renderTable({
@@ -263,57 +266,57 @@ shinyServer(function(input, output) {
   #                                    input$datum & input$mesec & input$glmesto) %>% data.frame()
   #   
   
-  output$zemljevid <- renderPlot({
-    nap3 <- ttt4 %>% select(attack,country,continent_id,start_date,end_date)
-    world_map <- map_data(map="world")
-    world_map <- subset(world_map, region!="Antarctica")
-    HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
-      group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
-    
-    
-    if (!is.null(input$kontinent) && input$kontinent != 0) {
-      HH <- nap3 %>% filter(continent_id == input$kontinent)%>% group_by(attack,region=country) %>% 
-        summarise() %>% group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
-    }
-    if (!is.null(input$datum)) {
-      HH <- nap3 %>% filter(start_date >= input$datum[1],
-                            end_date <= input$datum[2])%>% group_by(attack,region=country) %>% summarise() %>% 
-        group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
-    }
-    #prešeteje v vsaki državi kolko napadov
-    #HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
-    # group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
-    HH$region[HH$region=="United States"]<- "USA"
-    HH$region[HH$region=="United Kingdom"]<- "UK"
-    #HH$region[HH$region=="Russia"]<- "USSR"
-    HHH <- merge(world_map,HH, sort =FALSE, by="region")
-    HHH <- HHH[order(HHH$order),]
-    
-    #grdo
-    # qplot(long,lat, data = HHH, group=group, fill=stevilo, geom = "polygon")
-    
-    g <- ggplot(HHH)
-    g <- g + geom_map(dat=world_map, map=world_map, aes(map_id=region),fill="white", color="#7f7f7f",size=0.25)
-    g <- g+ geom_map(map=world_map, aes(map_id=region,fill=HHH$stevilo),size=0.25)
-    g <- g+scale_fill_gradient(low="#fff7bc",high="#cc4c02",name="Number of attacks",guide="colourbar")
-    g <- g+expand_limits(x=world_map$long,y=world_map$lat)
-    g <- g + labs(x="",y="")
-    g <- g+ theme(panel.grid=element_blank(), panel.border=element_blank(),axis.ticks=element_blank(), 
-                  axis.text=element_blank(),legend.position="top")
-
-    lim <- data.frame(xmin = c(-25, 20, -20, -170, 80, -120),
-                      xmax = c(60, 200, 59, -20, 190, -20),
-                      ymin = c(-40, -10, 35, 10, -50, -70),
-                      ymax = c(37, 80, 71, 85, 10, 20))
-    if (!is.null(input$kontinent) && input$kontinent!=0){
-      ln <- lim[input$kontinent,]
-      g <- g + coord_cartesian(xlim=c(ln[,"xmin"],ln[,"xmax"]),
-                               ylim=c(ln[,"ymin"],ln[,"ymax"])) +
-        theme(aspect.ratio=(ln[,"ymax"]-ln[,"ymin"])/(ln[,"xmax"]-ln[,"xmin"]))
-    }
-    g
-    
-  })
+  # output$zemljevid <- renderPlot({
+  #   nap3 <- ttt4 %>% select(attack,country,continent_id,start_date,end_date)
+  #   world_map <- map_data(map="world")
+  #   world_map <- subset(world_map, region!="Antarctica")
+  #   HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
+  #     group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+  #   
+  #   
+  #   if (!is.null(input$kontinent) && input$kontinent != 0) {
+  #     HH <- nap3 %>% filter(continent_id == input$kontinent)%>% group_by(attack,region=country) %>% 
+  #       summarise() %>% group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+  #   }
+  #   if (!is.null(input$datum)) {
+  #     HH <- nap3 %>% filter(start_date >= input$datum[1],
+  #                           end_date <= input$datum[2])%>% group_by(attack,region=country) %>% summarise() %>% 
+  #       group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+  #   }
+  #   #prešeteje v vsaki državi kolko napadov
+  #   #HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
+  #   # group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+  #   HH$region[HH$region=="United States"]<- "USA"
+  #   HH$region[HH$region=="United Kingdom"]<- "UK"
+  #   #HH$region[HH$region=="Russia"]<- "USSR"
+  #   HHH <- merge(world_map,HH, sort =FALSE, by="region")
+  #   HHH <- HHH[order(HHH$order),]
+  #   
+  #   #grdo
+  #   # qplot(long,lat, data = HHH, group=group, fill=stevilo, geom = "polygon")
+  #   
+  #   g <- ggplot(HHH)
+  #   g <- g + geom_map(dat=world_map, map=world_map, aes(map_id=region),fill="white", color="#7f7f7f",size=0.25)
+  #   g <- g+ geom_map(map=world_map, aes(map_id=region,fill=HHH$stevilo),size=0.25)
+  #   g <- g+scale_fill_gradient(low="#fff7bc",high="#cc4c02",name="Number of attacks",guide="colourbar")
+  #   g <- g+expand_limits(x=world_map$long,y=world_map$lat)
+  #   g <- g + labs(x="",y="")
+  #   g <- g+ theme(panel.grid=element_blank(), panel.border=element_blank(),axis.ticks=element_blank(), 
+  #                 axis.text=element_blank(),legend.position="top")
+  # 
+  #   lim <- data.frame(xmin = c(-25, 20, -20, -170, 80, -120),
+  #                     xmax = c(60, 200, 59, -20, 190, -20),
+  #                     ymin = c(-40, -10, 35, 10, -50, -70),
+  #                     ymax = c(37, 80, 71, 85, 10, 20))
+  #   if (!is.null(input$kontinent) && input$kontinent!=0){
+  #     ln <- lim[input$kontinent,]
+  #     g <- g + coord_cartesian(xlim=c(ln[,"xmin"],ln[,"xmax"]),
+  #                              ylim=c(ln[,"ymin"],ln[,"ymax"])) +
+  #       theme(aspect.ratio=(ln[,"ymax"]-ln[,"ymin"])/(ln[,"xmax"]-ln[,"xmin"]))
+  #   }
+  #   g
+  #   
+  # })
   # output$map <- renderLeaflet({
   #   nap3 <- ttt4 %>% select(attack,country,continent_id,start_date,end_date)
   #   HH <- nap3 %>% group_by(attack,region=country) %>% summarise() %>% 
@@ -326,4 +329,23 @@ shinyServer(function(input, output) {
   #   zem <- map("world",regions=HH$region,fill=TRUE)
   #   leaflet(data=zem)%>% addTiles() %>% addPolygons(fillColor = "yellow",stroke=FALSE)
   # })
+  output$map <- renderLeaflet({
+    HH <- ttt4 %>% select(attack,country,continent_id,start_date,end_date)
+    if (!is.null(input$datum)) {
+      HH <- HH %>% filter(start_date >= input$datum[1],
+                          end_date <= input$datum[2])
+    }
+    HH <- HH %>% group_by(attack,region=country) %>% summarise() %>%
+      group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+    HH$region[HH$region=="United States"]<- "USA"
+    HH$region[HH$region=="United Kingdom"]<- "UK"
+    nap <- setNames(HH$stevilo, HH$region) # spravimo število napadov v poimenovan vektor
+    zem <- map("world",regions=HH$region,fill=TRUE, plot=FALSE) # plot=FALSE poskrbi, da se zemljevid ne izriše še v RStudiu
+    imena <- zem$names %>% strapplyc("^([^:]+)") %>% unlist() # nekatere države so v več delih; ime države je do prvega dvopičja
+    napadi <- nap[imena] # pripravimo število napadov za vsako narisano ozemlje
+    popup <- paste0("<b>", imena, "</b><br />Number of attacks: ", napadi) # pripravimo vsebino pojavnega okenca
+    barve <- rgb(napadi, napadi, 0, maxColorValue = max(nap)) # pripravimo barve
+    leaflet(data=zem)%>% addTiles() %>%
+      addPolygons(fillColor = barve,stroke=FALSE, popup = popup)
+  })
 })
