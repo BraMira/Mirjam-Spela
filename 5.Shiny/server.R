@@ -51,7 +51,7 @@ shinyServer(function(input, output) {
 
 
 ##############################################################
-#APLIKACIJA 1: ŠTEVILO NAPADOV V POSAMEZNEM MESECU
+#ŠTEVILO NAPADOV V POSAMEZNEM MESECU
 
   # Pripravimo tabelo
     tt <- inner_join(tbl.in_country,tbl.country,by=c("country"="name"))
@@ -115,7 +115,7 @@ shinyServer(function(input, output) {
       xlab("Month") + ylab("Number of attacks") + theme_minimal()
   })
 ##############################################################################################
-#APLIKACIJA 2: SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
+#SEZNAM NAPADOV IN NJIHOVE LASTNOSTI, GLEDE NA VRSTO CELINE, RELIGIJE, Ali glavno mesto napadeno
   
 
   output$kontinent1 <- renderUI({
@@ -154,15 +154,12 @@ shinyServer(function(input, output) {
     if (!is.null(input$religije) && input$religije != 0) {
       nap1 <- nap1 %>% filter(main_religion == input$religije)
     }
-    #if (input$mesec != 0) {
-    #  nap <- nap %>% filter(month(start_date) == input$mesec)
-    #}
     if (input$gl.mesto) {
       nap1 <- nap1 %>% filter(place == capital)
     }
-    nap1 %>% data.frame() %>% select(Start=start_date, End=end_date, Location=place, Country=country,
+    nap1 %>% data.frame() %>% select(Start=start_date, End=end_date, Location=place, Country=country,Continent=name.y,
                   Type= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Part of"=part_of,
-                  Population=population, "Area (mi2)"=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (%)"=proportion.x
+                  "Population of country"=population, "Area (mi2)"=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (%)"=proportion.x
                   ) 
   })
 
@@ -191,10 +188,6 @@ shinyServer(function(input, output) {
       summarise() %>% group_by(religion_id, religija) %>%
       summarise(stevilo = count(religija)) %>% data.frame()
     
-    # vse <- tbl.religion %>% select(religion_id)
-    # tiste<- nap %>% select(religion_id)
-    # manjkajo <- which(! tiste %in% vse)
-    # nap <- rbind(nap, data.frame(religija = manjkajo, stevilo = rep(0, length(manjkajo))))
     if (nrow(nap) > 0) {
       manjkajo <- which(! religije$religion_id %in% nap$religion_id)
       nap <- rbind(nap, religije[manjkajo,])
@@ -226,9 +219,6 @@ shinyServer(function(input, output) {
     nap <- nap %>% group_by(religion_id, religija = name, max_deaths,injured) %>% 
       summarise() %>% group_by(religion_id, religija) %>%
       summarise(stevilo = sum(max_deaths+injured)) %>% data.frame()
-    # manjkajo <- which(! 1:12 %in% nap$mesec)
-    # nap <- rbind(nap, data.frame(mesec = manjkajo,
-    #                              stevilo = rep(0, length(manjkajo))))
     if (nrow(nap) > 0) {
       manjkajo <- which(! religije$religion_id %in% nap$religion_id)
       nap <- rbind(nap, religije[manjkajo,])
@@ -245,7 +235,7 @@ shinyServer(function(input, output) {
       
 
 #######################################################################
-#APLIKACIJA 3: ZEMLJEVID
+#ZEMLJEVID
   
   output$kontinent2 <- renderUI({
     celine <- data.frame(tbl.continent)
