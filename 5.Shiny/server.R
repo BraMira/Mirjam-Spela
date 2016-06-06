@@ -72,25 +72,20 @@ shinyServer(function(input, output) {
                   choices = c("All" = 0, setNames(celine$continent_id,
                                                   celine$name)))
     })
-    
-    
-    output$napadi1<-   renderTable({
-      attack <- data.frame(tbl.attack)
-      nap <- tbl.attack %>% filter(input$kontinent & input$religije1 &
-                                     input$datum & input$mesec & input$glmesto) %>% data.frame()
-    })
-    
     output$religije <- renderUI({
       religije <- data.frame(tbl.religion)
       selectInput("religije", "Choose a religion:",
                   choices = c("All" = 0, setNames(religije$religion_id, religije$name )))
     })
     
-    output$religije2 <- renderUI({
-      religije <- data.frame(tbl.religion)
-      selectInput("religije2", "Choose a religion:",
-                  choices = c("All" = 0, setNames(religije$religion_id, religije$name )))
-    })
+
+    
+    
+    # output$religije2 <- renderUI({
+    #   religije <- data.frame(tbl.religion)
+    #   selectInput("religije2", "Choose a religion:",
+    #               choices = c("All" = 0, setNames(religije$religion_id, religije$name )))
+    # })
   
   meseci <- factor(month.name, levels = month.name, ordered = TRUE)
   
@@ -120,7 +115,7 @@ shinyServer(function(input, output) {
 
   output$kontinent1 <- renderUI({
     celine <- data.frame(tbl.continent)
-    selectInput("kontinent", "Choose a continent:",
+    selectInput("kontinent1", "Choose a continent:",
                 choices = c("All" = 0, setNames(celine$continent_id,
                                                 celine$name)))
   })
@@ -136,27 +131,34 @@ shinyServer(function(input, output) {
   
   output$religije1 <- renderUI({
     religije1 <- data.frame(tbl.religion)
-    selectInput("religije", "Choose a religion:",
+    selectInput("religije1", "Choose a religion:",
                 choices = c("All" = 0, setNames(religije1$religion_id,
                                                 religije1$name)))
   }) 
   
-
+    output$napadi1<-   renderTable({
+      attack <- data.frame(tbl.attack)
+      nap <- tbl.attack %>% filter(input$kontinent1 & input$religije1 &
+                                     input$datum & input$mesec & input$glmesto) %>% data.frame()
+    })
+    
   output$napadi2<-DT::renderDataTable({
     nap1 <- ttt4
-    if (!is.null(input$kontinent) && input$kontinent != 0) {
-      nap1 <- nap1 %>% filter(continent_id == input$kontinent)
+    if (!is.null(input$kontinent1) && input$kontinent1 != 0) {
+      nap1 <- nap1 %>% filter(continent_id == input$kontinent1)
     }
     if (!is.null(input$datum)) {
       nap1 <- nap1 %>% filter(start_date >= input$datum[1],
                             end_date <= input$datum[2])
+      
     }
-    if (!is.null(input$religije) && input$religije != 0) {
-      nap1 <- nap1 %>% filter(main_religion == input$religije)
+    if (!is.null(input$religije1) && input$religije1 != 0) {
+      nap1 <- nap1 %>% filter(main_religion == input$religije1)
     }
     if (input$gl.mesto) {
       nap1 <- nap1 %>% filter(place == capital)
     }
+    
     nap1 %>% data.frame() %>% select(Start=start_date, End=end_date, Location=place, Country=country,Continent=name.y,
                   Type= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Part of"=part_of,
                   "Population of country"=population, "Area (mi2)"=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (%)"=proportion.x
@@ -170,7 +172,7 @@ shinyServer(function(input, output) {
   
   output$kontinent3 <- renderUI({
     celine <- data.frame(tbl.continent)
-    selectInput("kontinent", "Choose a continent:",
+    selectInput("kontinent3", "Choose a continent:",
                 choices = c("All" = 0, setNames(celine$continent_id,
                                                 celine$name)))
   })
@@ -178,8 +180,8 @@ shinyServer(function(input, output) {
   #stevilo napadov za posamezno religijo - na x osi religije, na y št napadov
   output$religionPlot1 <- renderPlot({
     nap <- ttt4
-    if (!is.null(input$kontinent) && input$kontinent != 0) {
-      nap <- nap %>% filter(continent_id == input$kontinent)
+    if (!is.null(input$kontinent3) && input$kontinent3 != 0) {
+      nap <- nap %>% filter(continent_id == input$kontinent3)
     }
     if (input$mesec != 0) {
       nap <- nap %>% filter(month(start_date) == input$mesec)}
@@ -202,7 +204,7 @@ shinyServer(function(input, output) {
   ########################################################################################################  
   output$kontinentA <- renderUI({
     celine <- data.frame(tbl.continent)
-    selectInput("kontinent", "Choose a continent:",
+    selectInput("kontinentA", "Choose a continent:",
                 choices = c("All" = 0, setNames(celine$continent_id,
                                                 celine$name)))
   })
@@ -210,11 +212,11 @@ shinyServer(function(input, output) {
   #max_deaths + injured : - na x osi religije, na y max_deaths + injured
   output$religionPlot2 <- renderPlot({
     nap <- ttt4
-    if (!is.null(input$kontinent) && input$kontinent != 0) {
-      nap <- nap %>% filter(continent_id == input$kontinent)
+    if (!is.null(input$kontinentA) && input$kontinentA != 0) {
+      nap <- nap %>% filter(continent_id == input$kontinentA)
     }
-    if (input$mesec != 0) {
-      nap <- nap %>% filter(month(start_date) == input$mesec)}
+    if (input$mesec1 != 0) {
+      nap <- nap %>% filter(month(start_date) == input$mesec1)}
     
     nap <- nap %>% group_by(religion_id, religija = name, max_deaths,injured) %>% 
       summarise() %>% group_by(religion_id, religija) %>%
@@ -237,18 +239,12 @@ shinyServer(function(input, output) {
 #######################################################################
 #ZEMLJEVID
   
-  output$kontinent2 <- renderUI({
-    celine <- data.frame(tbl.continent)
-    selectInput("kontinent", "Choose a continent:",
-                choices = c("All" = 0, setNames(celine$continent_id,
-                                                celine$name)))
-  })
-  output$datum1 <- renderUI({
-    MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
-    MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
-    dateRangeInput("datum",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
-                   end=as.Date(MAXdatum[1,1]),language="sl", separator = "to", weekstart = 1)
-  })    
+  # output$kontinent2 <- renderUI({
+  #   celine <- data.frame(tbl.continent)
+  #   selectInput("kontinent", "Choose a continent:",
+  #               choices = c("All" = 0, setNames(celine$continent_id,
+  #                                               celine$name)))
+  # })
   
   #   output$napadi3<-   renderTable({
   #     attack <- data.frame(tbl.attack)
@@ -319,11 +315,17 @@ shinyServer(function(input, output) {
   #   zem <- map("world",regions=HH$region,fill=TRUE)
   #   leaflet(data=zem)%>% addTiles() %>% addPolygons(fillColor = "yellow",stroke=FALSE)
   # })
+  output$datum1 <- renderUI({
+    MAXdatum <- data.frame(summarize(select(tbl.attack,start_date),max(start_date)))
+    MINdatum <- data.frame(summarize(select(tbl.attack,start_date),min(start_date)))
+    dateRangeInput("datum1",label="Choose a start and end date:",start=as.Date(MINdatum[1,1]),
+                   end=as.Date(MAXdatum[1,1]),language="sl", separator = "to", weekstart = 1)
+  })    
   output$map <- renderLeaflet({
     HH <- ttt4 %>% select(attack,country,continent_id,start_date,end_date)
-    if (!is.null(input$datum)) {
-      HH <- HH %>% filter(start_date >= input$datum[1],
-                          end_date <= input$datum[2])
+    if (!is.null(input$datum1)) {
+      HH <- HH %>% filter(start_date >= input$datum1[1],
+                          end_date <= input$datum1[2])
     }
     HH <- HH %>% group_by(attack,region=country) %>% summarise() %>%
       group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
@@ -334,7 +336,9 @@ shinyServer(function(input, output) {
     imena <- zem$names %>% strapplyc("^([^:]+)") %>% unlist() # nekatere države so v več delih; ime države je do prvega dvopičja
     napadi <- nap[imena] # pripravimo število napadov za vsako narisano ozemlje
     popup <- paste0("<b>", imena, "</b><br />Number of attacks: ", napadi) # pripravimo vsebino pojavnega okenca
-    barve <- rgb(napadi, napadi, 0, maxColorValue = max(nap)) # pripravimo barve
+    df <- ecdf(nap)
+    barve <- brewer.pal(n=9,name="YlOrRd")[8*df(napadi)+1]
+    #barve <- rgb(napadi, napadi, 0, maxColorValue = max(nap)) # pripravimo barve
     leaflet(data=zem)%>% addTiles() %>%
       addPolygons(fillColor = barve,stroke=FALSE, popup = popup)
   })

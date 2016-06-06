@@ -100,7 +100,7 @@ tabPanel("List victims",
              sidebarPanel(
                p("Choose which continent and/or month you wish to see plotted."),
                uiOutput("kontinentA"),
-               selectInput("mesec", "Choose a month:",choices=c("All" = 0, setNames(1:12, month.name)))
+               selectInput("mesec1", "Choose a month:",choices=c("All" = 0, setNames(1:12, month.name)))
              ),
              mainPanel(
                plotOutput('religionPlot2')
