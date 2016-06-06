@@ -146,6 +146,16 @@ napadi1$country[napadi1$country=="Sydney"]<-"Australia"
 napadi1$country[napadi1$country=="Sinai"]<-"Egypt"
 napadi1$country[napadi1$country=="Borno State"]<-"Nigeria"
 
+#Popravimo imena perpetratorjev
+napadi1$Perpetrator1[15] <- "al-Qaeda in the Arabian Peninsula"
+napadi1$Perpetrator1[16] <- "ISIL"
+napadi1$Perpetrator1[50] <- "Al-Mourabitoun"
+napadi1$Perpetrator1[51] <- "Palestinian man (lone wolf)"
+napadi1$Perpetrator1[186] <- "Islamic State affiliate"
+napadi1$Perpetrator1[207] <- "Ayoub El Kahzani"
+napadi1$Perpetrator1[282] <- "Ansar al-Islam claimed responsibility (not verified); police suspect the banned Islamic extremist group Ansarullah Bangla Team"
+napadi1$Perpetrator1[319] <- "Islamic State"
+
 napadi1$max_deaths[61]<-0
 
 #spremenimo imena stolpcev
