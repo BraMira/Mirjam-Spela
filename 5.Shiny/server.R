@@ -40,12 +40,13 @@ shinyServer(function(input, output) {
                                && dead_perpetrators >= input$min3[1]
                                && dead_perpetrators <= input$min3[2]) %>%
       arrange(max_deaths,injured, dead_perpetrators) %>% data.frame()
+    validate(need(nrow(t) > 0, "No attacks match the criteria."))
     # Vrnemo dobljeno razpredelnico
     d <-inner_join(t,tbl.in_country,by=c("attack_id"="attack"), copy=TRUE) %>% 
       select(Start=start_date, End = end_date, "Max. deaths"=max_deaths, Injured = injured,
              "Dead perpetrators"=dead_perpetrators, Type=type, Country=country, Location=place,
              Perpetrator = perpetrator, "Part of"=part_of)
-                                                                                     
+                                                                                    
     d
   })
 
@@ -159,10 +160,17 @@ shinyServer(function(input, output) {
       nap1 <- nap1 %>% filter(place == capital)
     }
     
-    nap1 %>% data.frame() %>% select(Start=start_date, End=end_date, Location=place, Country=country,Continent=name.y,
-                  Type= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Part of"=part_of,
-                  "Population of country"=population, "Area (mi2)"=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (%)"=proportion.x
-                  ) 
+    # nap1 %>% data.frame() %>% select(Start=start_date, End=end_date, Location=place, Country=country,Continent=name.y,
+    #               Type= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Part of"=part_of,
+    #               "Population of country"=population, "Area (mi2)"=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (%)"=proportion.x
+    #               ) 
+    nap1 <- nap1 %>% select(Start=start_date, End=end_date, Location=place, Country=country,Continent=name.y,
+                            Type= type, "Max. deaths"=max_deaths, "Confirmed victims"=confirmed, Injured=injured, "Dead perpetrators"=dead_perpetrators, Perpetrator=perpetrator, "Part of"=part_of,
+                            "Population of country"=population, "Area (mi2)"=area,  "Main religion"=name, "Followers"=followers.x, "Proportion (%)"=proportion.x
+    ) %>% data.frame()
+    validate(need(nrow(nap1) > 0, "No attacks match the criteria."))
+    nap1
+    
   })
 
   religije <- tbl.religion %>%
@@ -322,20 +330,23 @@ shinyServer(function(input, output) {
                    end=as.Date(MAXdatum[1,1]),language="sl", separator = "to", weekstart = 1)
   })    
   output$map <- renderLeaflet({
-    HH <- ttt4 %>% select(attack,country,continent_id,start_date,end_date)
+    HH <- ttt4 %>% select(attack,country,continent_id,start_date,end_date,name)
     if (!is.null(input$datum1)) {
       HH <- HH %>% filter(start_date >= input$datum1[1],
                           end_date <= input$datum1[2])
     }
-    HH <- HH %>% group_by(attack,region=country) %>% summarise() %>%
-      group_by(region) %>% summarise(stevilo=count(attack))%>%data.frame
+    HH <- HH %>% group_by(attack,region=country,name) %>% summarise() %>%
+      group_by(region,name) %>% summarise(stevilo=count(attack))%>%data.frame
+    validate(need(nrow(HH) > 0, "No attacks match the criteria. Select a different date interval."))
     HH$region[HH$region=="United States"]<- "USA"
     HH$region[HH$region=="United Kingdom"]<- "UK"
     nap <- setNames(HH$stevilo, HH$region) # spravimo število napadov v poimenovan vektor
+    reg <- setNames(HH$name,HH$region)
     zem <- map("world",regions=HH$region,fill=TRUE, plot=FALSE) # plot=FALSE poskrbi, da se zemljevid ne izriše še v RStudiu
     imena <- zem$names %>% strapplyc("^([^:]+)") %>% unlist() # nekatere države so v več delih; ime države je do prvega dvopičja
     napadi <- nap[imena] # pripravimo število napadov za vsako narisano ozemlje
-    popup <- paste0("<b>", imena, "</b><br />Number of attacks: ", napadi) # pripravimo vsebino pojavnega okenca
+    reli <- reg[imena]
+    popup <- paste0("<b>", imena, "</b><br /><i>Number of attacks</i>: ", napadi,"</b><br /> <i>Main religion</i>: ",reli) # pripravimo vsebino pojavnega okenca
     df <- ecdf(nap)
     barve <- brewer.pal(n=9,name="YlOrRd")[8*df(napadi)+1]
     #barve <- rgb(napadi, napadi, 0, maxColorValue = max(nap)) # pripravimo barve
