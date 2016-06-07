@@ -14,40 +14,40 @@ stran2 <- html_session(link2) %>% read_html()
 
 # Shranimo tabele
 januar <- stran %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[1]] %>% html_table()
+  .[[1]] %>% html_table(fill=TRUE)
 januar$month <- 1
 februar <- stran %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[2]] %>% html_table()
+  .[[2]] %>% html_table(fill=TRUE)
 februar$month <- 2
 marec <- stran %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[3]] %>% html_table()
+  .[[3]] %>% html_table(fill=TRUE)
 marec$month <- 3
 april <- stran %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[4]] %>% html_table()
+  .[[4]] %>% html_table(fill=TRUE)
 april$month <- 4
 maj <- stran %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[5]] %>% html_table()
+  .[[5]] %>% html_table(fill=TRUE)
 maj$month <- 5
 junij <- stran %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[6]] %>% html_table()
+  .[[6]] %>% html_table(fill=TRUE)
 junij$month <- 6
 julij <- stran2 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[1]] %>% html_table()
+  .[[1]] %>% html_table(fill=TRUE)
 julij$month <- 7
 avgust <- stran2 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[2]] %>% html_table()
+  .[[2]] %>% html_table(fill=TRUE)
 avgust$month <- 8
 september <- stran2 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[3]] %>% html_table()
+  .[[3]] %>% html_table(fill=TRUE)
 september$month <- 9
 oktober <- stran2 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[4]] %>% html_table()
+  .[[4]] %>% html_table(fill=TRUE)
 oktober$month <- 10
 november <- stran2 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[5]] %>% html_table()
+  .[[5]] %>% html_table(fill=TRUE)
 november$month <- 11
 december <- stran2 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[6]] %>% html_table()
+  .[[6]] %>% html_table(fill=TRUE)
 december$month <- 12
 
 #Združimo tabele
@@ -57,6 +57,7 @@ napadi$Injured2 <- `Encoding<-`(napadi$Injured,"UTF-8")
 napadi$Location1 <- `Encoding<-`(napadi$Location,"UTF-8")
 napadi$Perpetrator1 <- `Encoding<-`(napadi$Perpetrator,"UTF-8")
 napadi$`Part of1` <- `Encoding<-`(napadi$`Part of`,"UTF-8")
+
 napadi$Dead[180]<-"8-10"
 napadi$Dead[77]<-"10-20(+7)"
 
@@ -81,8 +82,15 @@ for (i in 1:length(napadi$month)){
 }
 
 napadi$confirmed <- FALSE
-napadi$max_deaths <- napadi$Dead %>% strapplyc("\\-([0-9]+)") %>% as.numeric()#napadi$Dead %>% strapplyc("^([0-9]+)") %>% as.numeric()
-napadi$max_deaths[is.na(napadi$max_deaths)]<-0
+#napadi$max_deaths <- napadi$Dead %>% strapplyc("\\-([0-9]+):") %>% as.numeric();#napadi$Dead %>% strapplyc("^([0-9]+)") %>% as.numeric()
+napadi$max_deaths <- 0
+napadi$max_deaths[c(1,226)]<-25
+napadi$max_deaths[c(77,78)]<-20
+napadi$max_deaths[128]<-233
+napadi$max_deaths[173]<-15
+napadi$max_deaths[c(180,182)]<-10
+napadi$max_deaths[338]<-6
+#napadi$max_deaths[is.na(napadi$max_deaths)]<-0
 t<-napadi$Dead %>% strapplyc("^([0-9]+)") %>% as.numeric();
 for (i in 1:length(napadi$Dead)){
   if(napadi$max_deaths[i]==0){
@@ -94,6 +102,7 @@ for (i in 1:length(napadi$Dead)){
   # }
 }
 napadi$max_deaths[4]<-2000;
+napadi$max_deaths[62]<-0;
 #napadi$confirmed[c(4,27,30,42,65,88,175,190,196,198,201,208,214,217,219,304,328,374,385)]<-"NO";
 
 napadi$dead_perpetrators <- napadi$Dead %>% strapplyc("\\(\\+([0-9]+)\\)") %>% as.numeric()
@@ -110,26 +119,26 @@ for (i in 1:length(napadi$Location1)){
 napadi$country[napadi$city=="East Jerusalem"]<- "Israel" 
 napadi$country[napadi$city=="West Bank"]<- "Israel" 
 napadi$city[napadi$country=="Sydney"]<-"Sydney"
-napadi$country[c(159,104)]<-"Afghanistan"
-napadi$country[c(230,34,229)]<-"Philippines"
-napadi$country[384]<-"Russia"
-napadi$country[126]<-"Syria"
-napadi$country[216]<-"Egypt"
-napadi$country[193]<-"Mali"
-napadi$city[192]<-NA
-napadi$country[192]<-"Nigeria"
-napadi$country[266]<-"Pakistan"
-napadi$city[266]<-"Quetta"
-napadi$city[267]<-"NA"
-napadi$country[267]<-"Bhutan"
-napadi$country[184]<-"Israel"
-napadi$city[184]<-"Jerusalem"
-napadi$country[204]<-"Thailand"
-napadi$city[207]<-"Bangkok"
-napadi$country[207]<-"France"
-napadi$city[207]<-"Oignies"
-napadi$city[369]<-"Abadam"
-napadi$country[369]<-"Nigeria"
+napadi$country[c(161,106)]<-"Afghanistan"
+napadi$country[c(231,35,232)]<-"Philippines"
+napadi$country[386]<-"Russia"
+napadi$country[128]<-"Syria"
+napadi$country[218]<-"Egypt"
+napadi$country[195]<-"Mali"
+napadi$city[194]<-NA
+napadi$country[194]<-"Nigeria"
+napadi$country[268]<-"Pakistan"
+napadi$city[268]<-"Quetta"
+napadi$city[269]<-NA
+napadi$country[269]<-"Bhutan"
+napadi$country[186]<-"Israel"
+napadi$city[186]<-"Jerusalem"
+napadi$country[206]<-"Thailand"
+napadi$city[206]<-"Bangkok"
+napadi$country[209]<-"France"
+napadi$city[209]<-"Oignies"
+napadi$city[371]<-"Abadam"
+napadi$country[371]<-"Nigeria"
 
 #spremenimo vrstni red
 napadi1 <- napadi[,c("start_date","end_date","Type","max_deaths","confirmed",
@@ -153,10 +162,10 @@ napadi1$Perpetrator1[50] <- "Al-Mourabitoun"
 napadi1$Perpetrator1[51] <- "Palestinian man (lone wolf)"
 napadi1$Perpetrator1[186] <- "Islamic State affiliate"
 napadi1$Perpetrator1[207] <- "Ayoub El Kahzani"
-napadi1$Perpetrator1[282] <- "Ansar al-Islam claimed responsibility (not verified); police suspect the banned Islamic extremist group Ansarullah Bangla Team"
+napadi1$Perpetrator1[282] <- "Ansar al-Islam claimed responsibility (not verified)"
 napadi1$Perpetrator1[319] <- "Islamic State"
 
-napadi1$max_deaths[61]<-0
+#napadi1$max_deaths[61]<-0
 
 #spremenimo imena stolpcev
 names(napadi1)[names(napadi1) %in% c("Type", "Injured1","city",

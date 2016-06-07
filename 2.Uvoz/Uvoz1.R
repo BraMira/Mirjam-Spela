@@ -11,7 +11,7 @@ link3 <- "https://en.wikipedia.org/wiki/Religions_by_country"
 stran3 <- html_session(link3) %>% read_html()
 
 religije <- stran3 %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-  .[[1]] %>% html_table()           #RELIGIJE
+  .[[1]] %>% html_table(fill=TRUE)           #RELIGIJE
 
 names(religije)<- c("country","Region","Subregion","Population","Christian","Christian%",
                     "Muslim","Muslim%","Unaffiliated","Unaffiliated%","Hindu","Hindu%",
@@ -20,6 +20,8 @@ names(religije)<- c("country","Region","Subregion","Population","Christian","Chr
 
 #odvečne vrstice
 religije<-religije[-c(22,33,40,60,64,71,81,88,96,97,108,121,130,140,155,161,169,181,191,203,229,239,256,263,278),]
+religije[c(2,162),20]<-"0.00"
+religije[2,c(15,17,19)]<-c("7 300",0,0)
 
 
 Encoding(religije$country) <- "UTF-8"
@@ -27,8 +29,8 @@ religije$country <- religije$country %>% strapplyc("([a-zA-Z -]+)") %>%
   sapply(. %>% .[[1]]) %>% trimws()
 
 
-religije[,6] <- religije[,6] %>% strapplyc("([0-9.]+)") %>%
-  unlist() %>% as.numeric()
+religije[,6] <- (religije[,6] %>% strapplyc("([0-9.]+)") %>%
+  unlist() %>% as.numeric())[-c(105)]
 
 religije$Population <- religije$Population %>% strsplit(split = " ") %>%
   sapply(. %>% paste(collapse = "")) %>% as.numeric()
@@ -40,15 +42,21 @@ religije[,10] <- religije[,10] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
 religije[,12] <- religije[,12] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
-religije[,14] <- religije[,14] %>% strapplyc("([0-9.]+)") %>%
-  unlist() %>% as.numeric()
-religije[,16] <- religije[,16] %>% strapplyc("([0-9.]+)") %>%
+rr<- (religije[,14] %>% strapplyc("([0-9.]+)") %>%
+  unlist() %>% as.numeric())[-c(3)]
+rr[2]<-0.00
+religije[,14] <- rr 
+rrr<- religije[,16] %>% strapplyc("([0-9.]+)") %>%
   sapply(. %>% .[[1]]) %>% as.numeric()
+rrr[2]<-1.00
+religije[,16] <-rrr
 religije[,18] <- religije[,18] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
 religije[,20] <- religije[,20] %>% strapplyc("([0-9.]+)") %>%
   unlist() %>% as.numeric()
 
+religije[104,c(5,7)]<-c("89 000 000","5 025 000") #filipini
+religije[162,c(11,13,15,17,19)]<-0 #srbija
 religije$Christian <- religije$Christian %>% strsplit(split = " ") %>%
   sapply(. %>% paste(collapse = "")) %>% as.numeric()
 
